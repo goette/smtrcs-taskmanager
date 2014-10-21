@@ -1,17 +1,23 @@
 {
     "name": "DashboardSuite",
     "version": "0.1.0",
+    "description": "Very early version of the development environment for Suite 7",
+    "repository" : {
+        "type": "git",
+        "url": "git@git.seometrie.dev:git-project-suite-frontend/suite7.git"
+    },
     "devDependencies": {
-        "gulp": "~3.8.8",
         "browser-sync": "~1.5.8",
-        "gulp-sass": "~1.2.0",
-        "gulp-autoprefixer": "~1.0.1",
         "browserify": "~6.1.0",
-        "del": "~0.1.3",
+        "gulp": "~3.8.8",
+        "gulp-autoprefixer": "~1.0.1",
+        "gulp-jest": "~0.2.2",
+        "gulp-sass": "~1.2.0",
+        "gulp-util": "^3.0.1",
+        "jest-cli": "~0.1.18",
         "reactify": "~0.14.0",
         "vinyl-source-stream": "~1.0.0",
-        "gulp-jest": "~0.2.2",
-        "jest-cli": "~0.1.18"
+        "watchify": "^2.0.0"
     },
     "dependencies": {
         "flux": "^2.0.1",
