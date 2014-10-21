@@ -1,7 +1,11 @@
-var Kpi = require('./components/kpi');
+/**
+ * @jsx React.DOM
+ */
+
+var Main = require('./component/main');
 var React = require('react');
 
 React.renderComponent(
-    <Kpi />,
-    document.getElementById('app')
+    <Main />,
+    document.getElementById('main')
 );

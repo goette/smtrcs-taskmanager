@@ -2,8 +2,8 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
-var browserSync =require('browser-sync');
 var browserify = require('browserify');
+var browserSync = require('browser-sync');
 var watchify = require('watchify');
 var reactify = require('reactify');
 var source =  require('vinyl-source-stream');
@@ -18,20 +18,36 @@ var paths = {
     cssMain: 'public/css/main.css'
 };
 
+gulp.task('browser-sync', function() {
+    browserSync({
+        open: false,
+        server: {
+            baseDir: "./public"
+        }
+    });
+});
+
+// Wrap bs-reload in it's own task, it's needed sometimes
+gulp.task('browser-sync-reload', function () {
+    browserSync.reload();
+});
+
 // Our JS task. It will Browserify our code and compile React JSX files.
-gulp.task('js', function() {
+gulp.task('browserify', function() {
     // Browserify/bundle the JS.
     var bundler = watchify(browserify(paths.appJs, watchify.args));
 
-    bundler.transform('reactify');
     bundler.on('update', rebundle);
 
     function rebundle () {
-        return bundler.bundle()
+        return bundler.transform(reactify).bundle()
             .on('error', gutil.log.bind(gutil, 'Browserify Error'))
             .pipe(source('bundle.js'))
-            .pipe(gulp.dest(paths.jsFolder));
+            .pipe(gulp.dest(paths.jsFolder))
+            .pipe(browserSync.reload({stream: true}));;
     }
+
+    return rebundle();
 });
 
 gulp.task('sass', function () {
@@ -41,19 +57,12 @@ gulp.task('sass', function () {
             browsers: ['> 1%', 'last 2 versions', 'ie 9'],
             cascade: false
         }))
-        .pipe(gulp.dest(paths.cssFolder));
-        //.pipe(browserSync.reload({stream: true}));
+        .pipe(gulp.dest(paths.cssFolder))
+        .pipe(browserSync.reload({stream: true}));;
 });
 
-gulp.task('serve', function () {
-    /*browserSync({
-        server: {
-            baseDir: './app/dashboard_suite/public'
-        }
-    });*/
-
+gulp.task('watch', ['browser-sync','browserify'], function () {
     gulp.watch(paths.scssFiles, ['sass']);
-    gulp.watch(paths.jsFiles, ['js']);
 });
 
-gulp.task('default', ['serve']);
+gulp.task('default', ['sass','watch']);
