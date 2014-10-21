@@ -18745,7 +18745,7 @@ var Main = React.createClass({displayName: 'Main',
         }.bind(this));
 
         return(
-            React.DOM.div({className: "module-container"}, 
+            React.DOM.div({className: "container"}, 
                 Intro(null), 
                 nodes
             )

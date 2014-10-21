@@ -33,7 +33,7 @@ var Main = React.createClass({
         }.bind(this));
 
         return(
-            <div className="module-container">
+            <div className="container">
                 <Intro />
                 {nodes}
             </div>
