@@ -1,4 +1,4 @@
-## Dashboard Sute aka. Suite 7
+## Dashboard Suite aka. Suite 7
 
 ### How to run things
 
