@@ -9,7 +9,7 @@ var PageConstants = require('../constants/PageConstants');
 var merge = require('react/lib/merge');
 var CHANGE_EVENT = 'change';
 
-var _onThisPage = [
+var _moduleCollection = [
     {
         pageId: 'kpi',
         name: 'KPI'
@@ -24,11 +24,11 @@ var _onThisPage = [
     }
 ];
 
-function addModuleToPage (word) {
-    var num = Math.round(Math.random() * 2),
-        el = _.clone(_onThisPage[num]);
+var _onThisPage = [];
 
-    el.name = word;
+function addModuleToPage () {
+    var num = Math.round(Math.random() * 2),
+        el = _.clone(_moduleCollection[num]);
 
     _onThisPage.push(el);
 }
@@ -67,7 +67,7 @@ AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case PageConstants.MODULE_ADD:
-            addModuleToPage(action.word);
+            addModuleToPage();
             PageStore.emitChange();
             break;
 

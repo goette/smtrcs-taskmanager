@@ -1,12 +1,14 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var sass = require('gulp-sass');
+var shell = require('gulp-shell');
 var autoprefixer = require('gulp-autoprefixer');
 var browserify = require('browserify');
 var browserSync = require('browser-sync');
 var watchify = require('watchify');
 var reactify = require('reactify');
 var source =  require('vinyl-source-stream');
+var jest = require('jest-cli');
 
 var paths = {
     appJs: './public/js/app.js',
@@ -64,5 +66,7 @@ gulp.task('sass', function () {
 gulp.task('watch', ['browser-sync','browserify'], function () {
     gulp.watch(paths.scssFiles, ['sass']);
 });
+
+gulp.task('test', shell.task('npm test'));
 
 gulp.task('default', ['sass','watch']);

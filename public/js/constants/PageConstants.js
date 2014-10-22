@@ -1,9 +1,9 @@
 /*
- * TodoConstants
+ * PageConstants
  */
 
-var keyMirror = require('react/lib/keyMirror');
+var constants = {
+    MODULE_ADD: 'MODULE_ADD'
+};
 
-module.exports = keyMirror({
-    MODULE_ADD: null
-});
+module.exports = constants;

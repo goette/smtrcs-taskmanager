@@ -51,8 +51,12 @@ var Main = React.createClass({
         return(
             <div className="container">
                 <Intro text={this.props.hallo} />
-                {nodes}
-                <Button />
+                <div className="col-sm-8">
+                    {nodes}
+                </div>
+                <div className="col-sm-4">
+                    <Button />
+                </div>
             </div>
         );
     }

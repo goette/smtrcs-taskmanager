@@ -26107,10 +26107,9 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var PageConstants = require('../constants/PageConstants');
 
 var PageActions = {
-    addModule: function (word) {
+    addModule: function () {
         AppDispatcher.handleViewAction({
-            actionType: PageConstants.MODULE_ADD,
-            word: word
+            actionType: PageConstants.MODULE_ADD
         });
     }
 };
@@ -26126,11 +26125,11 @@ var React = require('react');
 
 var Button = React.createClass({displayName: 'Button',
     _onClick: function () {
-        PageActions.addModule('test');
+        PageActions.addModule();
     },
     render: function () {
         return(
-            React.DOM.button({onClick: this._onClick, type: "button", className: "btn btn-default btn-lg"}, 
+            React.DOM.button({onClick: this._onClick, type: "button", className: "btn btn-primary btn-lg"}, 
                 "Add random module"
             )
         );
@@ -26212,8 +26211,12 @@ var Main = React.createClass({displayName: 'Main',
         return(
             React.DOM.div({className: "container"}, 
                 Intro({text: this.props.hallo}), 
-                nodes, 
-                Button(null)
+                React.DOM.div({className: "col-sm-8"}, 
+                    nodes
+                ), 
+                React.DOM.div({className: "col-sm-4"}, 
+                    Button(null)
+                )
             )
         );
     }
@@ -26323,7 +26326,7 @@ var PageConstants = require('../constants/PageConstants');
 var merge = require('react/lib/merge');
 var CHANGE_EVENT = 'change';
 
-var _onThisPage = [
+var _moduleCollection = [
     {
         pageId: 'kpi',
         name: 'KPI'
@@ -26338,11 +26341,11 @@ var _onThisPage = [
     }
 ];
 
-function addModuleToPage (word) {
-    var num = Math.round(Math.random() * 2),
-        el = _.clone(_onThisPage[num]);
+var _onThisPage = [];
 
-    el.name = word;
+function addModuleToPage () {
+    var num = Math.round(Math.random() * 2),
+        el = _.clone(_moduleCollection[num]);
 
     _onThisPage.push(el);
 }
@@ -26381,7 +26384,7 @@ AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case PageConstants.MODULE_ADD:
-            addModuleToPage(action.word);
+            addModuleToPage();
             PageStore.emitChange();
             break;
 

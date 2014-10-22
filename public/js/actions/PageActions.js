@@ -2,10 +2,9 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var PageConstants = require('../constants/PageConstants');
 
 var PageActions = {
-    addModule: function (word) {
+    addModule: function () {
         AppDispatcher.handleViewAction({
-            actionType: PageConstants.MODULE_ADD,
-            word: word
+            actionType: PageConstants.MODULE_ADD
         });
     }
 };

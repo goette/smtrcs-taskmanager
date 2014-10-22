@@ -4767,5 +4767,8 @@ body {
   -webkit-transition: all 0.5s linear;
   transition: all 0.5s linear; }
 
+button {
+  margin: 1.5em 0; }
+
 .module-item {
   margin-bottom: 2em; }
