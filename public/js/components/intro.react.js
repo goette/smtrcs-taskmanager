@@ -9,7 +9,7 @@ var Intro = React.createClass({
         return(
             <div className="intro">
                 <h1>I am the Intro!</h1>
-                <h2>Noch eine Komponente....</h2>
+                <h2>Noch eine Komponente.... / {this.props.text}</h2>
                 <hr />
             </div>
         );
