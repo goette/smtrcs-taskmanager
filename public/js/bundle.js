@@ -26111,6 +26111,12 @@ var PageActions = {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.MODULE_ADD
         });
+    },
+
+    removeModule: function () {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.MODULE_REMOVE
+        });
     }
 };
 
@@ -26170,11 +26176,9 @@ var Module = require('./module.react');
 var Intro = require('./intro.react');
 var Button = require('./button.react');
 
-var _ = require('lodash');
-
 function getPageState () {
     return {
-        modules: PageStore.getModules()
+        modules: PageStore.getModulesOnPage()
     };
 }
 
@@ -26202,8 +26206,8 @@ var Main = React.createClass({displayName: 'Main',
             return (
                 Module({
                     name: node.name, 
-                    pageId: node.pageId, 
-                    key: _.uniqueId()}
+                    type: node.type, 
+                    key: node.moduleId}
                 )
             );
         });
@@ -26223,7 +26227,7 @@ var Main = React.createClass({displayName: 'Main',
 });
 
 module.exports = Main;
-},{"../mixins/InheritsDomAttributes.mixin":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/mixins/InheritsDomAttributes.mixin.js","../stores/PageStore":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/stores/PageStore.js","./button.react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/components/button.react.js","./intro.react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/components/intro.react.js","./module.react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/components/module.react.js","lodash":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/node_modules/lodash/dist/lodash.js","react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/node_modules/react/react.js"}],"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/components/module.react.js":[function(require,module,exports){
+},{"../mixins/InheritsDomAttributes.mixin":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/mixins/InheritsDomAttributes.mixin.js","../stores/PageStore":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/stores/PageStore.js","./button.react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/components/button.react.js","./intro.react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/components/intro.react.js","./module.react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/components/module.react.js","react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/node_modules/react/react.js"}],"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/components/module.react.js":[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
@@ -26232,7 +26236,7 @@ var React = require('react');
 
 var Module = React.createClass({displayName: 'Module',
     _checkArticle: function () {
-        return this.props.pageId === 'kpi' ? 'eine' : 'ein';
+        return this.props.type === 'kpi' ? 'eine' : 'ein';
     },
     render: function () {
         return(
@@ -26247,7 +26251,7 @@ var Module = React.createClass({displayName: 'Module',
 module.exports = Module;
 },{"react":"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/node_modules/react/react.js"}],"/home/martingoette/Development/Sources/suite/frontend/dashboard_suite/public/js/constants/PageConstants.js":[function(require,module,exports){
 /*
- * TodoConstants
+ * PageConstants
  */
 
 var keyMirror = require('react/lib/keyMirror');
@@ -26328,15 +26332,18 @@ var CHANGE_EVENT = 'change';
 
 var _moduleCollection = [
     {
-        pageId: 'kpi',
+        moduleId: 'm' + _.uniqueId(),
+        type: 'kpi',
         name: 'KPI'
     },
     {
-        pageId: 'grid',
+        moduleId:  'm' + _.uniqueId(),
+        type: 'grid',
         name: 'Grid'
     },
     {
-        pageId: 'chart',
+        moduleId:  'm' + _.uniqueId(),
+        type: 'chart',
         name: 'Chart'
     }
 ];
@@ -26347,6 +26354,8 @@ function addModuleToPage () {
     var num = Math.round(Math.random() * 2),
         el = _.clone(_moduleCollection[num]);
 
+    el['moduleId'] = 'm' + _.uniqueId();
+
     _onThisPage.push(el);
 }
 
@@ -26355,8 +26364,12 @@ var PageStore = merge(EventEmitter.prototype, {
      * Get the entire collection of views.
      * @return {object}
      */
-    getModules: function () {
+    getModulesOnPage: function () {
         return _onThisPage;
+    },
+
+    getModuleCollection: function () {
+        return _moduleCollection;
     },
 
     emitChange: function () {

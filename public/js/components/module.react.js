@@ -6,7 +6,7 @@ var React = require('react');
 
 var Module = React.createClass({
     _checkArticle: function () {
-        return this.props.pageId === 'kpi' ? 'eine' : 'ein';
+        return this.props.type === 'kpi' ? 'eine' : 'ein';
     },
     render: function () {
         return(

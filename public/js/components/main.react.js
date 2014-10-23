@@ -10,11 +10,9 @@ var Module = require('./module.react');
 var Intro = require('./intro.react');
 var Button = require('./button.react');
 
-var _ = require('lodash');
-
 function getPageState () {
     return {
-        modules: PageStore.getModules()
+        modules: PageStore.getModulesOnPage()
     };
 }
 
@@ -42,8 +40,8 @@ var Main = React.createClass({
             return (
                 <Module
                     name={node.name}
-                    pageId={node.pageId}
-                    key={_.uniqueId()}
+                    type={node.type}
+                    key={node.moduleId}
                 />
             );
         });

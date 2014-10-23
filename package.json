@@ -30,5 +30,8 @@
   },
   "scripts": {
     "test": "jest"
+  },
+  "jest": {
+    "rootDir": "./public/js"
   }
 }

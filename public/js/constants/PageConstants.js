@@ -2,8 +2,8 @@
  * PageConstants
  */
 
-var constants = {
-    MODULE_ADD: 'MODULE_ADD'
-};
+var keyMirror = require('react/lib/keyMirror');
 
-module.exports = constants;
+module.exports = keyMirror({
+    MODULE_ADD: null
+});

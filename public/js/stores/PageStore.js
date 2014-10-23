@@ -11,15 +11,18 @@ var CHANGE_EVENT = 'change';
 
 var _moduleCollection = [
     {
-        pageId: 'kpi',
+        moduleId: 'm' + _.uniqueId(),
+        type: 'kpi',
         name: 'KPI'
     },
     {
-        pageId: 'grid',
+        moduleId:  'm' + _.uniqueId(),
+        type: 'grid',
         name: 'Grid'
     },
     {
-        pageId: 'chart',
+        moduleId:  'm' + _.uniqueId(),
+        type: 'chart',
         name: 'Chart'
     }
 ];
@@ -30,6 +33,8 @@ function addModuleToPage () {
     var num = Math.round(Math.random() * 2),
         el = _.clone(_moduleCollection[num]);
 
+    el['moduleId'] = 'm' + _.uniqueId();
+
     _onThisPage.push(el);
 }
 
@@ -38,8 +43,12 @@ var PageStore = merge(EventEmitter.prototype, {
      * Get the entire collection of views.
      * @return {object}
      */
-    getModules: function () {
+    getModulesOnPage: function () {
         return _onThisPage;
+    },
+
+    getModuleCollection: function () {
+        return _moduleCollection;
     },
 
     emitChange: function () {

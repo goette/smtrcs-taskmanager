@@ -6,6 +6,12 @@ var PageActions = {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.MODULE_ADD
         });
+    },
+
+    removeModule: function () {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.MODULE_REMOVE
+        });
     }
 };
 
