@@ -18,7 +18,7 @@ var Module = React.createClass({
             <div className="module-item">
                 <h3>Ich bin {this._checkArticle()} {this.props.name}</h3>
                 <span>Ein Modul kann so komplex sein, wie es will..</span>
-				<button onClick={this._onDeleteClick}>delete me!</button>
+				<button className="btn btn-danger" onClick={this._onDeleteClick}>delete me!</button>
             </div>
         );
     }

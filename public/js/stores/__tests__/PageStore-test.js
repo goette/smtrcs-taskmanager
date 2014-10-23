@@ -52,12 +52,23 @@ describe('PageStoreTest', function() {
     });
 
     it('removes a module from the page', function () {
-        callback(actionModuleAdd); // Add one module
-		var onPage = PageStore.getModulesOnPage();
-		var keys = Object.keys(onPage);
-		expect(keys.length).toBe(1);
-		actionModuleRemove.action.moduleId = onPage[keys[0]].moduleId;
-        callback(actionModuleRemove); // remove one module
-        expect(PageStore.getModulesOnPage().length).toEqual(0);
+        var onPage,
+            keys;
+
+        // Add one module
+        callback(actionModuleAdd);
+
+        // Check that PageStore modules on page has 1 entry
+        onPage = PageStore.getModulesOnPage();
+        expect(onPage.length).toBe(1);
+
+        // Set the moduleId in remove action to moduleId of the first (and only) entry
+        // And trigger the "remove" action
+		actionModuleRemove.action.moduleId = onPage[0].moduleId;
+        callback(actionModuleRemove);
+
+        // Yes it should be empty
+        onPage = PageStore.getModulesOnPage();
+        expect(onPage.length).toEqual(0);
     });
 });
