@@ -38,6 +38,13 @@ function addModuleToPage () {
     _onThisPage.push(el);
 }
 
+function removeModuleFromPage (moduleId) {
+    
+	_onThisPage = _onThisPage.filter(function(el){
+		return el.moduleId !== moduleId;
+	});
+}
+
 var PageStore = merge(EventEmitter.prototype, {
     /**
      * Get the entire collection of views.
@@ -77,6 +84,11 @@ AppDispatcher.register(function (payload) {
     switch (action.actionType) {
         case PageConstants.MODULE_ADD:
             addModuleToPage();
+            PageStore.emitChange();
+            break;
+			
+		case PageConstants.MODULE_REMOVE:
+            removeModuleFromPage(action.moduleId);
             PageStore.emitChange();
             break;
 

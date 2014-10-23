@@ -16,7 +16,8 @@ describe('PageStoreTest', function() {
     var actionModuleRemove = {
         source: 'VIEW_ACTION',
         action: {
-            actionType: PageConstants.MODULE_REMOVE
+            actionType: PageConstants.MODULE_REMOVE,
+			moduleId: 'blurks'
         }
     };
 
@@ -52,8 +53,11 @@ describe('PageStoreTest', function() {
 
     it('removes a module from the page', function () {
         callback(actionModuleAdd); // Add one module
+		var onPage = PageStore.getModulesOnPage();
+		var keys = Object.keys(onPage);
+		expect(keys.length).toBe(1);
+		actionModuleRemove.action.moduleId = onPage[keys[0]].moduleId;
         callback(actionModuleRemove); // remove one module
-        var onPage = PageStore.getModulesOnPage();
-        expect(onPage.length).toEqual(0);
+        expect(PageStore.getModulesOnPage().length).toEqual(0);
     });
 });

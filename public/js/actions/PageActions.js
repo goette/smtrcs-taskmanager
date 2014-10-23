@@ -8,9 +8,10 @@ var PageActions = {
         });
     },
 
-    removeModule: function () {
+    removeModule: function (moduleId) {
         AppDispatcher.handleViewAction({
-            actionType: PageConstants.MODULE_REMOVE
+            actionType: PageConstants.MODULE_REMOVE,
+			moduleId: moduleId
         });
     }
 };
