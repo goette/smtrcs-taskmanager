@@ -4,7 +4,9 @@
 
 var keyMirror = require('react/lib/keyMirror');
 
-module.exports = keyMirror({
+var constants = keyMirror({
     MODULE_ADD: null,
-	MODULE_REMOVE: null
+    MODULE_REMOVE: null
 });
+
+module.exports = constants;
