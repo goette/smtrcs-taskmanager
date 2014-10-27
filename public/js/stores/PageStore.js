@@ -80,7 +80,7 @@ var PageStore = merge(EventEmitter.prototype, {
 // Register to handle all updates
 AppDispatcher.register(function (payload) {
     var action = payload.action;
-
+    
     switch (action.actionType) {
         case PageConstants.MODULE_ADD:
             addModuleToPage();

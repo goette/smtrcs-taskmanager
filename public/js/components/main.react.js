@@ -6,9 +6,9 @@ var PageStore = require('../stores/PageStore');
 
 var React = require('react');
 var InheritsDomAttributes = require('../mixins/InheritsDomAttributes.mixin');
-var Module = require('./module.react');
-var Intro = require('./intro.react');
-var Button = require('./button.react');
+var CompModule = require('./module.react');
+var CompIntro = require('./intro.react');
+var CompButton = require('./button.react');
 
 function getPageState () {
     return {
@@ -38,7 +38,7 @@ var Main = React.createClass({
     render: function () {
         var nodes = this.state.modules.map(function (node) {
             return (
-                <Module
+                <CompModule
                     name={node.name}
                     type={node.type}
                     key={node.moduleId}
@@ -48,12 +48,12 @@ var Main = React.createClass({
 
         return(
             <div className="container">
-                <Intro text={this.props.hallo} />
+                <CompIntro hi="mencshc" text={this.props.hallo} meineid={this.props.id} />
                 <div className="col-sm-8">
                     {nodes}
                 </div>
                 <div className="col-sm-4">
-                    <Button />
+                    <CompButton />
                 </div>
             </div>
         );

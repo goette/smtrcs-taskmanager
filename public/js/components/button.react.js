@@ -4,9 +4,11 @@
 var PageActions = require('../actions/PageActions');
 
 var React = require('react');
+var $ = require('jquery');
 
 var Button = React.createClass({
-    _onClick: function () {
+    _onClick: function (e) {
+        console.log($(this.getDOMNode()));
         PageActions.addModule();
     },
     render: function () {
