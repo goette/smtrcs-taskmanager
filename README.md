@@ -23,9 +23,9 @@
 ### Windows
 
 * Install node.js & npm: 
-    * Download latest version, 64bit, msi, [http://nodejs.org/download](http://nodejs.org/download/)
-* Install [http://www.python.org/download/releases/2.7.3#download](Python v2.7.3)
-* Install [http://go.microsoft.com/?linkid=9816758](Visual Studio 2012 Express)
+    * Download [latest version](http://nodejs.org/download/), 64bit, msi
+* Install [Python v2.7.3](http://www.python.org/download/releases/2.7.3#download)
+* Install [Visual Studio 2012 Express](http://go.microsoft.com/?linkid=9816758)
 * Open CMD and install gulp: `npm install -g gulp`
 * Switch to this directory (suite7)
 * `npm install --msvs_version=2012`
