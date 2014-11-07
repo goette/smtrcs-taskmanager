@@ -12,7 +12,7 @@
 * Check that nodejs is installed: `node -v` should be greater 0.10.x
 * Check that npm is installed: `npm -v` should be greater 1.4.x
 * Switch to this directory (suite7)
-* `npm install`
+* `sudo npm install`
 * `gulp`
 * Open [http://localhost:3000/v1.html](http://localhost:3000/v1.html)
 * Change something in /scss or /js/components
