@@ -20,6 +20,11 @@ var paths = {
     cssMain: 'public/css/main.css'
 };
 
+function logAndIgnoreError(err) {
+  console.log(err.toString());
+  this.emit('end');
+}
+
 gulp.task('browser-sync', function() {
     browserSync({
         open: false,
@@ -55,6 +60,7 @@ gulp.task('browserify', function() {
 gulp.task('sass', function () {
     return gulp.src(paths.scssMain)
         .pipe(sass())
+		.on('error', logAndIgnoreError)
         .pipe(autoprefixer({
             browsers: ['> 1%', 'last 2 versions', 'ie 9'],
             cascade: false
