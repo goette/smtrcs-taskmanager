@@ -13,7 +13,7 @@ var jest = require('jest-cli');
 var paths = {
     appJs: './public/js/app.js',
     jsFolder: 'public/js',
-    jsFiles: ['public/js/**/*.js', '!public/js/bundle.js'],
+    jsFiles: ['public/js/**/*.js', '!public/js/bundle.js','!public/js/_backup/**/*.js'],
     scssFiles: 'public/scss/**/*.scss',
     scssMain: 'public/scss/main.scss',
     cssFolder: 'public/css',

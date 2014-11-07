@@ -2,8 +2,8 @@
  * @jsx React.DOM
  */
 
-var Main = require('./components/main.react');
 var React = require('react');
+var Main = require('./layout/main.module');
 
 window.React = React;
 

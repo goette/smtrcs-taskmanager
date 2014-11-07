@@ -1,6 +1,10 @@
 @import 'settings';
 
+/* Example how to use external files */
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,700,600,400);
+
 /* Example how to import scss from npm module */
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 
 @import 'base/base';
+@import 'layout/header';
