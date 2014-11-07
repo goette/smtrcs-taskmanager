@@ -8,7 +8,7 @@ var _ = require('lodash'),
     PageConstants = require('../constants/page.constants.js'),
     merge = require('react/lib/merge'),
     CHANGE_EVENT = 'change',
-    _moduleCollection = require('../_config/moduleCollection'),
+    _moduleCollection = require('../_config/module_collection'),
     _onThisPage = require('../_config/static_page'); // This will become an ajax call
 
 var PageStore = merge(EventEmitter.prototype, {
@@ -17,6 +17,11 @@ var PageStore = merge(EventEmitter.prototype, {
      * @return {object}
      */
     getModulesOnPage: function () {
+        console.log(_onThisPage, _moduleCollection);
+        _.each(_onThisPage.modulesOnPage, function (el) {
+             el['type'] = _moduleCollection[el.id];
+        });
+
         return _onThisPage;
     },
 

@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-var Headline = require('./components/headline.component');
+var Headline = require('../components/headline.component');
 
 var ConversionInside = React.createClass({
     render: function () {
