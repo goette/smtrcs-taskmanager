@@ -10,6 +10,7 @@ var ConversionInside = React.createClass({
         return (
             <div className={this.props.cx}>
                 <Headline text="Conversion inside" />
+                Action: {this.props.action}
             </div>
         );
     }

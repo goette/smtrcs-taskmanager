@@ -17,9 +17,12 @@ var PageStore = merge(EventEmitter.prototype, {
      * @return {object}
      */
     getModulesOnPage: function () {
-        console.log(_onThisPage, _moduleCollection);
         _.each(_onThisPage.modulesOnPage, function (el) {
-             el['type'] = _moduleCollection[el.id];
+            var key = el.id,
+                module = _.where(_moduleCollection, {id: key});
+
+            el.type = module[0].type;
+            el.action = module[0].action;
         });
 
         return _onThisPage;

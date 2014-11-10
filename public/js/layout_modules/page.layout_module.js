@@ -31,9 +31,12 @@ var Page = React.createClass({
     },
 
     render: function () {
-        var modules = this.state.modules.map(function (node) {
+        var modules = this.state.modules.map(function (module) {
             return (
-                <node.type />
+                <module.type
+                    cx={module.className}
+                    action={module.action}
+                />
             );
         });
 

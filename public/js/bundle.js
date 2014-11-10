@@ -26123,7 +26123,7 @@ module.exports = [
         id: 'KpiBasicVisibility',
         type: KpiBasic,
         //roles: ['c','s'],
-        //action: 'traffic/channel-distribution',
+        action: 'traffic/channel-distribution',
         defaultClassName: 'col-md-12 col-lg-6'
     }
 ];
@@ -26131,6 +26131,30 @@ module.exports = [
 var page = {
     url: '/static-page', // = id
     modulesOnPage: [ // Array of ordered modules
+        {
+            id: 'KpiBasicVisibility',
+            className: 'col-md-12' // Overrides defaultClassName
+        },
+        {
+            id: 'KpiBasicVisibility',
+            className: 'col-xs-4' // Overrides defaultClassName
+        },
+        {
+            id: 'KpiBasicVisibility',
+            className: 'col-xs-4' // Overrides defaultClassName
+        },
+        {
+            id: 'KpiBasicVisibility',
+            className: 'col-xs-4' // Overrides defaultClassName
+        },
+        {
+            id: 'KpiBasicVisibility',
+            className: 'col-md-12 col-lg-6' // Overrides defaultClassName
+        },
+        {
+            id: 'KpiBasicVisibility',
+            className: 'col-md-12 col-lg-12' // Overrides defaultClassName
+        },
         {
             id: 'KpiBasicVisibility',
             className: 'col-md-12 col-lg-6' // Overrides defaultClassName
@@ -26245,9 +26269,12 @@ var Page = React.createClass({displayName: 'Page',
     },
 
     render: function () {
-        var modules = this.state.modules.map(function (node) {
+        var modules = this.state.modules.map(function (module) {
             return (
-                node.type(null)
+                module.type({
+                    cx: module.className, 
+                    action: module.action}
+                )
             );
         });
 
@@ -26272,7 +26299,8 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
     render: function () {
         return (
             React.DOM.div({className: this.props.cx}, 
-                Headline({text: "Conversion inside"})
+                Headline({text: "Conversion inside"}), 
+                "Action: ", this.props.action
             )
         );
     }
@@ -26299,9 +26327,12 @@ var PageStore = merge(EventEmitter.prototype, {
      * @return {object}
      */
     getModulesOnPage: function () {
-        console.log(_onThisPage, _moduleCollection);
         _.each(_onThisPage.modulesOnPage, function (el) {
-             el['type'] = _moduleCollection[el.id];
+            var key = el.id,
+                module = _.where(_moduleCollection, {id: key});
+
+            el.type = module[0].type;
+            el.action = module[0].action;
         });
 
         return _onThisPage;
