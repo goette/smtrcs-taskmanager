@@ -1,0 +1,20 @@
+.add-menu {
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(#fff, 1);
+}
+
+.add-menu-item {
+    margin: 0 auto;
+    display: block;
+    max-width: 800px;
+    font-size: 2em;
+    padding: 10px 0;
+    border-bottom: 4px solid #eee;
+    button {
+        margin: 4px 0 0;
+    }
+}

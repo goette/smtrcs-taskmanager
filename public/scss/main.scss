@@ -2,10 +2,13 @@
 
 /* Example how to use external files */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,700,600,400);
+@import url(http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
 
 /* Example how to import scss from npm module */
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 
 @import 'base/base';
+@import 'button/page_edit';
+@import 'layout/add_menu';
 @import 'layout/header';
 @import 'module/module';

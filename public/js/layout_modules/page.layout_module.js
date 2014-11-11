@@ -5,10 +5,14 @@
 var React = require('react');
 var PageActions = require('../actions/page.actions');
 var PageStore = require('../stores/page.store');
+var AddMenu = require('./add_menu.layout_module');
+var PageEditButtons = require('../components/page_edit_buttons.component');
 
 function getPageState () {
     return {
-        modules: PageStore.getModulesOnPage()
+        modules: PageStore.getModulesOnPage(),
+        editMode: PageStore.getEditMode(),
+        addMode: PageStore.getAddMode()
     };
 }
 
@@ -31,7 +35,10 @@ var Page = React.createClass({
     },
 
     render: function () {
-        var modules;
+        var modules = '',
+            addMenu = '',
+            editButtons = '',
+            pageEditButtons = '';
 
         if (this.state) {
             modules = this.state.modules.map(function (module) {
@@ -41,17 +48,21 @@ var Page = React.createClass({
                         cx={module.className}
                         action={module.action}
                         pageId={module.pageId}
+                        editMode={this.state.editMode}
+                        roles={module.roles}
                     />
                 );
-            });
-        } else {
-            modules = '';
-        }
+            }.bind(this));
 
+            addMenu = this.state.addMode ? <AddMenu /> : '';
+            pageEditButtons = <PageEditButtons editMode={this.state.editMode} addMode={this.state.addMode} />;
+        }
 
         return (
             <div className="row">
                 {modules}
+                {addMenu}
+                {pageEditButtons}
             </div>
         );
     }

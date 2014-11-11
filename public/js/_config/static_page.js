@@ -2,6 +2,9 @@ var page = {
     url: '/static-page', // = id
     modulesOnPage: [ // Array of ordered modules
         {
+            id: 'ChartChannelInsight'
+        },
+        {
             id: 'KpiConversionInsight'
         },
         {
@@ -9,6 +12,9 @@ var page = {
         },
         {
             id: 'KpiSocial'
+        },
+        {
+            id: 'KpiConversionInsight'
         },
         {
             id: 'KpiUrlRankings'

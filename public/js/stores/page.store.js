@@ -10,9 +10,10 @@ var _ = require('lodash'),
     CHANGE_EVENT = 'change',
     _moduleCollection = require('../_config/module_collection'),
     _initiallyOnPage = require('../_config/static_page').modulesOnPage, // This will become an ajax call
-    _currentlyOnPage = [];
-
-var _currentRole = 'c';
+    _currentlyOnPage = [],
+    _currentRole = 'c',
+    _editMode = false,
+    _addMode = false;
 
 function joinPageArrays () {
     var arr = [],
@@ -23,18 +24,26 @@ function joinPageArrays () {
 
     for (i = 0; i < _initiallyOnPage.length; i++) {
         key = _initiallyOnPage[i].id;
-        module = _.where(_moduleCollection, {id: key});
+        module = _.where(_moduleCollection, {id: key})[0];
         obj = {
             id: key,
-            type: module[0].type,
-            action: module[0].action,
-            roles: module[0].roles,
+            type: module.type,
+            action: module.action,
+            roles: module.roles,
             pageId: _.uniqueId(),
-            className: module[0].defaultClassName
+            className: module.defaultClassName
         }
         arr.push(obj);
     }
     _currentlyOnPage = arr;
+}
+
+function toggleEditMode () {
+   _editMode = !_editMode;
+}
+
+function toggleAddMode () {
+    _addMode = !_addMode;
 }
 
 function setCurrentRole (role) {
@@ -45,6 +54,14 @@ function removeModuleFromPage (moduleId) {
     _currentlyOnPage = _currentlyOnPage.filter(function (el) {
         return el.pageId !== moduleId;
     });
+}
+
+function addModuleToPage (moduleId) {
+    var module = _.where(_moduleCollection, {id: moduleId})[0];
+    module.pageId = _.uniqueId();
+    module.className = module.defaultClassName;
+    _currentlyOnPage.push(module);
+    _addMode = false;
 }
 
 function filterModulesByRole () {
@@ -64,6 +81,14 @@ var PageStore = merge(EventEmitter.prototype, {
      */
     getModulesOnPage: function () {
         return filterModulesByRole();
+    },
+
+    getEditMode: function () {
+        return _editMode;
+    },
+
+    getAddMode: function () {
+        return _addMode;
     },
 
     getModuleCollection: function () {
@@ -99,8 +124,23 @@ AppDispatcher.register(function (payload) {
             PageStore.emitChange();
             break;
 
+        case PageConstants.PAGE_TOGGLE_EDIT:
+            toggleEditMode();
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.PAGE_TOGGLE_ADD:
+            toggleAddMode();
+            PageStore.emitChange();
+            break;
+
         case PageConstants.MODULE_FILTER_BY_ROLE:
             setCurrentRole(action.role);
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.MODULE_ADD:
+            addModuleToPage(action.moduleId);
             PageStore.emitChange();
             break;
 

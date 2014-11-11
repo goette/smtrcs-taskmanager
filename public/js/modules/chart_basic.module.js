@@ -5,9 +5,8 @@
 var React = require('react');
 var Headline = require('../components/headline.component');
 var RemoveModule = require('../components/remove_module.component');
-var _ = require('lodash');
 
-var KpiBasic = React.createClass({
+var ConversionInside = React.createClass({
     render: function () {
         var remove = '',
             roles = 'Roles: ' + this.props.roles.join(', ');
@@ -18,14 +17,14 @@ var KpiBasic = React.createClass({
 
         return (
             <div className={this.props.cx}>
-                <div className="kpi module">
+                <div className="chart module">
                     {remove}
-                    <Headline title={this.props.title} />
-                    <br />{roles}
+                    <Headline text={this.props.title} />
+                    <img src="/images/chart.png" />
                 </div>
             </div>
         );
     }
 });
 
-module.exports = KpiBasic;
+module.exports = ConversionInside;

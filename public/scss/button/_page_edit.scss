@@ -1,0 +1,48 @@
+.edit-buttons {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    button {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        width: 60px;
+        height: 60px;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 30px;
+        font-size: 24px;
+        color: #fff;
+        transition: all .25s linear;
+        &:focus,
+        &:active {
+            outline: none !important;
+        }
+        &:last-child {
+            display: none;
+            position: absolute;
+            font-size: 2em;
+            top: 0;
+            i {
+                vertical-align: top;
+                margin-top: 8px;
+            }
+        }
+    }
+    &:hover,
+    &.is-active {
+        height: 130px;
+        button:last-child {
+            display: block;
+        }
+    }
+    .btn-add-active {
+        transform: rotate(-45deg);
+    }
+    .btn-danger + .btn {
+        display: none !important;
+    }
+}
