@@ -9,7 +9,53 @@ var _ = require('lodash'),
     merge = require('react/lib/merge'),
     CHANGE_EVENT = 'change',
     _moduleCollection = require('../_config/module_collection'),
-    _onThisPage = require('../_config/static_page'); // This will become an ajax call
+    _initiallyOnPage = require('../_config/static_page').modulesOnPage, // This will become an ajax call
+    _currentlyOnPage = [];
+
+var _currentRole = 'c';
+
+function joinPageArrays () {
+    var arr = [],
+        key,
+        module,
+        obj,
+        i;
+
+    for (i = 0; i < _initiallyOnPage.length; i++) {
+        key = _initiallyOnPage[i].id;
+        module = _.where(_moduleCollection, {id: key});
+        obj = {
+            id: key,
+            type: module[0].type,
+            action: module[0].action,
+            roles: module[0].roles,
+            pageId: _.uniqueId(),
+            className: module[0].defaultClassName
+        }
+        arr.push(obj);
+    }
+    _currentlyOnPage = arr;
+}
+
+function setCurrentRole (role) {
+    _currentRole = role[0].toLowerCase();
+}
+
+function removeModuleFromPage (moduleId) {
+    _currentlyOnPage = _currentlyOnPage.filter(function (el) {
+        return el.pageId !== moduleId;
+    });
+}
+
+function filterModulesByRole () {
+    var arr = _currentlyOnPage;
+
+    arr = arr.filter(function (el) {
+        return el.roles.indexOf(_currentRole) > -1;
+    });
+
+    return arr;
+}
 
 var PageStore = merge(EventEmitter.prototype, {
     /**
@@ -17,15 +63,7 @@ var PageStore = merge(EventEmitter.prototype, {
      * @return {object}
      */
     getModulesOnPage: function () {
-        _.each(_onThisPage.modulesOnPage, function (el) {
-            var key = el.id,
-                module = _.where(_moduleCollection, {id: key});
-
-            el.type = module[0].type;
-            el.action = module[0].action;
-        });
-
-        return _onThisPage;
+        return filterModulesByRole();
     },
 
     getModuleCollection: function () {
@@ -56,8 +94,13 @@ AppDispatcher.register(function (payload) {
     var action = payload.action;
 
     switch (action.actionType) {
-        case PageConstants.MODULE_ADD:
-            addModuleToPage();
+        case PageConstants.PAGE_INITIALIZE:
+            joinPageArrays();
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.MODULE_FILTER_BY_ROLE:
+            setCurrentRole(action.role);
             PageStore.emitChange();
             break;
 
@@ -69,12 +112,6 @@ AppDispatcher.register(function (payload) {
         default:
             return true;
     }
-
-    // This often goes in each case that should trigger a UI change. This store
-    // needs to trigger a UI change after every view action, so we can make the
-    // code less repetitive by putting it here.  We need the default case,
-    // however, to make sure this only gets called after one of the cases above.
-
 
     return true; // No errors.  Needed by promise in Dispatcher.
 });

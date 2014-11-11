@@ -4858,6 +4858,9 @@ body {
 button {
   margin: 1.5em 0; }
 
+h1 {
+  font-size: 2em; }
+
 .module-item {
   margin-bottom: 2em; }
   .module-item button {
@@ -4868,3 +4871,10 @@ button {
 .header {
   line-height: 50px;
   font-size: 1.5em; }
+  .header select {
+    vertical-align: middle;
+    margin-top: -4px; }
+
+.module {
+  box-sizing: border-box;
+  background-color: #f0f0f0; }

@@ -26120,11 +26120,32 @@ var KpiBasic = require('../modules/kpi_basic.module');
 
 module.exports = [
     {
-        id: 'KpiBasicVisibility',
+        id: 'KpiConversionInsight',
         type: KpiBasic,
-        //roles: ['c','s'],
+        roles: ['c','s','e'],
         action: 'traffic/channel-distribution',
-        defaultClassName: 'col-md-12 col-lg-6'
+        defaultClassName: 'col-sm-4'
+    },
+    {
+        id: 'KpiSocial',
+        type: KpiBasic,
+        roles: ['c','s','e'],
+        action: 'traffic/channel-distribution',
+        defaultClassName: 'col-sm-4'
+    },
+    {
+        id: 'KpiTrafficInsight',
+        type: KpiBasic,
+        roles: ['c','s'],
+        action: 'traffic/channel-distribution',
+        defaultClassName: 'col-md-12'
+    },
+    {
+        id: 'KpiUrlRankings',
+        type: KpiBasic,
+        roles: ['c'],
+        action: 'traffic/channel-distribution',
+        defaultClassName: 'col-md-6'
     }
 ];
 },{"../modules/kpi_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js":[function(require,module,exports){
@@ -26132,32 +26153,22 @@ var page = {
     url: '/static-page', // = id
     modulesOnPage: [ // Array of ordered modules
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-md-12' // Overrides defaultClassName
+            id: 'KpiConversionInsight'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-xs-4' // Overrides defaultClassName
+            id: 'KpiSocial'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-xs-4' // Overrides defaultClassName
+            id: 'KpiSocial'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-xs-4' // Overrides defaultClassName
+            id: 'KpiUrlRankings'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-md-12 col-lg-6' // Overrides defaultClassName
+            id: 'KpiUrlRankings'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-md-12 col-lg-12' // Overrides defaultClassName
-        },
-        {
-            id: 'KpiBasicVisibility',
-            className: 'col-md-12 col-lg-6' // Overrides defaultClassName
+            id: 'KpiTrafficInsight'
         }
     ]
 };
@@ -26197,7 +26208,32 @@ var AppDispatcher = copyProperties(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/flux/index.js","react/lib/copyProperties":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/copyProperties.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js":[function(require,module,exports){
+},{"flux":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/flux/index.js","react/lib/copyProperties":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/copyProperties.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js":[function(require,module,exports){
+var AppDispatcher = require('../_dispatcher/app.dispatcher');
+var PageConstants = require('../constants/page.constants');
+
+var PageActions = {
+    initialize: function () {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.PAGE_INITIALIZE
+        });
+    },
+    setCurrentRole: function (role) {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.MODULE_FILTER_BY_ROLE,
+            role: role
+        });
+    },
+    removeModule: function (moduleId) {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.MODULE_REMOVE,
+            moduleId: moduleId
+        });
+    }
+};
+
+module.exports = PageActions;
+},{"../_dispatcher/app.dispatcher":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page.constants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js":[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
@@ -26213,21 +26249,67 @@ var Headline = React.createClass({displayName: 'Headline',
 });
 
 module.exports = Headline;
-},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js":[function(require,module,exports){
-
-},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/header.layout_module.js":[function(require,module,exports){
+},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/remove_module.component.js":[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
 
 var React = require('react');
+var PageActions = require('../actions/page.actions');
+
+var removeModule = React.createClass({displayName: 'removeModule',
+    _deleteMe: function () {
+        PageActions.removeModule(this.props.pageId);
+    },
+    render: function () {
+        return (
+            React.DOM.button({onClick: this._deleteMe, className: "btn-delete btn btn-danger pull-right"}, "Delete Me")
+        );
+    }
+});
+
+module.exports = removeModule;
+},{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js":[function(require,module,exports){
+/*
+ * PageConstants
+ */
+
+var keyMirror = require('react/lib/keyMirror');
+
+var constants = keyMirror({
+    MODULE_FILTER_BY_ROLE: null,
+    MODULE_REMOVE: null,
+    PAGE_INITIALIZE: null
+});
+
+module.exports = constants;
+},{"react/lib/keyMirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/keyMirror.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/header.layout_module.js":[function(require,module,exports){
+/**
+ * @jsx React.DOM
+ */
+
+var React = require('react');
+var PageActions = require('../actions/page.actions');
 
 var Header = React.createClass({displayName: 'Header',
+    _onChange: function (e) {
+        PageActions.setCurrentRole(e.target.value);
+    },
     render: function () {
+        var options = ['C-Type','SEO','Editor'];
+        var renderedOptions = options.map(function (option) {
+             return(
+                 React.DOM.option({value: option}, option)
+             );
+        });
+
         return (
             React.DOM.nav({className: "header navbar navbar-default navbar-fixed-top", role: "navigation"}, 
                 React.DOM.div({className: "container-fluid"}, 
-                    "Prototype v.1"
+                    React.DOM.a({className: "navbar-brand", href: "/v1.html"}, "S7 v0.1.0"), 
+                    React.DOM.select({onChange: this._onChange}, 
+                        renderedOptions
+                    )
                 )
             )
         );
@@ -26235,29 +26317,29 @@ var Header = React.createClass({displayName: 'Header',
 });
 
 module.exports = Header;
-},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/page.layout_module.js":[function(require,module,exports){
+},{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/page.layout_module.js":[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
 
 var React = require('react');
-
+var PageActions = require('../actions/page.actions');
 var PageStore = require('../stores/page.store');
 
 function getPageState () {
     return {
-        modules: PageStore.getModulesOnPage().modulesOnPage
+        modules: PageStore.getModulesOnPage()
     };
 }
 
 var Page = React.createClass({displayName: 'Page',
     getInitialState: function () {
-        console.log(getPageState());
-        return getPageState();
+        return null;
     },
 
     componentDidMount: function () {
         PageStore.addChangeListener(this._onChange);
+        PageActions.initialize();
     },
 
     componentWillUnmount: function () {
@@ -26269,14 +26351,23 @@ var Page = React.createClass({displayName: 'Page',
     },
 
     render: function () {
-        var modules = this.state.modules.map(function (module) {
-            return (
-                module.type({
-                    cx: module.className, 
-                    action: module.action}
-                )
-            );
-        });
+        var modules;
+
+        if (this.state) {
+            modules = this.state.modules.map(function (module) {
+                return (
+                    module.type({
+                        title: module.id, 
+                        cx: module.className, 
+                        action: module.action, 
+                        pageId: module.pageId}
+                    )
+                );
+            });
+        } else {
+            modules = '';
+        }
+
 
         return (
             React.DOM.div({className: "row"}, 
@@ -26287,27 +26378,31 @@ var Page = React.createClass({displayName: 'Page',
 });
 
 module.exports = Page;
-},{"../stores/page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js":[function(require,module,exports){
+},{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","../stores/page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js":[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
 
 var React = require('react');
 var Headline = require('../components/headline.component');
+var RemoveModule = require('../components/remove_module.component');
 
 var ConversionInside = React.createClass({displayName: 'ConversionInside',
     render: function () {
         return (
             React.DOM.div({className: this.props.cx}, 
-                Headline({text: "Conversion inside"}), 
-                "Action: ", this.props.action
+                React.DOM.div({className: "kpi module"}, 
+                    RemoveModule({pageId: this.props.pageId}), 
+                    Headline({text: this.props.title}), 
+                    React.DOM.div(null, "Action: ", this.props.action)
+                )
             )
         );
     }
 });
 
 module.exports = ConversionInside;
-},{"../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js":[function(require,module,exports){
+},{"../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","../components/remove_module.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/remove_module.component.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js":[function(require,module,exports){
 /*
  * ModuleStore
  */
@@ -26319,7 +26414,53 @@ var _ = require('lodash'),
     merge = require('react/lib/merge'),
     CHANGE_EVENT = 'change',
     _moduleCollection = require('../_config/module_collection'),
-    _onThisPage = require('../_config/static_page'); // This will become an ajax call
+    _initiallyOnPage = require('../_config/static_page').modulesOnPage, // This will become an ajax call
+    _currentlyOnPage = [];
+
+var _currentRole = 'c';
+
+function joinPageArrays () {
+    var arr = [],
+        key,
+        module,
+        obj,
+        i;
+
+    for (i = 0; i < _initiallyOnPage.length; i++) {
+        key = _initiallyOnPage[i].id;
+        module = _.where(_moduleCollection, {id: key});
+        obj = {
+            id: key,
+            type: module[0].type,
+            action: module[0].action,
+            roles: module[0].roles,
+            pageId: _.uniqueId(),
+            className: module[0].defaultClassName
+        }
+        arr.push(obj);
+    }
+    _currentlyOnPage = arr;
+}
+
+function setCurrentRole (role) {
+    _currentRole = role[0].toLowerCase();
+}
+
+function removeModuleFromPage (moduleId) {
+    _currentlyOnPage = _currentlyOnPage.filter(function (el) {
+        return el.pageId !== moduleId;
+    });
+}
+
+function filterModulesByRole () {
+    var arr = _currentlyOnPage;
+
+    arr = arr.filter(function (el) {
+        return el.roles.indexOf(_currentRole) > -1;
+    });
+
+    return arr;
+}
 
 var PageStore = merge(EventEmitter.prototype, {
     /**
@@ -26327,15 +26468,7 @@ var PageStore = merge(EventEmitter.prototype, {
      * @return {object}
      */
     getModulesOnPage: function () {
-        _.each(_onThisPage.modulesOnPage, function (el) {
-            var key = el.id,
-                module = _.where(_moduleCollection, {id: key});
-
-            el.type = module[0].type;
-            el.action = module[0].action;
-        });
-
-        return _onThisPage;
+        return filterModulesByRole();
     },
 
     getModuleCollection: function () {
@@ -26366,8 +26499,13 @@ AppDispatcher.register(function (payload) {
     var action = payload.action;
 
     switch (action.actionType) {
-        case PageConstants.MODULE_ADD:
-            addModuleToPage();
+        case PageConstants.PAGE_INITIALIZE:
+            joinPageArrays();
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.MODULE_FILTER_BY_ROLE:
+            setCurrentRole(action.role);
             PageStore.emitChange();
             break;
 
@@ -26379,12 +26517,6 @@ AppDispatcher.register(function (payload) {
         default:
             return true;
     }
-
-    // This often goes in each case that should trigger a UI change. This store
-    // needs to trigger a UI change after every view action, so we can make the
-    // code less repetitive by putting it here.  We need the default case,
-    // however, to make sure this only gets called after one of the cases above.
-
 
     return true; // No errors.  Needed by promise in Dispatcher.
 });

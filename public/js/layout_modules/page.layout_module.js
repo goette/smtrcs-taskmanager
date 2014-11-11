@@ -3,23 +3,23 @@
  */
 
 var React = require('react');
-
+var PageActions = require('../actions/page.actions');
 var PageStore = require('../stores/page.store');
 
 function getPageState () {
     return {
-        modules: PageStore.getModulesOnPage().modulesOnPage
+        modules: PageStore.getModulesOnPage()
     };
 }
 
 var Page = React.createClass({
     getInitialState: function () {
-        console.log(getPageState());
-        return getPageState();
+        return null;
     },
 
     componentDidMount: function () {
         PageStore.addChangeListener(this._onChange);
+        PageActions.initialize();
     },
 
     componentWillUnmount: function () {
@@ -31,14 +31,23 @@ var Page = React.createClass({
     },
 
     render: function () {
-        var modules = this.state.modules.map(function (module) {
-            return (
-                <module.type
-                    cx={module.className}
-                    action={module.action}
-                />
-            );
-        });
+        var modules;
+
+        if (this.state) {
+            modules = this.state.modules.map(function (module) {
+                return (
+                    <module.type
+                        title={module.id}
+                        cx={module.className}
+                        action={module.action}
+                        pageId={module.pageId}
+                    />
+                );
+            });
+        } else {
+            modules = '';
+        }
+
 
         return (
             <div className="row">

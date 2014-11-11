@@ -2,32 +2,22 @@ var page = {
     url: '/static-page', // = id
     modulesOnPage: [ // Array of ordered modules
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-md-12' // Overrides defaultClassName
+            id: 'KpiConversionInsight'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-xs-4' // Overrides defaultClassName
+            id: 'KpiSocial'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-xs-4' // Overrides defaultClassName
+            id: 'KpiSocial'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-xs-4' // Overrides defaultClassName
+            id: 'KpiUrlRankings'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-md-12 col-lg-6' // Overrides defaultClassName
+            id: 'KpiUrlRankings'
         },
         {
-            id: 'KpiBasicVisibility',
-            className: 'col-md-12 col-lg-12' // Overrides defaultClassName
-        },
-        {
-            id: 'KpiBasicVisibility',
-            className: 'col-md-12 col-lg-6' // Overrides defaultClassName
+            id: 'KpiTrafficInsight'
         }
     ]
 };
