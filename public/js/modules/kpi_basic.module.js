@@ -4,17 +4,13 @@
 
 var React = require('react');
 var Headline = require('../components/headline.component');
-var RemoveModule = require('../components/remove_module.component');
 var _ = require('lodash');
+var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
 
 var KpiBasic = React.createClass({
     render: function () {
-        var remove = '',
+        var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
             roles = 'Roles: ' + this.props.roles.join(', ');
-
-        if (this.props.editMode) {
-            remove = <RemoveModule pageId={this.props.pageId} />;
-        }
 
         return (
             <div className={this.props.cx}>

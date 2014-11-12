@@ -4927,6 +4927,8 @@ h1 {
   border-bottom: 4px solid #eee; }
   .add-menu-item button {
     margin: 4px 0 0; }
+  .add-menu-item span {
+    font-size: 0.75em; }
 
 .header {
   line-height: 50px;

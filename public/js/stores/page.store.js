@@ -64,9 +64,7 @@ function addModuleToPage (moduleId) {
     _addMode = false;
 }
 
-function filterModulesByRole () {
-    var arr = _currentlyOnPage;
-
+function filterByRole (arr) {
     arr = arr.filter(function (el) {
         return el.roles.indexOf(_currentRole) > -1;
     });
@@ -80,7 +78,11 @@ var PageStore = merge(EventEmitter.prototype, {
      * @return {object}
      */
     getModulesOnPage: function () {
-        return filterModulesByRole();
+        return filterByRole(_currentlyOnPage);
+    },
+
+    getModuleCollection: function () {
+        return filterByRole(_moduleCollection);
     },
 
     getEditMode: function () {
@@ -89,10 +91,6 @@ var PageStore = merge(EventEmitter.prototype, {
 
     getAddMode: function () {
         return _addMode;
-    },
-
-    getModuleCollection: function () {
-        return _moduleCollection;
     },
 
     emitChange: function () {

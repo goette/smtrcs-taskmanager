@@ -6,23 +6,16 @@ var React = require('react');
 var PageStore = require('../stores/page.store');
 var PageActions = require('../actions/page.actions');
 
-function getAllModules () {
-    return {
-        modules: PageStore.getModuleCollection()
-    };
-}
-
 var AddMenu = React.createClass({
-    getInitialState: function () {
-        return getAllModules();
-    },
-
     render: function () {
-        var moduleList = this.state.modules.map(function (module) {
+        var moduleList = this.props.moduleCollection.map(function (module) {
             return(
-                <ModuleItem moduleId={module.id} />
+                <ModuleItem
+                    moduleId={module.id}
+                    roles={module.roles}
+                />
             );
-        }.bind(this));
+        });
 
         return (
             <div className="add-menu">
@@ -37,10 +30,12 @@ var ModuleItem = React.createClass({
         PageActions.addModule(this.props.moduleId);
     },
     render: function () {
+        var roles = this.props.roles.join(', ');
         return (
             <div className="add-menu-item">
                 <button onClick={this._addToPage} className="btn btn-primary pull-right">+ Add to page</button>
-                <strong>{this.props.moduleId}</strong>
+                <strong>{this.props.moduleId}</strong><br />
+                <span>Roles: {roles}</span>
             </div>
         );
     }

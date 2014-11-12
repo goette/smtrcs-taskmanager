@@ -11,6 +11,7 @@ var PageEditButtons = require('../components/page_edit_buttons.component');
 function getPageState () {
     return {
         modules: PageStore.getModulesOnPage(),
+        moduleCollection: PageStore.getModuleCollection(),
         editMode: PageStore.getEditMode(),
         addMode: PageStore.getAddMode()
     };
@@ -54,7 +55,12 @@ var Page = React.createClass({
                 );
             }.bind(this));
 
-            addMenu = this.state.addMode ? <AddMenu /> : '';
+            if (this.state.addMode) {
+                addMenu =  <AddMenu moduleCollection={this.state.moduleCollection} />
+            } else {
+                addMenu = '';
+            }
+
             pageEditButtons = <PageEditButtons editMode={this.state.editMode} addMode={this.state.addMode} />;
         }
 

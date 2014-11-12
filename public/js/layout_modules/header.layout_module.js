@@ -10,7 +10,7 @@ var Header = React.createClass({
         PageActions.setCurrentRole(e.target.value);
     },
     render: function () {
-        var options = ['C-Type','SEO','Editor'];
+        var options = ['C-Level','SEO','Editor'];
         var renderedOptions = options.map(function (option) {
              return(
                  <option value={option}>{option}</option>
