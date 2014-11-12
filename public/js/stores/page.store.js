@@ -12,8 +12,10 @@ var _ = require('lodash'),
     _initiallyOnPage = require('../_config/static_page').modulesOnPage, // This will become an ajax call
     _currentlyOnPage = [],
     _currentRole = 'c',
-    _editMode = false,
-    _addMode = false;
+    _mode = {
+        edit: false,
+        add: false
+    };
 
 function joinPageArrays () {
     var arr = [],
@@ -38,12 +40,8 @@ function joinPageArrays () {
     _currentlyOnPage = arr;
 }
 
-function toggleEditMode () {
-   _editMode = !_editMode;
-}
-
-function toggleAddMode () {
-    _addMode = !_addMode;
+function toggleMode (val) {
+    _mode[val] = !_mode[val];
 }
 
 function setCurrentRole (role) {
@@ -61,7 +59,7 @@ function addModuleToPage (moduleId) {
     module.pageId = _.uniqueId();
     module.className = module.defaultClassName;
     _currentlyOnPage.push(module);
-    _addMode = false;
+    _mode.add = false;
 }
 
 function filterByRole (arr) {
@@ -86,11 +84,11 @@ var PageStore = merge(EventEmitter.prototype, {
     },
 
     getEditMode: function () {
-        return _editMode;
+        return _mode.edit;
     },
 
     getAddMode: function () {
-        return _addMode;
+        return _mode.add;
     },
 
     emitChange: function () {
@@ -123,12 +121,12 @@ AppDispatcher.register(function (payload) {
             break;
 
         case PageConstants.PAGE_TOGGLE_EDIT:
-            toggleEditMode();
+            toggleMode('edit');
             PageStore.emitChange();
             break;
 
         case PageConstants.PAGE_TOGGLE_ADD:
-            toggleAddMode();
+            toggleMode('add');
             PageStore.emitChange();
             break;
 

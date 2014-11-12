@@ -29,14 +29,13 @@ var PageEditButtons = React.createClass({
             cxa = "btn btn-danger btn-add-active";
             disabled = 'disabled';
             cxeb = cxeb + ' is-active';
-            style = {display: 'block'};
         } else {
             cxa = "btn btn-success";
         }
         return (
             <div className={cxeb}>
-                <button onClick={this._toggleEditMode} className={cxe} style={style} disabled={disabled}><i className="fa fa-pencil"></i></button>
-                <button onClick={this._toggleAddMode} className={cxa} style={style}><i className="fa fa-plus"></i></button>
+                <button onClick={this._toggleEditMode} className={cxe} disabled={disabled}><i className="fa fa-pencil"></i></button>
+                <button onClick={this._toggleAddMode} className={cxa}><i className="fa fa-plus"></i></button>
             </div>
         );
     }

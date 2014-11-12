@@ -4,8 +4,8 @@
 
 var React = require('react');
 var Headline = require('../components/headline.component');
-var _ = require('lodash');
 var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
+var _ = require('lodash');
 
 var KpiBasic = React.createClass({
     render: function () {

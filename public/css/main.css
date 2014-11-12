@@ -4956,7 +4956,6 @@ h1 {
   .module .btn-delete {
     margin: 0; }
   .module.chart {
-    max-height: 290px;
     background-color: #fafafa; }
     .module.chart img {
       width: 100%;
