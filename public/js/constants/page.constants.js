@@ -10,7 +10,8 @@ var constants = keyMirror({
     MODULE_REMOVE: null,
     PAGE_INITIALIZE: null,
     PAGE_TOGGLE_EDIT: null,
-    PAGE_TOGGLE_ADD: null
+    PAGE_TOGGLE_ADD: null,
+    PAGE_REORDER: null
 });
 
 module.exports = constants;

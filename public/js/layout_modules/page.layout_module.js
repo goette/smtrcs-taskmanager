@@ -10,6 +10,9 @@ var React = require('react'),
     _moduleCollection = require('../_config/module_collection'),
     _initiallyOnPage = require('../_config/static_page').modulesOnPage; // This will become an ajax call
 
+var placeholder = document.createElement("li");
+placeholder.className = "placeholder";
+
 function getPageState () {
     return {
         modules: PageStore.getModulesOnPage(),
@@ -37,12 +40,39 @@ var Page = React.createClass({
         this.setState(getPageState());
     },
 
-    _dragStart: function () {
+    _sort: function (modules, dragging) {
+        this.state.modules = modules;
+        this.state.dragging = dragging;
+        PageActions.updateModulesOrder(modules);
+    },
 
+    _dragStart: function (e) {
+        this._dragged = Number(e.currentTarget.dataset.id);
+        e.dataTransfer.effectAllowed = 'move';
+        // Firefox requires calling dataTransfer.setData
+        // for the drag to properly work
+        e.dataTransfer.setData("text/html", null);
+    },
+
+    _dragOver: function (e) {
+        var over = e.currentTarget;
+        var dragging = this.state.dragging;
+        var from = isFinite(dragging) ? dragging : this._dragged;
+        var to = Number(over.dataset.id);
+        if((e.clientY - over.offsetTop) > (over.offsetHeight / 2) ||
+            (e.clientX - over.offsetLeft) > (over.offsetWidth / 2)) {
+            to++;
+        }
+        if(from < to) to--;
+
+        // Move from 'a' to 'b'
+        var items = this.state.modules;
+        items.splice(to, 0, items.splice(from,1)[0]);
+        this._sort(items, to);
     },
 
     _dragEnd: function () {
-
+        this._sort(this.state.modules, undefined);
     },
 
     render: function () {
@@ -55,11 +85,13 @@ var Page = React.createClass({
         if (this.state) {
             editMode = this.state.editMode;
             modules = this.state.modules.map(function (module, i) {
+                var dragging = (i == this.state.dragging) ? ' dragging' : '';
                 return (
-                    <div className={module.className}
-                        data-id={this.props.i}
+                    <div className={module.className + dragging}
+                        data-id={i}
                         draggable={editMode}
                         onDragEnd={this._dragEnd}
+                        onDragOver={this._dragOver}
                         onDragStart={this._dragStart}>
                         <module.type
                             key={module.pageId}
@@ -71,7 +103,7 @@ var Page = React.createClass({
                         />
                     </div>
                 );
-            }.bind(this));
+            }, this);
 
             if (this.state.addMode) {
                 addMenu =  <AddMenu moduleCollection={this.state.moduleCollection} />

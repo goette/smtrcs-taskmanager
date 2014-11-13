@@ -74,6 +74,10 @@ function filterByRole (arr) {
     return arr;
 }
 
+function updateCurrentlyOnPage (modules) {
+    _currentlyOnPage = modules;
+}
+
 var PageStore = merge(EventEmitter.prototype, {
     /**
      * Get the entire collection of views.
@@ -150,6 +154,11 @@ AppDispatcher.register(function (payload) {
 
         case PageConstants.MODULE_REMOVE:
             removeModuleFromPage(action.moduleId);
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.PAGE_REORDER:
+            updateCurrentlyOnPage(action.modules);
             PageStore.emitChange();
             break;
 

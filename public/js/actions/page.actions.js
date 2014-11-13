@@ -36,6 +36,12 @@ var PageActions = {
             actionType: PageConstants.MODULE_REMOVE,
             moduleId: moduleId
         });
+    },
+    updateModulesOrder: function (modules) {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.PAGE_REORDER,
+            modules: modules
+        });
     }
 };
 
