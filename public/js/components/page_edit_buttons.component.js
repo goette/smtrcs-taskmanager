@@ -11,6 +11,7 @@ var PageEditButtons = React.createClass({
     },
     _toggleAddMode: function () {
         PageActions.toggleAddMode();
+        PageActions.toggleDisableScroll();
     },
     render: function () {
         var cxe,

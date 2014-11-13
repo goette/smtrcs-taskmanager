@@ -5,21 +5,23 @@
     left: 0;
     right: 0;
     background-color: rgba(#fff, 1);
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 .add-menu-item {
     position: relative;
     margin: 0 auto;
     display: block;
-    max-width: 800px;
+    max-width: 80%;
     font-size: 2em;
     padding: 10px 0;
     border-bottom: 4px solid #eee;
     button {
         position: absolute;
         right: 0;
-        top: 50%;
-        margin: -17px 0 0;
+        bottom: 10px;
+        margin: 0;
     }
     span {
         font-size: .75em;
@@ -27,6 +29,7 @@
 }
 
 .add-menu-preview {
+    display: none;
     width: 100px;
     height: 82px;
     margin-right: 1em;
@@ -56,5 +59,12 @@
     }
     &.darkgreen  {
         background-color: rgba($darkgreen, .3);
+    }
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: $screen-sm-min) {
+    .add-menu-preview {
+        display: block;
     }
 }

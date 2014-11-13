@@ -4918,25 +4918,28 @@ h1 {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white; }
+  background-color: white;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; }
 
 .add-menu-item {
   position: relative;
   margin: 0 auto;
   display: block;
-  max-width: 800px;
+  max-width: 80%;
   font-size: 2em;
   padding: 10px 0;
   border-bottom: 4px solid #eee; }
   .add-menu-item button {
     position: absolute;
     right: 0;
-    top: 50%;
-    margin: -17px 0 0; }
+    bottom: 10px;
+    margin: 0; }
   .add-menu-item span {
     font-size: 0.75em; }
 
 .add-menu-preview {
+  display: none;
   width: 100px;
   height: 82px;
   margin-right: 1em;
@@ -4961,13 +4964,20 @@ h1 {
   .add-menu-preview.darkgreen {
     background-color: rgba(49, 134, 36, 0.3); }
 
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .add-menu-preview {
+    display: block; }
+ }
+
 .header {
   line-height: 50px;
   font-size: 1.5em; }
   .header select {
     vertical-align: middle;
     margin-top: -4px;
-    margin-right: 1em; }
+    margin-right: 1em;
+    font-size: 1.5rem; }
   .header .btn-edit {
     position: absolute;
     right: 15px;
