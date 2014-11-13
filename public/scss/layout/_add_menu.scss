@@ -8,6 +8,7 @@
 }
 
 .add-menu-item {
+    position: relative;
     margin: 0 auto;
     display: block;
     max-width: 800px;
@@ -15,7 +16,10 @@
     padding: 10px 0;
     border-bottom: 4px solid #eee;
     button {
-        margin: 4px 0 0;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin: -17px 0 0;
     }
     span {
         font-size: .75em;
@@ -25,7 +29,7 @@
 .add-menu-preview {
     width: 100px;
     height: 82px;
-    margin-right: 2em;
+    margin-right: 1em;
     float: left;
     text-align: center;
     line-height: 82px;
@@ -36,21 +40,21 @@
         background-color: rgba($lightgrey, 1);
     }
     &.green  {
-        background-color: rgba($green, .6);
+        background-color: rgba($green, .3);
     }
     &.steelblue  {
-        background-color: rgba($steelblue, .6);
+        background-color: rgba($steelblue, .3);
     }
     &.orange  {
-        background-color: rgba($orange, .6);
+        background-color: rgba($orange, .3);
     }
     &.red  {
-        background-color: rgba($red, .6);
+        background-color: rgba($red, .3);
     }
     &.blue  {
-        background-color: rgba($blue, .6);
+        background-color: rgba($blue, .3);
     }
     &.darkgreen  {
-        background-color: rgba($darkgreen, .6);
+        background-color: rgba($darkgreen, .3);
     }
 }

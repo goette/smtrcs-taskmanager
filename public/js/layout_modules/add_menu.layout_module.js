@@ -37,7 +37,7 @@ var ModuleItem = React.createClass({
         return (
             <div className="add-menu-item">
                 <div className={cx}>Preview</div>
-                <button onClick={this._addToPage} className="btn btn-success pull-right">+ Add to page</button>
+                <button onClick={this._addToPage} className="btn btn-success">+ Add to page</button>
                 <strong>{this.props.moduleId}</strong><br />
                 <span>Roles: {roles}</span>
             </div>

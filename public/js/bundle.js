@@ -26434,7 +26434,7 @@ var ModuleItem = React.createClass({displayName: 'ModuleItem',
         return (
             React.DOM.div({className: "add-menu-item"}, 
                 React.DOM.div({className: cx}, "Preview"), 
-                React.DOM.button({onClick: this._addToPage, className: "btn btn-success pull-right"}, "+ Add to page"), 
+                React.DOM.button({onClick: this._addToPage, className: "btn btn-success"}, "+ Add to page"), 
                 React.DOM.strong(null, this.props.moduleId), React.DOM.br(null), 
                 React.DOM.span(null, "Roles: ", roles)
             )

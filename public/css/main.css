@@ -4921,6 +4921,7 @@ h1 {
   background-color: white; }
 
 .add-menu-item {
+  position: relative;
   margin: 0 auto;
   display: block;
   max-width: 800px;
@@ -4928,14 +4929,17 @@ h1 {
   padding: 10px 0;
   border-bottom: 4px solid #eee; }
   .add-menu-item button {
-    margin: 4px 0 0; }
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin: -17px 0 0; }
   .add-menu-item span {
     font-size: 0.75em; }
 
 .add-menu-preview {
   width: 100px;
   height: 82px;
-  margin-right: 2em;
+  margin-right: 1em;
   float: left;
   text-align: center;
   line-height: 82px;
@@ -4945,17 +4949,17 @@ h1 {
   .add-menu-preview.lightgrey {
     background-color: #fafafa; }
   .add-menu-preview.green {
-    background-color: rgba(122, 186, 0, 0.6); }
+    background-color: rgba(122, 186, 0, 0.3); }
   .add-menu-preview.steelblue {
-    background-color: rgba(108, 168, 191, 0.6); }
+    background-color: rgba(108, 168, 191, 0.3); }
   .add-menu-preview.orange {
-    background-color: rgba(247, 156, 0, 0.6); }
+    background-color: rgba(247, 156, 0, 0.3); }
   .add-menu-preview.red {
-    background-color: rgba(243, 0, 0, 0.6); }
+    background-color: rgba(243, 0, 0, 0.3); }
   .add-menu-preview.blue {
-    background-color: rgba(39, 105, 200, 0.6); }
+    background-color: rgba(39, 105, 200, 0.3); }
   .add-menu-preview.darkgreen {
-    background-color: rgba(49, 134, 36, 0.6); }
+    background-color: rgba(49, 134, 36, 0.3); }
 
 .header {
   line-height: 50px;
@@ -4997,16 +5001,16 @@ h1 {
       margin: 1em auto;
       border-bottom: 1px solid #eee; }
   .lightgrey .module {
-    background-color: #fafafa; }
+    background-color: rgba(250, 250, 250, 0.1); }
   .green .module {
-    background-color: rgba(122, 186, 0, 0.6); }
+    background-color: rgba(122, 186, 0, 0.2); }
   .steelblue .module {
-    background-color: rgba(108, 168, 191, 0.6); }
+    background-color: rgba(108, 168, 191, 0.2); }
   .orange .module {
-    background-color: rgba(247, 156, 0, 0.6); }
+    background-color: rgba(247, 156, 0, 0.2); }
   .red .module {
-    background-color: rgba(243, 0, 0, 0.6); }
+    background-color: rgba(243, 0, 0, 0.2); }
   .blue .module {
-    background-color: rgba(39, 105, 200, 0.6); }
+    background-color: rgba(39, 105, 200, 0.2); }
   .darkgreen .module {
-    background-color: rgba(49, 134, 36, 0.6); }
+    background-color: rgba(49, 134, 36, 0.2); }
