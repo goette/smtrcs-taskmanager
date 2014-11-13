@@ -85,7 +85,7 @@ var Page = React.createClass({
         if (this.state) {
             editMode = this.state.editMode;
             modules = this.state.modules.map(function (module, i) {
-                var dragging = (i == this.state.dragging) ? ' dragging' : '';
+                var dragging = (this.state.dragging) ? ' dragging' : '';
                 return (
                     <div className={module.className + dragging}
                         data-id={i}
@@ -100,6 +100,7 @@ var Page = React.createClass({
                             pageId={module.pageId}
                             editMode={editMode}
                             roles={module.roles}
+                            dragging=
                         />
                     </div>
                 );
