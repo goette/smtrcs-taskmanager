@@ -9,10 +9,12 @@ var PageActions = require('../actions/page.actions');
 var AddMenu = React.createClass({
     render: function () {
         var moduleList = this.props.moduleCollection.map(function (module) {
+            console.log(module);
             return(
                 <ModuleItem
                     moduleId={module.id}
                     roles={module.roles}
+                    cx={module.defaultClassName}
                 />
             );
         });
@@ -30,9 +32,11 @@ var ModuleItem = React.createClass({
         PageActions.addModule(this.props.moduleId);
     },
     render: function () {
-        var roles = this.props.roles.join(', ');
+        var roles = this.props.roles.join(', '),
+            cx = "add-menu-preview " + this.props.cx.split(' ').pop();
         return (
             <div className="add-menu-item">
+                <div className={cx}>Preview</div>
                 <button onClick={this._addToPage} className="btn btn-success pull-right">+ Add to page</button>
                 <strong>{this.props.moduleId}</strong><br />
                 <span>Roles: {roles}</span>

@@ -26118,8 +26118,9 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/React.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/module_collection.js":[function(require,module,exports){
-var KpiBasic = require('../modules/kpi_basic.module');
-var ChartBasic = require('../modules/chart_basic.module');
+var KpiBasic = require('../modules/kpi_basic.module'),
+    ChartBasic = require('../modules/chart_basic.module'),
+    GridBasic = require('../modules/grid_basic.module');
 
 var ModuleCollection = [
     {
@@ -26127,40 +26128,47 @@ var ModuleCollection = [
         type: KpiBasic,
         roles: ['c','s','e'],
         action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-6 col-md-3'
+        defaultClassName: 'col-sm-6 col-md-3 green'
     },
     {
         id: 'KpiSocial',
         type: KpiBasic,
         roles: ['c','s','e'],
         action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-6 col-md-3'
+        defaultClassName: 'col-sm-6 col-md-3 steelblue'
     },
     {
         id: 'KpiTrafficInsight',
         type: KpiBasic,
         roles: ['c','s'],
         action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-12'
+        defaultClassName: 'col-sm-12 orange'
     },
     {
         id: 'KpiUrlRankings',
         type: KpiBasic,
         roles: ['c'],
         action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-6'
+        defaultClassName: 'col-sm-6 red'
     },
     {
         id: 'ChartChannelInsight',
         type: ChartBasic,
         roles: ['c', 's'],
         action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-12'
+        defaultClassName: 'col-sm-12 lightgrey'
+    },
+    {
+        id: 'GridUrlRankings',
+        type: GridBasic,
+        roles: ['c','s','e'],
+        action: 'traffic/channel-distribution',
+        defaultClassName: 'col-sm-12 blue'
     }
 ];
 
 module.exports = ModuleCollection;
-},{"../modules/chart_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/chart_basic.module.js","../modules/kpi_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js":[function(require,module,exports){
+},{"../modules/chart_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/chart_basic.module.js","../modules/grid_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/grid_basic.module.js","../modules/kpi_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js":[function(require,module,exports){
 var page = {
     url: '/static-page', // = id
     modulesOnPage: [ // Array of ordered modules
@@ -26178,6 +26186,9 @@ var page = {
         },
         {
             id: 'KpiConversionInsight'
+        },
+        {
+            id: 'GridUrlRankings'
         },
         {
             id: 'KpiUrlRankings'
@@ -26395,10 +26406,12 @@ var PageActions = require('../actions/page.actions');
 var AddMenu = React.createClass({displayName: 'AddMenu',
     render: function () {
         var moduleList = this.props.moduleCollection.map(function (module) {
+            console.log(module);
             return(
                 ModuleItem({
                     moduleId: module.id, 
-                    roles: module.roles}
+                    roles: module.roles, 
+                    cx: module.defaultClassName}
                 )
             );
         });
@@ -26416,9 +26429,11 @@ var ModuleItem = React.createClass({displayName: 'ModuleItem',
         PageActions.addModule(this.props.moduleId);
     },
     render: function () {
-        var roles = this.props.roles.join(', ');
+        var roles = this.props.roles.join(', '),
+            cx = "add-menu-preview " + this.props.cx.split(' ').pop();
         return (
             React.DOM.div({className: "add-menu-item"}, 
+                React.DOM.div({className: cx}, "Preview"), 
                 React.DOM.button({onClick: this._addToPage, className: "btn btn-success pull-right"}, "+ Add to page"), 
                 React.DOM.strong(null, this.props.moduleId), React.DOM.br(null), 
                 React.DOM.span(null, "Roles: ", roles)
@@ -26571,7 +26586,35 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
 });
 
 module.exports = ConversionInside;
-},{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js":[function(require,module,exports){
+},{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/grid_basic.module.js":[function(require,module,exports){
+/**
+ * @jsx React.DOM
+ */
+
+var React = require('react');
+var Headline = require('../components/headline.component');
+var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
+var _ = require('lodash');
+
+var GridBasic = React.createClass({displayName: 'GridBasic',
+    render: function () {
+        var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
+            roles = 'Roles: ' + this.props.roles.join(', ');
+
+        return (
+            React.DOM.div({className: this.props.cx}, 
+                React.DOM.div({className: "grid module"}, 
+                    remove, 
+                    Headline({title: this.props.title}), 
+                    React.DOM.br(null), roles
+                )
+            )
+        );
+    }
+});
+
+module.exports = GridBasic;
+},{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js":[function(require,module,exports){
 /**
  * @jsx React.DOM
  */

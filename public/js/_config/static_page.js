@@ -17,6 +17,9 @@ var page = {
             id: 'KpiConversionInsight'
         },
         {
+            id: 'GridUrlRankings'
+        },
+        {
             id: 'KpiUrlRankings'
         },
         {
