@@ -4964,9 +4964,11 @@ h1 {
     padding: 0 12px 4px;
     font-size: 24px; }
   .module.chart {
+    text-align: center;
     background-color: #fafafa; }
     .module.chart img {
       width: 100%;
       display: block;
       max-width: 950px;
-      margin: 0 auto; }
+      margin: 1em auto;
+      border-bottom: 1px solid #eee; }

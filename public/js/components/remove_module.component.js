@@ -11,7 +11,7 @@ var removeModule = React.createClass({
     },
     render: function () {
         return (
-            <button onClick={this._deleteMe} className="btn-delete btn btn-danger pull-right">{'\u2a09'}</button>
+            <button onClick={this._deleteMe} className="btn-delete btn btn-default pull-right">{'\u2a09'}</button>
         );
     }
 });

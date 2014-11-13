@@ -26360,7 +26360,7 @@ var removeModule = React.createClass({displayName: 'removeModule',
     },
     render: function () {
         return (
-            React.DOM.button({onClick: this._deleteMe, className: "btn-delete btn btn-danger pull-right"}, '\u2a09')
+            React.DOM.button({onClick: this._deleteMe, className: "btn-delete btn btn-default pull-right"}, '\u2a09')
         );
     }
 });
@@ -26419,7 +26419,7 @@ var ModuleItem = React.createClass({displayName: 'ModuleItem',
         var roles = this.props.roles.join(', ');
         return (
             React.DOM.div({className: "add-menu-item"}, 
-                React.DOM.button({onClick: this._addToPage, className: "btn btn-primary pull-right"}, "+ Add to page"), 
+                React.DOM.button({onClick: this._addToPage, className: "btn btn-success pull-right"}, "+ Add to page"), 
                 React.DOM.strong(null, this.props.moduleId), React.DOM.br(null), 
                 React.DOM.span(null, "Roles: ", roles)
             )

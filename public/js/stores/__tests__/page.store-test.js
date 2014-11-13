@@ -6,8 +6,17 @@ jest.dontMock('../../_config/static_page');
 
 describe('PageStoreTest', function() {
     var PageConstants = require('../../constants/page.constants'),
-        ModuleCollection = require('../../_config/module_collection'),
-        StaticPage = require('../../_config/static_page');
+        StaticPage = [],
+        ModuleCollection = [
+            {
+                id: 'TestModule1',
+                roles: ['c','s','e']
+            },
+            {
+                id: 'TestModule2',
+                roles: ['c']
+            }
+        ];
 
     // mock actions inside dispatch payload
     var initialize = {
@@ -23,7 +32,7 @@ describe('PageStoreTest', function() {
         source: 'VIEW_ACTION',
         action: {
             actionType: PageConstants.MODULE_ADD,
-            moduleId: 'KpiConversionInsight'
+            moduleId: 'TestModule1'
         }
     };
 
@@ -109,5 +118,19 @@ describe('PageStoreTest', function() {
         callback(actionToggleAdd);
         // It should be the opposite now
         expect(PageStore.getAddMode()).toBe(!addMode);
+    });
+
+    it('filters modules on page by role', function () {
+        // Add first test element
+        callback(actionModuleAdd);
+        // Add second test element
+        actionModuleAdd.action.moduleId = 'TestModule2';
+        callback(actionModuleAdd);
+        // Are there 2 elements on the page? (yes!)
+        expect(PageStore.getModulesOnPage().length).toEqual(2);
+        // Change Role to 's'
+        callback(actionFilterByRole);
+        // One element should be removed by filter
+        expect(PageStore.getModulesOnPage().length).toEqual(1);
     });
 });

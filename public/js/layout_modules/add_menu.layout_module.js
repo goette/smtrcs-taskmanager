@@ -33,7 +33,7 @@ var ModuleItem = React.createClass({
         var roles = this.props.roles.join(', ');
         return (
             <div className="add-menu-item">
-                <button onClick={this._addToPage} className="btn btn-primary pull-right">+ Add to page</button>
+                <button onClick={this._addToPage} className="btn btn-success pull-right">+ Add to page</button>
                 <strong>{this.props.moduleId}</strong><br />
                 <span>Roles: {roles}</span>
             </div>
