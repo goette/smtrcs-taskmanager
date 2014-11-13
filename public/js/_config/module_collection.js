@@ -1,7 +1,7 @@
 var KpiBasic = require('../modules/kpi_basic.module');
 var ChartBasic = require('../modules/chart_basic.module');
 
-module.exports = [
+var ModuleCollection = [
     {
         id: 'KpiConversionInsight',
         type: KpiBasic,
@@ -38,3 +38,5 @@ module.exports = [
         defaultClassName: 'col-sm-12'
     }
 ];
+
+module.exports = ModuleCollection;

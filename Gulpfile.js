@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var gutil = require('gulp-util');
 var sass = require('gulp-sass');
 var shell = require('gulp-shell');
 var autoprefixer = require('gulp-autoprefixer');
@@ -48,7 +47,7 @@ gulp.task('browserify', function() {
 
     function rebundle () {
         return bundler.transform(reactify).bundle()
-            .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+            .on('error', logAndIgnoreError)
             .pipe(source('bundle.js'))
             .pipe(gulp.dest(paths.jsFolder))
             .pipe(browserSync.reload({stream: true}));;

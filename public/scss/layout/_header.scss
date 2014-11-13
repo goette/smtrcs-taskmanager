@@ -5,6 +5,7 @@
     select {
         vertical-align: middle;
         margin-top: -4px;
+        margin-right: 1em;
     }
 
     .btn-edit {
@@ -14,5 +15,13 @@
         margin: 0;
         height: 34px;
         color: #fff;
+    }
+
+    > div {
+        text-align: right;
+    }
+    
+    .bars {
+        font-size: 1em;
     }
 }

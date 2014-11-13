@@ -22,6 +22,7 @@ var Main = React.createClass({displayName: 'Main',
     }
 });
 
+
 React.renderComponent(
     Main(null),
     document.getElementById('main')
@@ -26120,7 +26121,7 @@ module.exports = require('./lib/React');
 var KpiBasic = require('../modules/kpi_basic.module');
 var ChartBasic = require('../modules/chart_basic.module');
 
-module.exports = [
+var ModuleCollection = [
     {
         id: 'KpiConversionInsight',
         type: KpiBasic,
@@ -26157,6 +26158,8 @@ module.exports = [
         defaultClassName: 'col-sm-12'
     }
 ];
+
+module.exports = ModuleCollection;
 },{"../modules/chart_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/chart_basic.module.js","../modules/kpi_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js":[function(require,module,exports){
 var page = {
     url: '/static-page', // = id
@@ -26244,9 +26247,11 @@ var AppDispatcher = require('../_dispatcher/app.dispatcher');
 var PageConstants = require('../constants/page.constants');
 
 var PageActions = {
-    initialize: function () {
+    initialize: function (moduleCollection, initiallyOnPage) {
         AppDispatcher.handleViewAction({
-            actionType: PageConstants.PAGE_INITIALIZE
+            actionType: PageConstants.PAGE_INITIALIZE,
+            moduleCollection: moduleCollection,
+            initiallyOnPage: initiallyOnPage
         });
     },
     toggleEditMode: function () {
@@ -26437,16 +26442,17 @@ var Header = React.createClass({displayName: 'Header',
     },
     render: function () {
         var options = ['C-Level','SEO','Editor'];
-        var renderedOptions = options.map(function (option) {
+        var renderedOptions = options.map(function (option, i) {
              return(
-                 React.DOM.option({value: option}, option)
+                 React.DOM.option({key: 'opt' + i, value: option}, option)
              );
         });
 
         return (
             React.DOM.nav({className: "header navbar navbar-default navbar-fixed-top", role: "navigation"}, 
                 React.DOM.div({className: "container-fluid"}, 
-                    React.DOM.a({className: "navbar-brand", href: "/v1.html"}, "S7 v0.1.0"), 
+                    React.DOM.a({className: "navbar-brand bars", href: "/v1.html"}, React.DOM.i({className: "fa fa-bars"})), 
+                    React.DOM.a({className: "navbar-brand pull-right", href: "/v1.html"}, "S7 v0.1.0"), 
                     React.DOM.select({onChange: this._onChange}, 
                         renderedOptions
                     )
@@ -26462,11 +26468,13 @@ module.exports = Header;
  * @jsx React.DOM
  */
 
-var React = require('react');
-var PageActions = require('../actions/page.actions');
-var PageStore = require('../stores/page.store');
-var AddMenu = require('./add_menu.layout_module');
-var PageEditButtons = require('../components/page_edit_buttons.component');
+var React = require('react'),
+    PageActions = require('../actions/page.actions'),
+    PageStore = require('../stores/page.store'),
+    AddMenu = require('./add_menu.layout_module'),
+    PageEditButtons = require('../components/page_edit_buttons.component'),
+    _moduleCollection = require('../_config/module_collection'),
+    _initiallyOnPage = require('../_config/static_page').modulesOnPage; // This will become an ajax call
 
 function getPageState () {
     return {
@@ -26484,7 +26492,7 @@ var Page = React.createClass({displayName: 'Page',
 
     componentDidMount: function () {
         PageStore.addChangeListener(this._onChange);
-        PageActions.initialize();
+        PageActions.initialize(_moduleCollection, _initiallyOnPage);
     },
 
     componentWillUnmount: function () {
@@ -26502,9 +26510,10 @@ var Page = React.createClass({displayName: 'Page',
             pageEditButtons = '';
 
         if (this.state) {
-            modules = this.state.modules.map(function (module) {
+            modules = this.state.modules.map(function (module, i) {
                 return (
                     module.type({
+                        key: module.pageId, 
                         title: module.id, 
                         cx: module.className, 
                         action: module.action, 
@@ -26535,7 +26544,7 @@ var Page = React.createClass({displayName: 'Page',
 });
 
 module.exports = Page;
-},{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","../components/page_edit_buttons.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/page_edit_buttons.component.js","../stores/page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","./add_menu.layout_module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/chart_basic.module.js":[function(require,module,exports){
+},{"../_config/module_collection":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/module_collection.js","../_config/static_page":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js","../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","../components/page_edit_buttons.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/page_edit_buttons.component.js","../stores/page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","./add_menu.layout_module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/chart_basic.module.js":[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
@@ -26601,34 +26610,38 @@ var _ = require('lodash'),
     PageConstants = require('../constants/page.constants.js'),
     merge = require('react/lib/merge'),
     CHANGE_EVENT = 'change',
-    _moduleCollection = require('../_config/module_collection'),
-    _initiallyOnPage = require('../_config/static_page').modulesOnPage, // This will become an ajax call
     _currentlyOnPage = [],
+    _moduleCollection = [],
     _currentRole = 'c',
     _mode = {
         edit: false,
         add: false
     };
 
-function joinPageArrays () {
+function joinPageArrays (moduleCollection, initiallyOnPage) {
     var arr = [],
         key,
         module,
         obj,
         i;
 
-    for (i = 0; i < _initiallyOnPage.length; i++) {
-        key = _initiallyOnPage[i].id;
+    _moduleCollection = moduleCollection;
+
+    for (i = 0; i < initiallyOnPage.length; i++) {
+        key = initiallyOnPage[i].id;
         module = _.where(_moduleCollection, {id: key})[0];
-        obj = {
-            id: key,
-            type: module.type,
-            action: module.action,
-            roles: module.roles,
-            pageId: _.uniqueId(),
-            className: module.defaultClassName
+
+        if (module) {
+            obj = {
+                id: key,
+                type: module.type,
+                action: module.action,
+                roles: module.roles,
+                pageId: _.uniqueId(),
+                className: module.defaultClassName
+            }
+            arr.push(obj);
         }
-        arr.push(obj);
     }
     _currentlyOnPage = arr;
 }
@@ -26647,11 +26660,11 @@ function removeModuleFromPage (moduleId) {
     });
 }
 
-function addModuleToPage (moduleId) {
-    var module = _.where(_moduleCollection, {id: moduleId})[0];
+function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
+    var module = _.where(moduleCollection, {id: moduleId})[0];
     module.pageId = _.uniqueId();
     module.className = module.defaultClassName;
-    _currentlyOnPage.push(module);
+    currentlyOnPage.push(module);
     _mode.add = false;
 }
 
@@ -26709,7 +26722,7 @@ AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case PageConstants.PAGE_INITIALIZE:
-            joinPageArrays();
+            joinPageArrays(action.moduleCollection, action.initiallyOnPage);
             PageStore.emitChange();
             break;
 
@@ -26729,7 +26742,7 @@ AppDispatcher.register(function (payload) {
             break;
 
         case PageConstants.MODULE_ADD:
-            addModuleToPage(action.moduleId);
+            addModuleToPage(_moduleCollection, _currentlyOnPage, action.moduleId);
             PageStore.emitChange();
             break;
 
@@ -26746,4 +26759,4 @@ AppDispatcher.register(function (payload) {
 });
 
 module.exports = PageStore;
-},{"../_config/module_collection":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/module_collection.js","../_config/static_page":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js","../_dispatcher/app.dispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page.constants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react/lib/merge":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/merge.js"}]},{},["./public/js/app.js"]);
+},{"../_dispatcher/app.dispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page.constants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react/lib/merge":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/merge.js"}]},{},["./public/js/app.js"]);

@@ -8,34 +8,38 @@ var _ = require('lodash'),
     PageConstants = require('../constants/page.constants.js'),
     merge = require('react/lib/merge'),
     CHANGE_EVENT = 'change',
-    _moduleCollection = require('../_config/module_collection'),
-    _initiallyOnPage = require('../_config/static_page').modulesOnPage, // This will become an ajax call
     _currentlyOnPage = [],
+    _moduleCollection = [],
     _currentRole = 'c',
     _mode = {
         edit: false,
         add: false
     };
 
-function joinPageArrays () {
+function joinPageArrays (moduleCollection, initiallyOnPage) {
     var arr = [],
         key,
         module,
         obj,
         i;
 
-    for (i = 0; i < _initiallyOnPage.length; i++) {
-        key = _initiallyOnPage[i].id;
+    _moduleCollection = moduleCollection;
+
+    for (i = 0; i < initiallyOnPage.length; i++) {
+        key = initiallyOnPage[i].id;
         module = _.where(_moduleCollection, {id: key})[0];
-        obj = {
-            id: key,
-            type: module.type,
-            action: module.action,
-            roles: module.roles,
-            pageId: _.uniqueId(),
-            className: module.defaultClassName
+
+        if (module) {
+            obj = {
+                id: key,
+                type: module.type,
+                action: module.action,
+                roles: module.roles,
+                pageId: _.uniqueId(),
+                className: module.defaultClassName
+            }
+            arr.push(obj);
         }
-        arr.push(obj);
     }
     _currentlyOnPage = arr;
 }
@@ -54,11 +58,11 @@ function removeModuleFromPage (moduleId) {
     });
 }
 
-function addModuleToPage (moduleId) {
-    var module = _.where(_moduleCollection, {id: moduleId})[0];
+function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
+    var module = _.where(moduleCollection, {id: moduleId})[0];
     module.pageId = _.uniqueId();
     module.className = module.defaultClassName;
-    _currentlyOnPage.push(module);
+    currentlyOnPage.push(module);
     _mode.add = false;
 }
 
@@ -91,6 +95,10 @@ var PageStore = merge(EventEmitter.prototype, {
         return _mode.add;
     },
 
+    getCurrentRole: function () {
+        return _currentRole;
+    },
+
     emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
@@ -116,7 +124,7 @@ AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case PageConstants.PAGE_INITIALIZE:
-            joinPageArrays();
+            joinPageArrays(action.moduleCollection, action.initiallyOnPage);
             PageStore.emitChange();
             break;
 
@@ -136,7 +144,7 @@ AppDispatcher.register(function (payload) {
             break;
 
         case PageConstants.MODULE_ADD:
-            addModuleToPage(action.moduleId);
+            addModuleToPage(_moduleCollection, _currentlyOnPage, action.moduleId);
             PageStore.emitChange();
             break;
 

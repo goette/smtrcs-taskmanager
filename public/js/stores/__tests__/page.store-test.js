@@ -1,15 +1,29 @@
 jest.dontMock('../../constants/page.constants');
 jest.dontMock('../page.store');
 jest.dontMock('react/lib/merge');
+jest.dontMock('../../_config/module_collection');
+jest.dontMock('../../_config/static_page');
 
 describe('PageStoreTest', function() {
-    var PageConstants = require('../../constants/page.constants');
+    var PageConstants = require('../../constants/page.constants'),
+        ModuleCollection = require('../../_config/module_collection'),
+        StaticPage = require('../../_config/static_page');
 
-    // mock actions inside dispatch payloads
+    // mock actions inside dispatch payload
+    var initialize = {
+        source: 'VIEW_ACTION',
+        action: {
+            actionType: PageConstants.PAGE_INITIALIZE,
+            moduleCollection: ModuleCollection,
+            initiallyOnPage: StaticPage
+        }
+    };
+
     var actionModuleAdd = {
         source: 'VIEW_ACTION',
         action: {
-            actionType: PageConstants.MODULE_ADD
+            actionType: PageConstants.MODULE_ADD,
+            moduleId: 'KpiConversionInsight'
         }
     };
 
@@ -17,58 +31,83 @@ describe('PageStoreTest', function() {
         source: 'VIEW_ACTION',
         action: {
             actionType: PageConstants.MODULE_REMOVE,
-			moduleId: 'blurks'
+			moduleId: 'this will be set by test'
         }
     };
 
-    var AppDispatcher;
-    var PageStore;
-    var callback;
+    var actionToggleEdit = {
+        source: 'VIEW_ACTION',
+        action: {
+            actionType: PageConstants.PAGE_TOGGLE_EDIT
+        }
+    };
+
+    var actionToggleAdd = {
+        source: 'VIEW_ACTION',
+        action: {
+            actionType: PageConstants.PAGE_TOGGLE_ADD
+        }
+    };
+
+    var actionFilterByRole = {
+        source: 'VIEW_ACTION',
+        action: {
+            actionType: PageConstants.MODULE_FILTER_BY_ROLE,
+            role: 's'
+        }
+    };
+
+    var AppDispatcher,
+        PageStore,
+        callback;
 
     beforeEach(function() {
         AppDispatcher = require('../../_dispatcher/app.dispatcher');
         PageStore = require('../page.store');
         callback = AppDispatcher.register.mock.calls[0][0];
+
+        // Load initial data
+        callback(initialize);
     });
 
     it('should register a callback with the dispatcher', function() {
+        // This is a default test to make sure the dispatcher works
         expect(AppDispatcher.register.mock.calls.length).toBe(1);
     });
 
-    /*it('has a collection of 3 different modules', function() {
-        var all = PageStore.getModuleCollection();
-        expect(all.length).toEqual(3);
-    });
-
-    it('initialize without any module', function() {
-        var onPage = PageStore.getModulesOnPage();
-        expect(onPage.length).toEqual(0);
-    });
-
     it('adds a module to the page', function () {
+        // Add one module
         callback(actionModuleAdd);
-        var onPage = PageStore.getModulesOnPage();
-        expect(onPage.length).toEqual(1);
+        // We have one module on the page
+        expect(PageStore.getModulesOnPage().length).toEqual(1);
     });
 
     it('removes a module from the page', function () {
-        var onPage,
-            keys;
-
         // Add one module
         callback(actionModuleAdd);
-
-        // Check that PageStore modules on page has 1 entry
-        onPage = PageStore.getModulesOnPage();
-        expect(onPage.length).toBe(1);
-
-        // Set the moduleId in remove action to moduleId of the first (and only) entry
-        // And trigger the "remove" action
-		actionModuleRemove.action.moduleId = onPage[0].moduleId;
+        // Set moduleId in remove action to pageId of the first (and only) entry
+        // and trigger the "remove" action
+		actionModuleRemove.action.moduleId = PageStore.getModulesOnPage()[0].pageId;
         callback(actionModuleRemove);
+        // The module should be removed, which means there is 0 modules on page again
+        expect(PageStore.getModulesOnPage().length).toEqual(0);
+    });
 
-        // Yes it should be empty
-        onPage = PageStore.getModulesOnPage();
-        expect(onPage.length).toEqual(0);
-    });*/
+    it('toggles edit-mode', function () {
+        // Get edit initial edit mode (true / false)
+        var editMode = PageStore.getEditMode();
+        // Toggle it
+        callback(actionToggleEdit);
+        // It should be the opposite now
+        expect(PageStore.getEditMode()).toBe(!editMode);
+    });
+
+    it('toggles add-mode', function () {
+        // Get edit initial add mode (true / false)
+        var addMode = PageStore.getAddMode();
+        // Toggle it
+        callback(actionToggleAdd);
+        // It should be the opposite now
+        expect(PageStore.getAddMode()).toBe(!addMode);
+    });
 });

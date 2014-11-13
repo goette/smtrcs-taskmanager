@@ -2,9 +2,11 @@ var AppDispatcher = require('../_dispatcher/app.dispatcher');
 var PageConstants = require('../constants/page.constants');
 
 var PageActions = {
-    initialize: function () {
+    initialize: function (moduleCollection, initiallyOnPage) {
         AppDispatcher.handleViewAction({
-            actionType: PageConstants.PAGE_INITIALIZE
+            actionType: PageConstants.PAGE_INITIALIZE,
+            moduleCollection: moduleCollection,
+            initiallyOnPage: initiallyOnPage
         });
     },
     toggleEditMode: function () {

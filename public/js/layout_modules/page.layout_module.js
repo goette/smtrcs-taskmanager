@@ -2,11 +2,13 @@
  * @jsx React.DOM
  */
 
-var React = require('react');
-var PageActions = require('../actions/page.actions');
-var PageStore = require('../stores/page.store');
-var AddMenu = require('./add_menu.layout_module');
-var PageEditButtons = require('../components/page_edit_buttons.component');
+var React = require('react'),
+    PageActions = require('../actions/page.actions'),
+    PageStore = require('../stores/page.store'),
+    AddMenu = require('./add_menu.layout_module'),
+    PageEditButtons = require('../components/page_edit_buttons.component'),
+    _moduleCollection = require('../_config/module_collection'),
+    _initiallyOnPage = require('../_config/static_page').modulesOnPage; // This will become an ajax call
 
 function getPageState () {
     return {
@@ -24,7 +26,7 @@ var Page = React.createClass({
 
     componentDidMount: function () {
         PageStore.addChangeListener(this._onChange);
-        PageActions.initialize();
+        PageActions.initialize(_moduleCollection, _initiallyOnPage);
     },
 
     componentWillUnmount: function () {
@@ -42,9 +44,10 @@ var Page = React.createClass({
             pageEditButtons = '';
 
         if (this.state) {
-            modules = this.state.modules.map(function (module) {
+            modules = this.state.modules.map(function (module, i) {
                 return (
                     <module.type
+                        key={module.pageId}
                         title={module.id}
                         cx={module.className}
                         action={module.action}

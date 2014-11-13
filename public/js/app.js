@@ -21,6 +21,7 @@ var Main = React.createClass({
     }
 });
 
+
 React.renderComponent(
     <Main />,
     document.getElementById('main')

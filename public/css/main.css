@@ -4935,7 +4935,8 @@ h1 {
   font-size: 1.5em; }
   .header select {
     vertical-align: middle;
-    margin-top: -4px; }
+    margin-top: -4px;
+    margin-right: 1em; }
   .header .btn-edit {
     position: absolute;
     right: 15px;
@@ -4943,6 +4944,10 @@ h1 {
     margin: 0;
     height: 34px;
     color: #fff; }
+  .header > div {
+    text-align: right; }
+  .header .bars {
+    font-size: 1em; }
 
 .module {
   position: relative;
