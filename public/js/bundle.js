@@ -26563,7 +26563,7 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
                 React.DOM.div({className: "chart module"}, 
                     remove, 
                     Headline({title: this.props.title}), 
-                    React.DOM.img({src: "/images/chart.png"})
+                    React.DOM.img({src: "../images/chart.png"})
                 )
             )
         );
@@ -26695,6 +26695,10 @@ var PageStore = merge(EventEmitter.prototype, {
 
     getAddMode: function () {
         return _mode.add;
+    },
+
+    getCurrentRole: function () {
+        return _currentRole;
     },
 
     emitChange: function () {
