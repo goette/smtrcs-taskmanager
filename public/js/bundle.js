@@ -26360,7 +26360,7 @@ var removeModule = React.createClass({displayName: 'removeModule',
     },
     render: function () {
         return (
-            React.DOM.button({onClick: this._deleteMe, className: "btn-delete btn btn-danger pull-right"}, "×")
+            React.DOM.button({onClick: this._deleteMe, className: "btn-delete btn btn-danger pull-right"}, '\u2a09')
         );
     }
 });
