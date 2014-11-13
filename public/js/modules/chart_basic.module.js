@@ -16,7 +16,7 @@ var ConversionInside = React.createClass({
                 <div className="chart module">
                     {remove}
                     <Headline title={this.props.title} />
-                    <img src="../images/chart.png" />
+                    <img src="images/chart.png" />
                 </div>
             </div>
         );
