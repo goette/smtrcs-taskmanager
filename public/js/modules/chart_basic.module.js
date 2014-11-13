@@ -12,12 +12,10 @@ var ConversionInside = React.createClass({
             roles = 'Roles: ' + this.props.roles.join(', ');
 
         return (
-            <div className={this.props.cx}>
-                <div className="chart module">
-                    {remove}
-                    <Headline title={this.props.title} />
-                    <img src="images/chart.png" />
-                </div>
+            <div className="chart module">
+                {remove}
+                <Headline title={this.props.title} />
+                <img src="images/chart.png" />
             </div>
         );
     }

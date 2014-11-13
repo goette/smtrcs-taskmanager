@@ -13,12 +13,10 @@ var KpiBasic = React.createClass({
             roles = 'Roles: ' + this.props.roles.join(', ');
 
         return (
-            <div className={this.props.cx}>
-                <div className="kpi module">
-                    {remove}
-                    <Headline title={this.props.title} />
-                    <br />{roles}
-                </div>
+            <div className="kpi module">
+                {remove}
+                <Headline title={this.props.title} />
+                <br />{roles}
             </div>
         );
     }

@@ -26519,23 +26519,38 @@ var Page = React.createClass({displayName: 'Page',
         this.setState(getPageState());
     },
 
+    _dragStart: function () {
+
+    },
+
+    _dragEnd: function () {
+
+    },
+
     render: function () {
         var modules = '',
             addMenu = '',
             editButtons = '',
-            pageEditButtons = '';
+            pageEditButtons = '',
+            editMode;
 
         if (this.state) {
+            editMode = this.state.editMode;
             modules = this.state.modules.map(function (module, i) {
                 return (
-                    module.type({
-                        key: module.pageId, 
-                        title: module.id, 
-                        cx: module.className, 
-                        action: module.action, 
-                        pageId: module.pageId, 
-                        editMode: this.state.editMode, 
-                        roles: module.roles}
+                    React.DOM.div({className: module.className, 
+                        'data-id': this.props.i, 
+                        draggable: editMode, 
+                        onDragEnd: this._dragEnd, 
+                        onDragStart: this._dragStart}, 
+                        module.type({
+                            key: module.pageId, 
+                            title: module.id, 
+                            action: module.action, 
+                            pageId: module.pageId, 
+                            editMode: editMode, 
+                            roles: module.roles}
+                        )
                     )
                 );
             }.bind(this));
@@ -26575,12 +26590,10 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
             roles = 'Roles: ' + this.props.roles.join(', ');
 
         return (
-            React.DOM.div({className: this.props.cx}, 
-                React.DOM.div({className: "chart module"}, 
-                    remove, 
-                    Headline({title: this.props.title}), 
-                    React.DOM.img({src: "images/chart.png"})
-                )
+            React.DOM.div({className: "chart module"}, 
+                remove, 
+                Headline({title: this.props.title}), 
+                React.DOM.img({src: "images/chart.png"})
             )
         );
     }
@@ -26603,12 +26616,10 @@ var GridBasic = React.createClass({displayName: 'GridBasic',
             roles = 'Roles: ' + this.props.roles.join(', ');
 
         return (
-            React.DOM.div({className: this.props.cx}, 
-                React.DOM.div({className: "grid module"}, 
-                    remove, 
-                    Headline({title: this.props.title}), 
-                    React.DOM.br(null), roles
-                )
+            React.DOM.div({className: "grid module"}, 
+                remove, 
+                Headline({title: this.props.title}), 
+                React.DOM.br(null), roles
             )
         );
     }
@@ -26631,12 +26642,10 @@ var KpiBasic = React.createClass({displayName: 'KpiBasic',
             roles = 'Roles: ' + this.props.roles.join(', ');
 
         return (
-            React.DOM.div({className: this.props.cx}, 
-                React.DOM.div({className: "kpi module"}, 
-                    remove, 
-                    Headline({title: this.props.title}), 
-                    React.DOM.br(null), roles
-                )
+            React.DOM.div({className: "kpi module"}, 
+                remove, 
+                Headline({title: this.props.title}), 
+                React.DOM.br(null), roles
             )
         );
     }

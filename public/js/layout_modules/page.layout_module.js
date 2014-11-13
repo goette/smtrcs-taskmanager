@@ -37,24 +37,39 @@ var Page = React.createClass({
         this.setState(getPageState());
     },
 
+    _dragStart: function () {
+
+    },
+
+    _dragEnd: function () {
+
+    },
+
     render: function () {
         var modules = '',
             addMenu = '',
             editButtons = '',
-            pageEditButtons = '';
+            pageEditButtons = '',
+            editMode;
 
         if (this.state) {
+            editMode = this.state.editMode;
             modules = this.state.modules.map(function (module, i) {
                 return (
-                    <module.type
-                        key={module.pageId}
-                        title={module.id}
-                        cx={module.className}
-                        action={module.action}
-                        pageId={module.pageId}
-                        editMode={this.state.editMode}
-                        roles={module.roles}
-                    />
+                    <div className={module.className}
+                        data-id={this.props.i}
+                        draggable={editMode}
+                        onDragEnd={this._dragEnd}
+                        onDragStart={this._dragStart}>
+                        <module.type
+                            key={module.pageId}
+                            title={module.id}
+                            action={module.action}
+                            pageId={module.pageId}
+                            editMode={editMode}
+                            roles={module.roles}
+                        />
+                    </div>
                 );
             }.bind(this));
 
