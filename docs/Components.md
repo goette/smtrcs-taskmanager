@@ -1,4 +1,4 @@
-# Components
+# Components (Draft 1)
 
 ## Description
 Components (as in React-Components) are the smallest UI-parts of the application. They can be clustered in groups to form new reusable components. Modules consist of one or more components / component-groups. Components are built in React, they don't have their own store. They trigger actions of the module they are contained in.

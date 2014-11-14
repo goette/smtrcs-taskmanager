@@ -1,4 +1,4 @@
-# Module
+# Modules (Draft 1)
 
 ## Description
 
@@ -28,7 +28,7 @@ For example the unique module "Channels compared - historical" entry could look 
 ´´´
 {
     id: 'ChannelsComparedHistorical', // the unique id
-    type: 'AreaChart', // is a module type area chart
+    type: AreaChart, // is a module type area chart, this should be the actual React Component
     roles: ['c','s'], // can be seen by user-roles c-type and seo
     action: 'traffic/channel-distribution', // server-side action that delivers the data
     defaultClass: 'col-md-12 col-lg-6' // it is always full width, on large screen half width only 
