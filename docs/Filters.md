@@ -14,6 +14,6 @@ Functionally a module filter just re-triggers an ajax call to the action with th
 
 Page filters are dynamically populated by the modules and their corresponding filter parameters on the page. They are a specific module themselves with their own store, which needs to wait for the page store before being initialized. The filter store then loops over the modules on the page and collects all filter parameters. This is depending on the current role, so a page filter is able to transform with the modules for different roles.
 
-The page filter needs its own action to fetch the available options, for example "search engines of current project" dynamically, so the original plan to keep it "dumb" is not possible.
+The page filter needs its own action to fetch the available options initially, for example "search engines of current project" dynamically, so the original plan to keep it "dumb" is not possible.
 
 
