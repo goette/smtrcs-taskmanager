@@ -2,13 +2,14 @@
  * @jsx React.DOM
  */
 
-var React = require('react');
-var PageStore = require('../stores/page.store');
-var PageActions = require('../actions/page.actions');
+var React = require('react'),
+    _ = require('lodash'),
+    PageStore = require('../stores/page.store'),
+    PageActions = require('../actions/page.actions');
 
 var AddMenu = React.createClass({
     render: function () {
-        var moduleList = this.props.moduleCollection.map(function (module) {
+        var moduleList = _.map(this.props.moduleCollection, function (module) {
             console.log(module);
             return(
                 <ModuleItem

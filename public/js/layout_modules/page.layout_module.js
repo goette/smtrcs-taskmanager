@@ -3,6 +3,7 @@
  */
 
 var React = require('react'),
+    _ = require('lodash'),
     PageActions = require('../actions/page.actions'),
     PageStore = require('../stores/page.store'),
     AddMenu = require('./add_menu.layout_module'),
@@ -84,17 +85,17 @@ var Page = React.createClass({
 
         if (this.state) {
             editMode = this.state.editMode;
-            modules = this.state.modules.map(function (module, i) {
+            modules = _.map(this.state.modules, function (module, i) {
                 var dragging = (i == this.state.dragging) ? ' dragging' : '';
                 return (
                     <div className={module.className + dragging}
+                        key={module.pageId}
                         data-id={i}
                         draggable={editMode}
                         onDragEnd={this._dragEnd}
                         onDragOver={this._dragOver}
                         onDragStart={this._dragStart}>
                         <module.type
-                            key={module.pageId}
                             title={module.id}
                             action={module.action}
                             pageId={module.pageId}

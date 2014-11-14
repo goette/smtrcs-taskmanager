@@ -2,8 +2,9 @@
  * @jsx React.DOM
  */
 
-var React = require('react');
-var PageActions = require('../actions/page.actions');
+var React = require('react'),
+    _ = require('lodash'),
+    PageActions = require('../actions/page.actions');
 
 var Header = React.createClass({
     _onChange: function (e) {
@@ -11,7 +12,7 @@ var Header = React.createClass({
     },
     render: function () {
         var options = ['C-Level','SEO','Editor'];
-        var renderedOptions = options.map(function (option, i) {
+        var renderedOptions = _.map(options, function (option, i) {
              return(
                  <option key={'opt' + i} value={option}>{option}</option>
              );

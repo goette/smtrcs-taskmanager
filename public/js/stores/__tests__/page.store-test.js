@@ -6,7 +6,6 @@ jest.dontMock('../../_config/static_page');
 
 describe('PageStoreTest', function() {
     var PageConstants = require('../../constants/page.constants'),
-        StaticPage = [],
         ModuleCollection = [
             {
                 id: 'TestModule1',
@@ -24,7 +23,7 @@ describe('PageStoreTest', function() {
         action: {
             actionType: PageConstants.PAGE_INITIALIZE,
             moduleCollection: ModuleCollection,
-            initiallyOnPage: StaticPage
+            initiallyOnPage: []
         }
     };
 
@@ -75,13 +74,26 @@ describe('PageStoreTest', function() {
         PageStore = require('../page.store');
         callback = AppDispatcher.register.mock.calls[0][0];
 
-        // Load initial data
         callback(initialize);
+
     });
 
     it('should register a callback with the dispatcher', function() {
         // This is a default test to make sure the dispatcher works
         expect(AppDispatcher.register.mock.calls.length).toBe(1);
+    });
+
+    it('merges the initial modules correctly', function () {
+        // Pretend there is a module in the page config
+        initialize.action.initiallyOnPage = [{id: 'TestModule2'}];
+        // And Initialize store again
+        callback(initialize);
+        // There should be 1 module on page
+        expect(PageStore.getModulesOnPage().length).toBe(1);
+        // The module should have a property 'roles'
+        expect(PageStore.getModulesOnPage()[0]['roles']).not.toBeUndefined();
+        // Reset initial page config for next tests
+        initialize.action.initiallyOnPage.length = 0;
     });
 
     it('adds a module to the page', function () {

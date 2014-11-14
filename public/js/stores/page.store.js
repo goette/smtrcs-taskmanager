@@ -16,7 +16,7 @@ var _ = require('lodash'),
         add: false
     };
 
-function joinPageArrays (moduleCollection, initiallyOnPage) {
+function mergePageArrays (moduleCollection, initiallyOnPage) {
     var arr = [],
         key,
         module,
@@ -27,7 +27,7 @@ function joinPageArrays (moduleCollection, initiallyOnPage) {
 
     for (i = 0; i < initiallyOnPage.length; i++) {
         key = initiallyOnPage[i].id;
-        module = _.where(_moduleCollection, {id: key})[0];
+        module = _.find(_moduleCollection, {id: key});
 
         if (module) {
             obj = {
@@ -53,13 +53,11 @@ function setCurrentRole (role) {
 }
 
 function removeModuleFromPage (moduleId) {
-    _currentlyOnPage = _currentlyOnPage.filter(function (el) {
-        return el.pageId !== moduleId;
-    });
+    _currentlyOnPage = _.reject(_currentlyOnPage, {pageId: moduleId});
 }
 
 function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
-    var module = _.where(moduleCollection, {id: moduleId})[0];
+    var module = _.find(moduleCollection, {id: moduleId});
     module.pageId = _.uniqueId();
     module.className = module.defaultClassName;
     currentlyOnPage.push(module);
@@ -67,11 +65,7 @@ function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
 }
 
 function filterByRole (arr) {
-    arr = arr.filter(function (el) {
-        return el.roles.indexOf(_currentRole) > -1;
-    });
-
-    return arr;
+    return _.filter(arr, function (el) { return el.roles.indexOf(_currentRole) > -1; });
 }
 
 function updateCurrentlyOnPage (modules) {
@@ -128,7 +122,7 @@ AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case PageConstants.PAGE_INITIALIZE:
-            joinPageArrays(action.moduleCollection, action.initiallyOnPage);
+            mergePageArrays(action.moduleCollection, action.initiallyOnPage);
             PageStore.emitChange();
             break;
 
