@@ -22,7 +22,7 @@ var Main = React.createClass({
 });
 
 
-React.renderComponent(
+React.render(
     <Main />,
     document.getElementById('main')
 );

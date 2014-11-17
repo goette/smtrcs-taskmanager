@@ -1,8 +1,8 @@
 /*
- * PageConstants
+ * PageFilterConstants
  */
 
-var keyMirror = require('react/lib/keyMirror');
+var keyMirror = require('keymirror');
 
 var constants = keyMirror({
     PAGE_FILTER_INITIALIZE: null

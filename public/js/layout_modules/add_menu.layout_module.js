@@ -1,7 +1,3 @@
-/**
- * @jsx React.DOM
- */
-
 var React = require('react'),
     _ = require('lodash'),
     PageStore = require('../stores/page.store'),

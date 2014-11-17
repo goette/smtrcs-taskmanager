@@ -12,9 +12,9 @@
  */
 
 var Dispatcher = require('flux').Dispatcher;
-var copyProperties = require('react/lib/copyProperties');
-var AppDispatcher = copyProperties(new Dispatcher(), {
+var assign = require('object-assign');
 
+var AppDispatcher = assign(new Dispatcher(), {
     /**
      * A bridge function between the views and the dispatcher, marking the action
      * as a view action.  Another variant here could be handleServerAction.
@@ -26,7 +26,6 @@ var AppDispatcher = copyProperties(new Dispatcher(), {
             action: action
         });
     }
-
 });
 
 module.exports = AppDispatcher;

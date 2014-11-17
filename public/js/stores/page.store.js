@@ -6,7 +6,7 @@ var _ = require('lodash'),
     AppDispatcher = require('../_dispatcher/app.dispatcher.js'),
     EventEmitter = require('events').EventEmitter,
     PageConstants = require('../constants/page.constants.js'),
-    merge = require('react/lib/merge'),
+    assign = require('object-assign'),
     CHANGE_EVENT = 'change',
     _currentlyOnPage = [],
     _moduleCollection = [],
@@ -72,7 +72,7 @@ function updateCurrentlyOnPage (modules) {
     _currentlyOnPage = modules;
 }
 
-var PageStore = merge(EventEmitter.prototype, {
+var PageStore = assign({}, EventEmitter.prototype, {
     /**
      * Get the entire collection of views.
      * @return {object}

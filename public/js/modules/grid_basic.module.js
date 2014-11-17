@@ -1,7 +1,3 @@
-/**
- * @jsx React.DOM
- */
-
 var React = require('react');
 var Headline = require('../components/headline.component');
 var RemoveButtonMixin = require('../_mixins/remove_button.mixin');

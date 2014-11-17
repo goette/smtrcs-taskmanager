@@ -2,7 +2,7 @@
  * PageConstants
  */
 
-var keyMirror = require('react/lib/keyMirror');
+var keyMirror = require('keymirror');
 
 var constants = keyMirror({
     MODULE_FILTER_BY_ROLE: null,

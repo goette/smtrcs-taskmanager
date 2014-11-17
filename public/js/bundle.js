@@ -14,17 +14,17 @@ window.React = React;
 var Main = React.createClass({displayName: 'Main',
     render: function () {
         return (
-            React.DOM.div({className: "container-fluid"}, 
-                Header(null), 
-                Page(null)
+            React.createElement("div", {className: "container-fluid"}, 
+                React.createElement(Header, null), 
+                React.createElement(Page, null)
             )
         );
     }
 });
 
 
-React.renderComponent(
-    Main(null),
+React.render(
+    React.createElement(Main, null),
     document.getElementById('main')
 );
 },{"./layout_modules/add_menu.layout_module.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js","./layout_modules/header.layout_module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/header.layout_module.js","./layout_modules/page.layout_module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/page.layout_module.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js":[function(require,module,exports){
@@ -736,6 +736,61 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 };
 
 module.exports = invariant;
+
+},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014 Facebook, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+"use strict";
+
+/**
+ * Constructs an enumeration with keys equal to their value.
+ *
+ * For example:
+ *
+ *   var COLORS = keyMirror({blue: null, red: null});
+ *   var myColor = COLORS.blue;
+ *   var isColorValid = !!COLORS[myColor];
+ *
+ * The last line could not be performed if the values of the generated enum were
+ * not equal to their keys.
+ *
+ *   Input:  {key1: val1, key2: val2}
+ *   Output: {key1: key1, key2: key2}
+ *
+ * @param {object} obj
+ * @return {object}
+ */
+var keyMirror = function(obj) {
+  var ret = {};
+  var key;
+  if (!(obj instanceof Object && !Array.isArray(obj))) {
+    throw new Error('keyMirror(...): Argument must be an object.');
+  }
+  for (key in obj) {
+    if (!obj.hasOwnProperty(key)) {
+      continue;
+    }
+    ret[key] = key;
+  }
+  return ret;
+};
+
+module.exports = keyMirror;
 
 },{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js":[function(require,module,exports){
 (function (global){
@@ -7526,6 +7581,45 @@ module.exports = invariant;
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js":[function(require,module,exports){
+'use strict';
+
+function ToObject(val) {
+	if (val == null) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+module.exports = Object.assign || function (target, source) {
+	var pendingException;
+	var from;
+	var keys;
+	var to = ToObject(target);
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = arguments[s];
+		keys = Object.keys(Object(from));
+
+		for (var i = 0; i < keys.length; i++) {
+			try {
+				to[keys[i]] = from[keys[i]];
+			} catch (err) {
+				if (pendingException === undefined) {
+					pendingException = err;
+				}
+			}
+		}
+	}
+
+	if (pendingException) {
+		throw pendingException;
+	}
+
+	return to;
+};
+
 },{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23370,65 +23464,7 @@ function containsNode(outerNode, innerNode) {
 
 module.exports = containsNode;
 
-},{"./isTextNode":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/isTextNode.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/copyProperties.js":[function(require,module,exports){
-(function (process){
-/**
- * Copyright 2013-2014, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule copyProperties
- */
-
-/**
- * Copy properties from one or more objects (up to 5) into the first object.
- * This is a shallow copy. It mutates the first object and also returns it.
- *
- * NOTE: `arguments` has a very significant performance penalty, which is why
- * we don't support unlimited arguments.
- */
-function copyProperties(obj, a, b, c, d, e, f) {
-  obj = obj || {};
-
-  if ("production" !== process.env.NODE_ENV) {
-    if (f) {
-      throw new Error('Too many arguments passed to copyProperties');
-    }
-  }
-
-  var args = [a, b, c, d, e];
-  var ii = 0, v;
-  while (args[ii]) {
-    v = args[ii++];
-    for (var k in v) {
-      obj[k] = v[k];
-    }
-
-    // IE ignores toString in object iteration.. See:
-    // webreflection.blogspot.com/2007/07/quick-fix-internet-explorer-and.html
-    if (v.hasOwnProperty && v.hasOwnProperty('toString') &&
-        (typeof v.toString != 'undefined') && (obj.toString !== v.toString)) {
-      obj.toString = v.toString;
-    }
-  }
-
-  return obj;
-}
-
-module.exports = copyProperties;
-
-// deprecation notice
-console.warn(
-  'react/lib/copyProperties has been deprecated and will be removed in the ' +
-  'next version of React. All uses can be replaced with ' +
-  'Object.assign(obj, a, b, ...) or _.extend(obj, a, b, ...).'
-);
-
-}).call(this,require('_process'))
-},{"_process":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/process/browser.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/createArrayFrom.js":[function(require,module,exports){
+},{"./isTextNode":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/isTextNode.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/createArrayFrom.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25196,43 +25232,7 @@ function memoizeStringOnly(callback) {
 
 module.exports = memoizeStringOnly;
 
-},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/merge.js":[function(require,module,exports){
-/**
- * Copyright 2013-2014, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule merge
- */
-
-"use strict";
-
-var assign = require("./Object.assign");
-
-/**
- * Shallow merges two structures into a return value, without mutating either.
- *
- * @param {?object} one Optional object with properties to merge from.
- * @param {?object} two Optional object with properties to merge from.
- * @return {object} The shallow extension of one by two.
- */
-var merge = function(one, two) {
-  return assign({}, one, two);
-};
-
-module.exports = merge;
-
-// deprecation notice
-console.warn(
-  'react/lib/merge has been deprecated and will be removed in the ' +
-  'next version of React. All uses can be replaced with ' +
-  'Object.assign({}, a, b) or _.extend({}, a, b).'
-);
-
-},{"./Object.assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/Object.assign.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/monitorCodeUse.js":[function(require,module,exports){
+},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/monitorCodeUse.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -25937,9 +25937,9 @@ module.exports = page;
  */
 
 var Dispatcher = require('flux').Dispatcher;
-var copyProperties = require('react/lib/copyProperties');
-var AppDispatcher = copyProperties(new Dispatcher(), {
+var assign = require('object-assign');
 
+var AppDispatcher = assign(new Dispatcher(), {
     /**
      * A bridge function between the views and the dispatcher, marking the action
      * as a view action.  Another variant here could be handleServerAction.
@@ -25951,12 +25951,11 @@ var AppDispatcher = copyProperties(new Dispatcher(), {
             action: action
         });
     }
-
 });
 
 module.exports = AppDispatcher;
 
-},{"flux":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/flux/index.js","react/lib/copyProperties":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/copyProperties.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js":[function(require,module,exports){
+},{"flux":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/flux/index.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js":[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
@@ -25965,7 +25964,7 @@ var RemoveModule = require('../components/remove_module.component');
 
 var remove = function (editMode, pageId) {
     if (editMode) {
-        return RemoveModule({pageId: pageId});
+        return React.createElement(RemoveModule, {pageId: pageId});
     } else {
         return '';
     }
@@ -26035,26 +26034,18 @@ var PageFilterActions = {
 
 module.exports = PageFilterActions;
 },{"../_dispatcher/app.dispatcher":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page_filter.constants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page_filter.constants.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react');
 
 var Headline = React.createClass({displayName: 'Headline',
     render: function () {
         return (
-            React.DOM.strong(null, this.props.title)
+            React.createElement("strong", null, this.props.title)
         );
     }
 });
 
 module.exports = Headline;
 },{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/page_edit_buttons.component.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react');
 var PageActions = require('../actions/page.actions');
 
@@ -26087,9 +26078,9 @@ var PageEditButtons = React.createClass({displayName: 'PageEditButtons',
             cxa = "btn btn-success";
         }
         return (
-            React.DOM.div({className: cxeb}, 
-                React.DOM.button({onClick: this._toggleEditMode, className: cxe, disabled: disabled}, React.DOM.i({className: "fa fa-pencil"})), 
-                React.DOM.button({onClick: this._toggleAddMode, className: cxa}, React.DOM.i({className: "fa fa-plus"}))
+            React.createElement("div", {className: cxeb}, 
+                React.createElement("button", {onClick: this._toggleEditMode, className: cxe, disabled: disabled}, React.createElement("i", {className: "fa fa-pencil"})), 
+                React.createElement("button", {onClick: this._toggleAddMode, className: cxa}, React.createElement("i", {className: "fa fa-plus"}))
             )
         );
     }
@@ -26097,10 +26088,6 @@ var PageEditButtons = React.createClass({displayName: 'PageEditButtons',
 
 module.exports = PageEditButtons;
 },{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/remove_module.component.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react');
 var PageActions = require('../actions/page.actions');
 
@@ -26110,7 +26097,7 @@ var removeModule = React.createClass({displayName: 'removeModule',
     },
     render: function () {
         return (
-            React.DOM.button({onClick: this._deleteMe, className: "btn-delete btn btn-default pull-right"}, '\u2a09')
+            React.createElement("button", {onClick: this._deleteMe, className: "btn-delete btn btn-default pull-right"}, '\u2a09')
         );
     }
 });
@@ -26121,7 +26108,7 @@ module.exports = removeModule;
  * PageConstants
  */
 
-var keyMirror = require('react/lib/keyMirror');
+var keyMirror = require('keymirror');
 
 var constants = keyMirror({
     MODULE_FILTER_BY_ROLE: null,
@@ -26134,23 +26121,19 @@ var constants = keyMirror({
 });
 
 module.exports = constants;
-},{"react/lib/keyMirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/keyMirror.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page_filter.constants.js":[function(require,module,exports){
+},{"keymirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page_filter.constants.js":[function(require,module,exports){
 /*
- * PageConstants
+ * PageFilterConstants
  */
 
-var keyMirror = require('react/lib/keyMirror');
+var keyMirror = require('keymirror');
 
 var constants = keyMirror({
     PAGE_FILTER_INITIALIZE: null
 });
 
 module.exports = constants;
-},{"react/lib/keyMirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/keyMirror.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
+},{"keymirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js":[function(require,module,exports){
 var React = require('react'),
     _ = require('lodash'),
     PageStore = require('../stores/page.store'),
@@ -26161,7 +26144,7 @@ var AddMenu = React.createClass({displayName: 'AddMenu',
         var moduleList = _.map(this.props.moduleCollection, function (module) {
             console.log(module);
             return(
-                ModuleItem({
+                React.createElement(ModuleItem, {
                     moduleId: module.id, 
                     roles: module.roles, 
                     cx: module.defaultClassName}
@@ -26170,7 +26153,7 @@ var AddMenu = React.createClass({displayName: 'AddMenu',
         });
 
         return (
-            React.DOM.div({className: "add-menu"}, 
+            React.createElement("div", {className: "add-menu"}, 
                 moduleList
             )
         );
@@ -26185,11 +26168,11 @@ var ModuleItem = React.createClass({displayName: 'ModuleItem',
         var roles = this.props.roles.join(', '),
             cx = "add-menu-preview " + this.props.cx.split(' ').pop();
         return (
-            React.DOM.div({className: "add-menu-item"}, 
-                React.DOM.div({className: cx}, "Preview"), 
-                React.DOM.button({onClick: this._addToPage, className: "btn btn-success"}, "+ Add to page"), 
-                React.DOM.strong(null, this.props.moduleId), React.DOM.br(null), 
-                React.DOM.span(null, "Roles: ", roles)
+            React.createElement("div", {className: "add-menu-item"}, 
+                React.createElement("div", {className: cx}, "Preview"), 
+                React.createElement("button", {onClick: this._addToPage, className: "btn btn-success"}, "+ Add to page"), 
+                React.createElement("strong", null, this.props.moduleId), React.createElement("br", null), 
+                React.createElement("span", null, "Roles: ", roles)
             )
         );
     }
@@ -26197,10 +26180,6 @@ var ModuleItem = React.createClass({displayName: 'ModuleItem',
 
 module.exports = AddMenu;
 },{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","../stores/page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/header.layout_module.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react'),
     _ = require('lodash'),
     PageActions = require('../actions/page.actions');
@@ -26213,16 +26192,16 @@ var Header = React.createClass({displayName: 'Header',
         var options = ['C-Level','SEO','Editor'];
         var renderedOptions = _.map(options, function (option, i) {
              return(
-                 React.DOM.option({key: 'opt' + i, value: option}, option)
+                 React.createElement("option", {key: 'opt' + i, value: option}, option)
              );
         });
 
         return (
-            React.DOM.nav({className: "header navbar navbar-default navbar-fixed-top", role: "navigation"}, 
-                React.DOM.div({className: "container-fluid"}, 
-                    React.DOM.a({className: "navbar-brand bars", href: "/v1.html"}, React.DOM.i({className: "fa fa-bars"})), 
-                    React.DOM.a({className: "navbar-brand pull-right", href: "/v1.html"}, "S7 v0.1.0"), 
-                    React.DOM.select({onChange: this._onChange}, 
+            React.createElement("nav", {className: "header navbar navbar-default navbar-fixed-top", role: "navigation"}, 
+                React.createElement("div", {className: "container-fluid"}, 
+                    React.createElement("a", {className: "navbar-brand bars", href: "/v1.html"}, React.createElement("i", {className: "fa fa-bars"})), 
+                    React.createElement("a", {className: "navbar-brand pull-right", href: "/v1.html"}, "S7 v0.1.0"), 
+                    React.createElement("select", {onChange: this._onChange}, 
                         renderedOptions
                     )
                 )
@@ -26233,10 +26212,6 @@ var Header = React.createClass({displayName: 'Header',
 
 module.exports = Header;
 },{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/page.layout_module.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react'),
     _ = require('lodash'),
     PageActions = require('../actions/page.actions'),
@@ -26321,14 +26296,14 @@ var Page = React.createClass({displayName: 'Page',
             modules = _.map(this.state.modules, function (module, i) {
                 var dragging = (i == this.state.dragging) ? ' dragging' : '';
                 return (
-                    React.DOM.div({className: module.className + dragging, 
+                    React.createElement("div", {className: module.className + dragging, 
                         key: module.pageId, 
                         'data-id': i, 
                         draggable: editMode, 
                         onDragEnd: this._dragEnd, 
                         onDragOver: this._dragOver, 
                         onDragStart: this._dragStart}, 
-                        module.type({
+                        React.createElement(module.type, {
                             title: module.id, 
                             action: module.action, 
                             pageId: module.pageId, 
@@ -26340,16 +26315,16 @@ var Page = React.createClass({displayName: 'Page',
             }, this);
 
             if (this.state.addMode) {
-                addMenu =  AddMenu({moduleCollection: this.state.moduleCollection})
+                addMenu =  React.createElement(AddMenu, {moduleCollection: this.state.moduleCollection})
             } else {
                 addMenu = '';
             }
 
-            pageEditButtons = PageEditButtons({editMode: this.state.editMode, addMode: this.state.addMode});
+            pageEditButtons = React.createElement(PageEditButtons, {editMode: this.state.editMode, addMode: this.state.addMode});
         }
 
         return (
-            React.DOM.div({className: "row"}, 
+            React.createElement("div", {className: "row"}, 
                 modules, 
                 addMenu, 
                 pageEditButtons
@@ -26360,10 +26335,6 @@ var Page = React.createClass({displayName: 'Page',
 
 module.exports = Page;
 },{"../_config/module_collection":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/module_collection.js","../_config/static_page":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js","../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","../components/page_edit_buttons.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/page_edit_buttons.component.js","../modules/page_filter.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/page_filter.module.js","../stores/page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","./add_menu.layout_module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/chart_basic.module.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react');
 var Headline = require('../components/headline.component');
 var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
@@ -26374,10 +26345,10 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
             roles = 'Roles: ' + this.props.roles.join(', ');
 
         return (
-            React.DOM.div({className: "chart module"}, 
+            React.createElement("div", {className: "chart module"}, 
                 remove, 
-                Headline({title: this.props.title}), 
-                React.DOM.img({src: "images/chart.png"})
+                React.createElement(Headline, {title: this.props.title}), 
+                React.createElement("img", {src: "images/chart.png"})
             )
         );
     }
@@ -26385,10 +26356,6 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
 
 module.exports = ConversionInside;
 },{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/grid_basic.module.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react');
 var Headline = require('../components/headline.component');
 var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
@@ -26400,10 +26367,10 @@ var GridBasic = React.createClass({displayName: 'GridBasic',
             roles = 'Roles: ' + this.props.roles.join(', ');
 
         return (
-            React.DOM.div({className: "grid module"}, 
+            React.createElement("div", {className: "grid module"}, 
                 remove, 
-                Headline({title: this.props.title}), 
-                React.DOM.br(null), roles
+                React.createElement(Headline, {title: this.props.title}), 
+                React.createElement("br", null), roles
             )
         );
     }
@@ -26411,10 +26378,6 @@ var GridBasic = React.createClass({displayName: 'GridBasic',
 
 module.exports = GridBasic;
 },{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react');
 var Headline = require('../components/headline.component');
 var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
@@ -26426,10 +26389,10 @@ var KpiBasic = React.createClass({displayName: 'KpiBasic',
             roles = 'Roles: ' + this.props.roles.join(', ');
 
         return (
-            React.DOM.div({className: "kpi module"}, 
+            React.createElement("div", {className: "kpi module"}, 
                 remove, 
-                Headline({title: this.props.title}), 
-                React.DOM.br(null), roles
+                React.createElement(Headline, {title: this.props.title}), 
+                React.createElement("br", null), roles
             )
         );
     }
@@ -26437,10 +26400,6 @@ var KpiBasic = React.createClass({displayName: 'KpiBasic',
 
 module.exports = KpiBasic;
 },{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/page_filter.module.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var React = require('react'),
     _ = require('lodash'),
     PageFilterActions = require('../actions/page_filter.actions'),
@@ -26471,7 +26430,7 @@ var Page = React.createClass({displayName: 'Page',
 
     render: function () {
         return (
-            React.DOM.div({className: "col-xs-12 page-filter"}, "Page Filter")
+            React.createElement("div", {className: "col-xs-12 page-filter"}, "Page Filter")
         );
     }
 });
@@ -26486,7 +26445,7 @@ var _ = require('lodash'),
     AppDispatcher = require('../_dispatcher/app.dispatcher.js'),
     EventEmitter = require('events').EventEmitter,
     PageConstants = require('../constants/page.constants.js'),
-    merge = require('react/lib/merge'),
+    assign = require('object-assign'),
     CHANGE_EVENT = 'change',
     _currentlyOnPage = [],
     _moduleCollection = [],
@@ -26552,7 +26511,7 @@ function updateCurrentlyOnPage (modules) {
     _currentlyOnPage = modules;
 }
 
-var PageStore = merge(EventEmitter.prototype, {
+var PageStore = assign({}, EventEmitter.prototype, {
     /**
      * Get the entire collection of views.
      * @return {object}
@@ -26644,7 +26603,7 @@ PageStore.dispatchToken = AppDispatcher.register(function (payload) {
 });
 
 module.exports = PageStore;
-},{"../_dispatcher/app.dispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page.constants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react/lib/merge":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/merge.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page_filter.store.js":[function(require,module,exports){
+},{"../_dispatcher/app.dispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page.constants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page_filter.store.js":[function(require,module,exports){
 /*
  * ModuleStore
  */
@@ -26654,11 +26613,11 @@ var _ = require('lodash'),
     EventEmitter = require('events').EventEmitter,
     PageStore = require('./page.store'),
     PageFilterConstants = require('../constants/page_filter.constants.js'),
-    merge = require('react/lib/merge'),
+    assign = require('object-assign'),
     CHANGE_EVENT = 'change',
     _filterParamsOnPage = [];
 
-var PageFilterStore = merge(EventEmitter.prototype, {
+var PageFilterStore = assign({}, EventEmitter.prototype, {
     getFilterParamsOnPage: function () {
         return _.uniq(_.flatten(_.map(PageStore.getModulesOnPage(), 'filterParams')));
     },
@@ -26703,4 +26662,4 @@ PageFilterStore.dispatchToken = AppDispatcher.register(function (payload) {
 });
 
 module.exports = PageFilterStore;
-},{"../_dispatcher/app.dispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page_filter.constants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page_filter.constants.js","./page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react/lib/merge":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/merge.js"}]},{},["./public/js/app.js"]);
+},{"../_dispatcher/app.dispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page_filter.constants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page_filter.constants.js","./page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}]},{},["./public/js/app.js"]);

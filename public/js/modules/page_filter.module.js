@@ -1,7 +1,3 @@
-/**
- * @jsx React.DOM
- */
-
 var React = require('react'),
     _ = require('lodash'),
     PageFilterActions = require('../actions/page_filter.actions'),

@@ -7,11 +7,11 @@ var _ = require('lodash'),
     EventEmitter = require('events').EventEmitter,
     PageStore = require('./page.store'),
     PageFilterConstants = require('../constants/page_filter.constants.js'),
-    merge = require('react/lib/merge'),
+    assign = require('object-assign'),
     CHANGE_EVENT = 'change',
     _filterParamsOnPage = [];
 
-var PageFilterStore = merge(EventEmitter.prototype, {
+var PageFilterStore = assign({}, EventEmitter.prototype, {
     getFilterParamsOnPage: function () {
         return _.uniq(_.flatten(_.map(PageStore.getModulesOnPage(), 'filterParams')));
     },
