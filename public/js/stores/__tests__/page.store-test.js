@@ -79,7 +79,7 @@ describe('PageStoreTest', function() {
     });
 
     it('should register a callback with the dispatcher', function() {
-        // This is a default test to make sure the dispatcher works
+        // This makes sure the page store is registered with the dispatcher first
         expect(AppDispatcher.register.mock.calls.length).toBe(1);
     });
 

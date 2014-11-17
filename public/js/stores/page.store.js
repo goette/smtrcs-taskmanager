@@ -117,7 +117,7 @@ var PageStore = merge(EventEmitter.prototype, {
 });
 
 // Register to handle all updates
-AppDispatcher.register(function (payload) {
+PageStore.dispatchToken = AppDispatcher.register(function (payload) {
     var action = payload.action;
 
     switch (action.actionType) {

@@ -4,11 +4,12 @@
 
 var React = require('react'),
     _ = require('lodash'),
+    PageFilterActions = require('../actions/page_filter.actions'),
     PageFilterStore = require('../stores/page_filter.store.js');
 
 function getPageFilterState () {
     return {
-        modules: PageFilterStore.getModulesOnPage()
+        filterParamsOnPage: PageFilterStore.getFilterParamsOnPage()
     };
 }
 
@@ -31,9 +32,7 @@ var Page = React.createClass({
 
     render: function () {
         return (
-            <div className="row">
-                <div className="col-xs-12">Page Filter</div>
-            </div>
+            <div className="col-xs-12 page-filter">Page Filter</div>
         );
     }
 });

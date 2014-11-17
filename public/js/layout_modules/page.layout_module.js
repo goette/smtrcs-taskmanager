@@ -8,11 +8,9 @@ var React = require('react'),
     PageStore = require('../stores/page.store'),
     AddMenu = require('./add_menu.layout_module'),
     PageEditButtons = require('../components/page_edit_buttons.component'),
-    _moduleCollection = require('../_config/module_collection'),
+    PageFilter = require('../modules/page_filter.module'),
+    _moduleCollection = require('../_config/module_collection'), // This will become an ajax call
     _initiallyOnPage = require('../_config/static_page').modulesOnPage; // This will become an ajax call
-
-var placeholder = document.createElement("li");
-placeholder.className = "placeholder";
 
 function getPageState () {
     return {

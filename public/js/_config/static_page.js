@@ -2,6 +2,9 @@ var page = {
     url: '/static-page', // = id
     modulesOnPage: [ // Array of ordered modules
         {
+            id: 'PageFilter'
+        },
+        {
             id: 'ChartChannelInsight'
         },
         {
