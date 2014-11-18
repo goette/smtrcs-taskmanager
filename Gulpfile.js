@@ -13,6 +13,7 @@ var paths = {
     appJs: './public/js/app.js',
     jsFolder: 'public/js',
     jsFiles: ['public/js/**/*.js', '!public/js/bundle.js','!public/js/_backup/**/*.js'],
+    jsTests: ['public/js/stores/__tests__/*.js','public/js/bundle.js'],
     scssFiles: 'public/scss/**/*.scss',
     scssMain: 'public/scss/main.scss',
     cssFolder: 'public/css',
@@ -68,8 +69,9 @@ gulp.task('sass', function () {
         .pipe(browserSync.reload({stream: true}));;
 });
 
-gulp.task('watch', ['browser-sync','browserify'], function () {
+gulp.task('watch', ['browser-sync','browserify','test'], function () {
     gulp.watch(paths.scssFiles, ['sass']);
+    gulp.watch(paths.jsTests, ['test']);
 });
 
 gulp.task('test', shell.task('npm test'));
