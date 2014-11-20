@@ -37,7 +37,7 @@
   },
   "jest": {
     "rootDir": "./public/js",
-    "scriptPreprocessor": "_helpers/preprocessor.js",
+    "scriptPreprocessor": "_helpers/Preprocessor.js",
     "testFileExtensions": [
       "js"
     ]

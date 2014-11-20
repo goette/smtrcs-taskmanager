@@ -69,9 +69,9 @@ gulp.task('sass', function () {
         .pipe(browserSync.reload({stream: true}));;
 });
 
-gulp.task('watch', ['browser-sync','browserify','test'], function () {
+gulp.task('watch', ['browser-sync','browserify'], function () {
     gulp.watch(paths.scssFiles, ['sass']);
-    gulp.watch(paths.jsTests, ['test']);
+    //gulp.watch(paths.jsTests, ['test']);
 });
 
 gulp.task('test', shell.task('npm test'));

@@ -30,5 +30,3 @@ if(isset($response['response'])){
 
 //Output transformed Response
 echo json_encode($transformed_response);
-
-?>

@@ -1,0 +1,17 @@
+.example-enter {
+    transform: scale(0, 0);
+    transition: transform .25s ease-out;
+}
+
+.example-enter.example-enter-active {
+    transform: scale(1, 1);
+}
+
+.example-leave {
+    transform: scale(1, 1);
+    transition: transform .25s ease-out;
+}
+
+.example-leave.example-leave-active {
+    transform: scale(0, 0);
+}

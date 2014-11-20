@@ -1,33 +1,22 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./public/js/app.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
-var React = require('react');
-var Header = require('./layout_modules/header.layout_module');
-var Page = require('./layout_modules/page.layout_module');
-var EditMenu = require('./layout_modules/add_menu.layout_module.js');
+var React = require('react'),
+    App = require('./components/AppComponent'),
+    AppExampleData = require('./AppExampleData'),
+    ApiUtils = require('./utils/ApiUtils');
 
 // For React DevTools
 window.React = React;
 
-var Main = React.createClass({displayName: 'Main',
-    render: function () {
-        return (
-            React.createElement("div", {className: "container-fluid"}, 
-                React.createElement(Header, null), 
-                React.createElement(Page, null)
-            )
-        );
-    }
-});
+AppExampleData.init(); // Write static data to localStorage
 
+ApiUtils.getPageConfig();
 
 React.render(
-    React.createElement(Main, null),
-    document.getElementById('main')
+    React.createElement(App, null),
+    document.getElementById('app')
 );
-},{"./layout_modules/add_menu.layout_module.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js","./layout_modules/header.layout_module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/header.layout_module.js","./layout_modules/page.layout_module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/page.layout_module.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js":[function(require,module,exports){
+
+},{"./AppExampleData":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/AppExampleData.js","./components/AppComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AppComponent.js","./utils/ApiUtils":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js":[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -7552,7 +7541,7 @@ module.exports = keyMirror;
 
   // some AMD build optimizers like r.js check for condition patterns like the following:
   if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
-    // Expose Lo-Dash to the global object even when an AMD loader is present in
+    // Expose Lo-Dash to the global object even when an AMD spinner is present in
     // case Lo-Dash is loaded with a RequireJS shim config.
     // See http://requirejs.org/docs/api.html#config-shim
     root._ = _;
@@ -7869,7 +7858,119 @@ var BeforeInputEventPlugin = {
 
 module.exports = BeforeInputEventPlugin;
 
-},{"./EventConstants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ExecutionEnvironment.js","./SyntheticInputEvent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/SyntheticInputEvent.js","./keyOf":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/keyOf.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/CSSProperty.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventConstants.js","./EventPropagators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ExecutionEnvironment.js","./SyntheticInputEvent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/SyntheticInputEvent.js","./keyOf":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/keyOf.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/CSSCore.js":[function(require,module,exports){
+(function (process){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule CSSCore
+ * @typechecks
+ */
+
+var invariant = require("./invariant");
+
+/**
+ * The CSSCore module specifies the API (and implements most of the methods)
+ * that should be used when dealing with the display of elements (via their
+ * CSS classes and visibility on screen. It is an API focused on mutating the
+ * display and not reading it as no logical state should be encoded in the
+ * display of elements.
+ */
+
+var CSSCore = {
+
+  /**
+   * Adds the class passed in to the element if it doesn't already have it.
+   *
+   * @param {DOMElement} element the element to set the class on
+   * @param {string} className the CSS className
+   * @return {DOMElement} the element passed in
+   */
+  addClass: function(element, className) {
+    ("production" !== process.env.NODE_ENV ? invariant(
+      !/\s/.test(className),
+      'CSSCore.addClass takes only a single class name. "%s" contains ' +
+      'multiple classes.', className
+    ) : invariant(!/\s/.test(className)));
+
+    if (className) {
+      if (element.classList) {
+        element.classList.add(className);
+      } else if (!CSSCore.hasClass(element, className)) {
+        element.className = element.className + ' ' + className;
+      }
+    }
+    return element;
+  },
+
+  /**
+   * Removes the class passed in from the element
+   *
+   * @param {DOMElement} element the element to set the class on
+   * @param {string} className the CSS className
+   * @return {DOMElement} the element passed in
+   */
+  removeClass: function(element, className) {
+    ("production" !== process.env.NODE_ENV ? invariant(
+      !/\s/.test(className),
+      'CSSCore.removeClass takes only a single class name. "%s" contains ' +
+      'multiple classes.', className
+    ) : invariant(!/\s/.test(className)));
+
+    if (className) {
+      if (element.classList) {
+        element.classList.remove(className);
+      } else if (CSSCore.hasClass(element, className)) {
+        element.className = element.className
+          .replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)', 'g'), '$1')
+          .replace(/\s+/g, ' ') // multiple spaces to one
+          .replace(/^\s*|\s*$/g, ''); // trim the ends
+      }
+    }
+    return element;
+  },
+
+  /**
+   * Helper to add or remove a class from an element based on a condition.
+   *
+   * @param {DOMElement} element the element to set the class on
+   * @param {string} className the CSS className
+   * @param {*} bool condition to whether to add or remove the class
+   * @return {DOMElement} the element passed in
+   */
+  conditionClass: function(element, className, bool) {
+    return (bool ? CSSCore.addClass : CSSCore.removeClass)(element, className);
+  },
+
+  /**
+   * Tests whether the element has the class specified.
+   *
+   * @param {DOMNode|DOMWindow} element the element to set the class on
+   * @param {string} className the CSS className
+   * @return {boolean} true if the element has the class, false if not
+   */
+  hasClass: function(element, className) {
+    ("production" !== process.env.NODE_ENV ? invariant(
+      !/\s/.test(className),
+      'CSS.hasClass takes only a single class name.'
+    ) : invariant(!/\s/.test(className)));
+    if (element.classList) {
+      return !!className && element.classList.contains(className);
+    }
+    return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
+  }
+
+};
+
+module.exports = CSSCore;
+
+}).call(this,require('_process'))
+},{"./invariant":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/invariant.js","_process":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/process/browser.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/CSSProperty.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -12248,7 +12349,209 @@ var ReactBrowserEventEmitter = assign({}, ReactEventEmitterMixin, {
 
 module.exports = ReactBrowserEventEmitter;
 
-},{"./EventConstants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventPluginHub.js","./EventPluginRegistry":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventPluginRegistry.js","./Object.assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/Object.assign.js","./ReactEventEmitterMixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactEventEmitterMixin.js","./ViewportMetrics":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ViewportMetrics.js","./isEventSupported":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/isEventSupported.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactChildren.js":[function(require,module,exports){
+},{"./EventConstants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventPluginHub.js","./EventPluginRegistry":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/EventPluginRegistry.js","./Object.assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/Object.assign.js","./ReactEventEmitterMixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactEventEmitterMixin.js","./ViewportMetrics":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ViewportMetrics.js","./isEventSupported":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/isEventSupported.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactCSSTransitionGroup.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ * @providesModule ReactCSSTransitionGroup
+ */
+
+"use strict";
+
+var React = require("./React");
+
+var assign = require("./Object.assign");
+
+var ReactTransitionGroup = React.createFactory(
+  require("./ReactTransitionGroup")
+);
+var ReactCSSTransitionGroupChild = React.createFactory(
+  require("./ReactCSSTransitionGroupChild")
+);
+
+var ReactCSSTransitionGroup = React.createClass({
+  displayName: 'ReactCSSTransitionGroup',
+
+  propTypes: {
+    transitionName: React.PropTypes.string.isRequired,
+    transitionEnter: React.PropTypes.bool,
+    transitionLeave: React.PropTypes.bool
+  },
+
+  getDefaultProps: function() {
+    return {
+      transitionEnter: true,
+      transitionLeave: true
+    };
+  },
+
+  _wrapChild: function(child) {
+    // We need to provide this childFactory so that
+    // ReactCSSTransitionGroupChild can receive updates to name, enter, and
+    // leave while it is leaving.
+    return ReactCSSTransitionGroupChild(
+      {
+        name: this.props.transitionName,
+        enter: this.props.transitionEnter,
+        leave: this.props.transitionLeave
+      },
+      child
+    );
+  },
+
+  render: function() {
+    return (
+      ReactTransitionGroup(
+        assign({}, this.props, {childFactory: this._wrapChild})
+      )
+    );
+  }
+});
+
+module.exports = ReactCSSTransitionGroup;
+
+},{"./Object.assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/Object.assign.js","./React":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/React.js","./ReactCSSTransitionGroupChild":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactCSSTransitionGroupChild.js","./ReactTransitionGroup":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactTransitionGroup.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactCSSTransitionGroupChild.js":[function(require,module,exports){
+(function (process){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ * @providesModule ReactCSSTransitionGroupChild
+ */
+
+"use strict";
+
+var React = require("./React");
+
+var CSSCore = require("./CSSCore");
+var ReactTransitionEvents = require("./ReactTransitionEvents");
+
+var onlyChild = require("./onlyChild");
+
+// We don't remove the element from the DOM until we receive an animationend or
+// transitionend event. If the user screws up and forgets to add an animation
+// their node will be stuck in the DOM forever, so we detect if an animation
+// does not start and if it doesn't, we just call the end listener immediately.
+var TICK = 17;
+var NO_EVENT_TIMEOUT = 5000;
+
+var noEventListener = null;
+
+
+if ("production" !== process.env.NODE_ENV) {
+  noEventListener = function() {
+    console.warn(
+      'transition(): tried to perform an animation without ' +
+      'an animationend or transitionend event after timeout (' +
+      NO_EVENT_TIMEOUT + 'ms). You should either disable this ' +
+      'transition in JS or add a CSS animation/transition.'
+    );
+  };
+}
+
+var ReactCSSTransitionGroupChild = React.createClass({
+  displayName: 'ReactCSSTransitionGroupChild',
+
+  transition: function(animationType, finishCallback) {
+    var node = this.getDOMNode();
+    var className = this.props.name + '-' + animationType;
+    var activeClassName = className + '-active';
+    var noEventTimeout = null;
+
+    var endListener = function(e) {
+      if (e && e.target !== node) {
+        return;
+      }
+      if ("production" !== process.env.NODE_ENV) {
+        clearTimeout(noEventTimeout);
+      }
+
+      CSSCore.removeClass(node, className);
+      CSSCore.removeClass(node, activeClassName);
+
+      ReactTransitionEvents.removeEndEventListener(node, endListener);
+
+      // Usually this optional callback is used for informing an owner of
+      // a leave animation and telling it to remove the child.
+      finishCallback && finishCallback();
+    };
+
+    ReactTransitionEvents.addEndEventListener(node, endListener);
+
+    CSSCore.addClass(node, className);
+
+    // Need to do this to actually trigger a transition.
+    this.queueClass(activeClassName);
+
+    if ("production" !== process.env.NODE_ENV) {
+      noEventTimeout = setTimeout(noEventListener, NO_EVENT_TIMEOUT);
+    }
+  },
+
+  queueClass: function(className) {
+    this.classNameQueue.push(className);
+
+    if (!this.timeout) {
+      this.timeout = setTimeout(this.flushClassNameQueue, TICK);
+    }
+  },
+
+  flushClassNameQueue: function() {
+    if (this.isMounted()) {
+      this.classNameQueue.forEach(
+        CSSCore.addClass.bind(CSSCore, this.getDOMNode())
+      );
+    }
+    this.classNameQueue.length = 0;
+    this.timeout = null;
+  },
+
+  componentWillMount: function() {
+    this.classNameQueue = [];
+  },
+
+  componentWillUnmount: function() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+  },
+
+  componentWillEnter: function(done) {
+    if (this.props.enter) {
+      this.transition('enter', done);
+    } else {
+      done();
+    }
+  },
+
+  componentWillLeave: function(done) {
+    if (this.props.leave) {
+      this.transition('leave', done);
+    } else {
+      done();
+    }
+  },
+
+  render: function() {
+    return onlyChild(this.props.children);
+  }
+});
+
+module.exports = ReactCSSTransitionGroupChild;
+
+}).call(this,require('_process'))
+},{"./CSSCore":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/CSSCore.js","./React":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/React.js","./ReactTransitionEvents":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactTransitionEvents.js","./onlyChild":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/onlyChild.js","_process":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/process/browser.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -21221,7 +21524,408 @@ ReactTextComponentFactory.type = ReactTextComponent;
 
 module.exports = ReactTextComponentFactory;
 
-},{"./DOMPropertyOperations":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/Object.assign.js","./ReactComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactComponent.js","./ReactElement":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactElement.js","./escapeTextForBrowser":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/escapeTextForBrowser.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactUpdates.js":[function(require,module,exports){
+},{"./DOMPropertyOperations":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/Object.assign.js","./ReactComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactComponent.js","./ReactElement":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactElement.js","./escapeTextForBrowser":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/escapeTextForBrowser.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactTransitionChildMapping.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks static-only
+ * @providesModule ReactTransitionChildMapping
+ */
+
+"use strict";
+
+var ReactChildren = require("./ReactChildren");
+
+var ReactTransitionChildMapping = {
+  /**
+   * Given `this.props.children`, return an object mapping key to child. Just
+   * simple syntactic sugar around ReactChildren.map().
+   *
+   * @param {*} children `this.props.children`
+   * @return {object} Mapping of key to child
+   */
+  getChildMapping: function(children) {
+    return ReactChildren.map(children, function(child) {
+      return child;
+    });
+  },
+
+  /**
+   * When you're adding or removing children some may be added or removed in the
+   * same render pass. We want to show *both* since we want to simultaneously
+   * animate elements in and out. This function takes a previous set of keys
+   * and a new set of keys and merges them with its best guess of the correct
+   * ordering. In the future we may expose some of the utilities in
+   * ReactMultiChild to make this easy, but for now React itself does not
+   * directly have this concept of the union of prevChildren and nextChildren
+   * so we implement it here.
+   *
+   * @param {object} prev prev children as returned from
+   * `ReactTransitionChildMapping.getChildMapping()`.
+   * @param {object} next next children as returned from
+   * `ReactTransitionChildMapping.getChildMapping()`.
+   * @return {object} a key set that contains all keys in `prev` and all keys
+   * in `next` in a reasonable order.
+   */
+  mergeChildMappings: function(prev, next) {
+    prev = prev || {};
+    next = next || {};
+
+    function getValueForKey(key) {
+      if (next.hasOwnProperty(key)) {
+        return next[key];
+      } else {
+        return prev[key];
+      }
+    }
+
+    // For each key of `next`, the list of keys to insert before that key in
+    // the combined list
+    var nextKeysPending = {};
+
+    var pendingKeys = [];
+    for (var prevKey in prev) {
+      if (next.hasOwnProperty(prevKey)) {
+        if (pendingKeys.length) {
+          nextKeysPending[prevKey] = pendingKeys;
+          pendingKeys = [];
+        }
+      } else {
+        pendingKeys.push(prevKey);
+      }
+    }
+
+    var i;
+    var childMapping = {};
+    for (var nextKey in next) {
+      if (nextKeysPending.hasOwnProperty(nextKey)) {
+        for (i = 0; i < nextKeysPending[nextKey].length; i++) {
+          var pendingNextKey = nextKeysPending[nextKey][i];
+          childMapping[nextKeysPending[nextKey][i]] = getValueForKey(
+            pendingNextKey
+          );
+        }
+      }
+      childMapping[nextKey] = getValueForKey(nextKey);
+    }
+
+    // Finally, add the keys which didn't appear before any key in `next`
+    for (i = 0; i < pendingKeys.length; i++) {
+      childMapping[pendingKeys[i]] = getValueForKey(pendingKeys[i]);
+    }
+
+    return childMapping;
+  }
+};
+
+module.exports = ReactTransitionChildMapping;
+
+},{"./ReactChildren":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactChildren.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactTransitionEvents.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule ReactTransitionEvents
+ */
+
+"use strict";
+
+var ExecutionEnvironment = require("./ExecutionEnvironment");
+
+/**
+ * EVENT_NAME_MAP is used to determine which event fired when a
+ * transition/animation ends, based on the style property used to
+ * define that event.
+ */
+var EVENT_NAME_MAP = {
+  transitionend: {
+    'transition': 'transitionend',
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'mozTransitionEnd',
+    'OTransition': 'oTransitionEnd',
+    'msTransition': 'MSTransitionEnd'
+  },
+
+  animationend: {
+    'animation': 'animationend',
+    'WebkitAnimation': 'webkitAnimationEnd',
+    'MozAnimation': 'mozAnimationEnd',
+    'OAnimation': 'oAnimationEnd',
+    'msAnimation': 'MSAnimationEnd'
+  }
+};
+
+var endEvents = [];
+
+function detectEvents() {
+  var testEl = document.createElement('div');
+  var style = testEl.style;
+
+  // On some platforms, in particular some releases of Android 4.x,
+  // the un-prefixed "animation" and "transition" properties are defined on the
+  // style object but the events that fire will still be prefixed, so we need
+  // to check if the un-prefixed events are useable, and if not remove them
+  // from the map
+  if (!('AnimationEvent' in window)) {
+    delete EVENT_NAME_MAP.animationend.animation;
+  }
+
+  if (!('TransitionEvent' in window)) {
+    delete EVENT_NAME_MAP.transitionend.transition;
+  }
+
+  for (var baseEventName in EVENT_NAME_MAP) {
+    var baseEvents = EVENT_NAME_MAP[baseEventName];
+    for (var styleName in baseEvents) {
+      if (styleName in style) {
+        endEvents.push(baseEvents[styleName]);
+        break;
+      }
+    }
+  }
+}
+
+if (ExecutionEnvironment.canUseDOM) {
+  detectEvents();
+}
+
+// We use the raw {add|remove}EventListener() call because EventListener
+// does not know how to remove event listeners and we really should
+// clean up. Also, these events are not triggered in older browsers
+// so we should be A-OK here.
+
+function addEventListener(node, eventName, eventListener) {
+  node.addEventListener(eventName, eventListener, false);
+}
+
+function removeEventListener(node, eventName, eventListener) {
+  node.removeEventListener(eventName, eventListener, false);
+}
+
+var ReactTransitionEvents = {
+  addEndEventListener: function(node, eventListener) {
+    if (endEvents.length === 0) {
+      // If CSS transitions are not supported, trigger an "end animation"
+      // event immediately.
+      window.setTimeout(eventListener, 0);
+      return;
+    }
+    endEvents.forEach(function(endEvent) {
+      addEventListener(node, endEvent, eventListener);
+    });
+  },
+
+  removeEndEventListener: function(node, eventListener) {
+    if (endEvents.length === 0) {
+      return;
+    }
+    endEvents.forEach(function(endEvent) {
+      removeEventListener(node, endEvent, eventListener);
+    });
+  }
+};
+
+module.exports = ReactTransitionEvents;
+
+},{"./ExecutionEnvironment":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ExecutionEnvironment.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactTransitionGroup.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule ReactTransitionGroup
+ */
+
+"use strict";
+
+var React = require("./React");
+var ReactTransitionChildMapping = require("./ReactTransitionChildMapping");
+
+var assign = require("./Object.assign");
+var cloneWithProps = require("./cloneWithProps");
+var emptyFunction = require("./emptyFunction");
+
+var ReactTransitionGroup = React.createClass({
+  displayName: 'ReactTransitionGroup',
+
+  propTypes: {
+    component: React.PropTypes.any,
+    childFactory: React.PropTypes.func
+  },
+
+  getDefaultProps: function() {
+    return {
+      component: 'span',
+      childFactory: emptyFunction.thatReturnsArgument
+    };
+  },
+
+  getInitialState: function() {
+    return {
+      children: ReactTransitionChildMapping.getChildMapping(this.props.children)
+    };
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    var nextChildMapping = ReactTransitionChildMapping.getChildMapping(
+      nextProps.children
+    );
+    var prevChildMapping = this.state.children;
+
+    this.setState({
+      children: ReactTransitionChildMapping.mergeChildMappings(
+        prevChildMapping,
+        nextChildMapping
+      )
+    });
+
+    var key;
+
+    for (key in nextChildMapping) {
+      var hasPrev = prevChildMapping && prevChildMapping.hasOwnProperty(key);
+      if (nextChildMapping[key] && !hasPrev &&
+          !this.currentlyTransitioningKeys[key]) {
+        this.keysToEnter.push(key);
+      }
+    }
+
+    for (key in prevChildMapping) {
+      var hasNext = nextChildMapping && nextChildMapping.hasOwnProperty(key);
+      if (prevChildMapping[key] && !hasNext &&
+          !this.currentlyTransitioningKeys[key]) {
+        this.keysToLeave.push(key);
+      }
+    }
+
+    // If we want to someday check for reordering, we could do it here.
+  },
+
+  componentWillMount: function() {
+    this.currentlyTransitioningKeys = {};
+    this.keysToEnter = [];
+    this.keysToLeave = [];
+  },
+
+  componentDidUpdate: function() {
+    var keysToEnter = this.keysToEnter;
+    this.keysToEnter = [];
+    keysToEnter.forEach(this.performEnter);
+
+    var keysToLeave = this.keysToLeave;
+    this.keysToLeave = [];
+    keysToLeave.forEach(this.performLeave);
+  },
+
+  performEnter: function(key) {
+    this.currentlyTransitioningKeys[key] = true;
+
+    var component = this.refs[key];
+
+    if (component.componentWillEnter) {
+      component.componentWillEnter(
+        this._handleDoneEntering.bind(this, key)
+      );
+    } else {
+      this._handleDoneEntering(key);
+    }
+  },
+
+  _handleDoneEntering: function(key) {
+    var component = this.refs[key];
+    if (component.componentDidEnter) {
+      component.componentDidEnter();
+    }
+
+    delete this.currentlyTransitioningKeys[key];
+
+    var currentChildMapping = ReactTransitionChildMapping.getChildMapping(
+      this.props.children
+    );
+
+    if (!currentChildMapping || !currentChildMapping.hasOwnProperty(key)) {
+      // This was removed before it had fully entered. Remove it.
+      this.performLeave(key);
+    }
+  },
+
+  performLeave: function(key) {
+    this.currentlyTransitioningKeys[key] = true;
+
+    var component = this.refs[key];
+    if (component.componentWillLeave) {
+      component.componentWillLeave(this._handleDoneLeaving.bind(this, key));
+    } else {
+      // Note that this is somewhat dangerous b/c it calls setState()
+      // again, effectively mutating the component before all the work
+      // is done.
+      this._handleDoneLeaving(key);
+    }
+  },
+
+  _handleDoneLeaving: function(key) {
+    var component = this.refs[key];
+
+    if (component.componentDidLeave) {
+      component.componentDidLeave();
+    }
+
+    delete this.currentlyTransitioningKeys[key];
+
+    var currentChildMapping = ReactTransitionChildMapping.getChildMapping(
+      this.props.children
+    );
+
+    if (currentChildMapping && currentChildMapping.hasOwnProperty(key)) {
+      // This entered again before it fully left. Add it again.
+      this.performEnter(key);
+    } else {
+      var newChildren = assign({}, this.state.children);
+      delete newChildren[key];
+      this.setState({children: newChildren});
+    }
+  },
+
+  render: function() {
+    // TODO: we could get rid of the need for the wrapper node
+    // by cloning a single child
+    var childrenToRender = {};
+    for (var key in this.state.children) {
+      var child = this.state.children[key];
+      if (child) {
+        // You may need to apply reactive updates to a child as it is leaving.
+        // The normal React way to do it won't work since the child will have
+        // already been removed. In case you need this behavior you can provide
+        // a childFactory function to wrap every child, even the ones that are
+        // leaving.
+        childrenToRender[key] = cloneWithProps(
+          this.props.childFactory(child),
+          {ref: key}
+        );
+      }
+    }
+    return React.createElement(
+      this.props.component,
+      this.props,
+      childrenToRender
+    );
+  }
+});
+
+module.exports = ReactTransitionGroup;
+
+},{"./Object.assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/Object.assign.js","./React":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/React.js","./ReactTransitionChildMapping":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactTransitionChildMapping.js","./cloneWithProps":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/cloneWithProps.js","./emptyFunction":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/emptyFunction.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactUpdates.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23420,7 +24124,66 @@ function camelizeStyleName(string) {
 
 module.exports = camelizeStyleName;
 
-},{"./camelize":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/camelize.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/containsNode.js":[function(require,module,exports){
+},{"./camelize":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/camelize.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/cloneWithProps.js":[function(require,module,exports){
+(function (process){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @typechecks
+ * @providesModule cloneWithProps
+ */
+
+"use strict";
+
+var ReactElement = require("./ReactElement");
+var ReactPropTransferer = require("./ReactPropTransferer");
+
+var keyOf = require("./keyOf");
+var warning = require("./warning");
+
+var CHILDREN_PROP = keyOf({children: null});
+
+/**
+ * Sometimes you want to change the props of a child passed to you. Usually
+ * this is to add a CSS class.
+ *
+ * @param {object} child child component you'd like to clone
+ * @param {object} props props you'd like to modify. They will be merged
+ * as if you used `transferPropsTo()`.
+ * @return {object} a clone of child with props merged in.
+ */
+function cloneWithProps(child, props) {
+  if ("production" !== process.env.NODE_ENV) {
+    ("production" !== process.env.NODE_ENV ? warning(
+      !child.ref,
+      'You are calling cloneWithProps() on a child with a ref. This is ' +
+      'dangerous because you\'re creating a new child which will not be ' +
+      'added as a ref to its parent.'
+    ) : null);
+  }
+
+  var newProps = ReactPropTransferer.mergeProps(props, child.props);
+
+  // Use `child.props.children` if it is provided.
+  if (!newProps.hasOwnProperty(CHILDREN_PROP) &&
+      child.props.hasOwnProperty(CHILDREN_PROP)) {
+    newProps.children = child.props.children;
+  }
+
+  // The current API doesn't retain _owner and _context, which is why this
+  // doesn't use ReactElement.cloneAndReplaceProps.
+  return ReactElement.createElement(child.type, newProps);
+}
+
+module.exports = cloneWithProps;
+
+}).call(this,require('_process'))
+},{"./ReactElement":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactElement.js","./ReactPropTransferer":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactPropTransferer.js","./keyOf":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/keyOf.js","./warning":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/warning.js","_process":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/process/browser.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/containsNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25825,155 +26588,122 @@ module.exports = warning;
 },{"./emptyFunction":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/emptyFunction.js","_process":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/process/browser.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js":[function(require,module,exports){
 module.exports = require('./lib/React');
 
-},{"./lib/React":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/React.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/module_collection.js":[function(require,module,exports){
-var KpiBasic = require('../modules/kpi_basic.module'),
-    ChartBasic = require('../modules/chart_basic.module'),
-    GridBasic = require('../modules/grid_basic.module'),
-    PageFilter = require('../modules/page_filter.module');
-
-var ModuleCollection = [
-    {
-        id: 'PageFilter',
-        type: PageFilter,
-        roles: ['c','s','e'],
-        action: 'some/filter/action',
-        defaultClassName: 'col-xs-12 lightgrey'
-    },
-    {
-        id: 'KpiConversionInsight',
-        type: KpiBasic,
-        roles: ['c','s','e'],
-        action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-6 col-md-3 green'
-    },
-    {
-        id: 'KpiSocial',
-        type: KpiBasic,
-        roles: ['c','s','e'],
-        action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-6 col-md-3 steelblue'
-    },
-    {
-        id: 'KpiTrafficInsight',
-        type: KpiBasic,
-        roles: ['c','s'],
-        action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-12 orange'
-    },
-    {
-        id: 'KpiUrlRankings',
-        type: KpiBasic,
-        roles: ['c'],
-        action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-6 red'
-    },
-    {
-        id: 'ChartChannelInsight',
-        type: ChartBasic,
-        roles: ['c', 's'],
-        action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-12 lightgrey'
-    },
-    {
-        id: 'GridUrlRankings',
-        type: GridBasic,
-        roles: ['c','s','e'],
-        action: 'traffic/channel-distribution',
-        defaultClassName: 'col-sm-12 blue'
+},{"./lib/React":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/React.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/AppExampleData.js":[function(require,module,exports){
+module.exports = {
+    init: function() {
+        localStorage.clear();
+        localStorage.setItem('moduleCollection', JSON.stringify([
+            {
+                id: 'PageFilter',
+                type: 'PageFilterModule',
+                roles: ['c','s','e'],
+                action: 'some/filter/action',
+                defaultClassName: 'col-xs-12',
+                background: 'lightgrey'
+            },
+            {
+                id: 'KpiConversionInsight',
+                type: 'KpiBasicModule',
+                roles: ['c','s','e'],
+                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
+                defaultClassName: 'col-sm-6 col-md-3',
+                background: 'green'
+            },
+            {
+                id: 'KpiSocial',
+                type: 'KpiBasicModule',
+                roles: ['c','s','e'],
+                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
+                defaultClassName: 'col-sm-6 col-md-3',
+                background: 'steelblue'
+            },
+            {
+                id: 'KpiTrafficInsight',
+                type: 'KpiBasicModule',
+                roles: ['c','s'],
+                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
+                defaultClassName: 'col-sm-12',
+                background: 'orange'
+            },
+            {
+                id: 'KpiUrlRankings',
+                type: 'KpiBasicModule',
+                roles: ['c'],
+                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
+                defaultClassName: 'col-sm-6',
+                background: 'red'
+            },
+            {
+                id: 'ChartChannelInsight',
+                type: 'ChartBasicModule',
+                roles: ['c'],
+                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
+                defaultClassName: 'col-sm-12',
+                background: 'lightgrey'
+            },
+            {
+                id: 'GridUrlRankings',
+                type: 'GridBasicModule',
+                roles: ['c','s','e'],
+                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
+                defaultClassName: 'col-sm-12',
+                background: 'blue'
+            }
+        ]));
+        localStorage.setItem('pageConfig', JSON.stringify({
+            url: '/some-page', // = id
+            modulesOnPage: [ // Array of ordered modules
+                {
+                    id: 'PageFilter'
+                },
+                {
+                    id: 'KpiConversionInsight'
+                },
+                {
+                    id: 'KpiSocial'
+                },
+                {
+                    id: 'KpiSocial'
+                },
+                {
+                    id: 'KpiConversionInsight'
+                },
+                {
+                    id: 'ChartChannelInsight'
+                },
+                {
+                    id: 'GridUrlRankings'
+                },
+                {
+                    id: 'KpiUrlRankings'
+                },
+                {
+                    id: 'KpiUrlRankings'
+                },
+                {
+                    id: 'KpiTrafficInsight'
+                }
+            ]
+        }));
     }
-];
 
-module.exports = ModuleCollection;
-},{"../modules/chart_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/chart_basic.module.js","../modules/grid_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/grid_basic.module.js","../modules/kpi_basic.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js","../modules/page_filter.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/page_filter.module.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js":[function(require,module,exports){
-var page = {
-    url: '/static-page', // = id
-    modulesOnPage: [ // Array of ordered modules
-        {
-            id: 'PageFilter'
-        },
-        {
-            id: 'ChartChannelInsight'
-        },
-        {
-            id: 'KpiConversionInsight'
-        },
-        {
-            id: 'KpiSocial'
-        },
-        {
-            id: 'KpiSocial'
-        },
-        {
-            id: 'KpiConversionInsight'
-        },
-        {
-            id: 'GridUrlRankings'
-        },
-        {
-            id: 'KpiUrlRankings'
-        },
-        {
-            id: 'KpiUrlRankings'
-        },
-        {
-            id: 'KpiTrafficInsight'
-        }
-    ]
 };
 
-module.exports = page;
-},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js":[function(require,module,exports){
-/*
- * Copyright (c) 2014, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * AppDispatcher
- *
- * A singleton that operates as the central hub for application updates.
- */
+},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ModuleActionCreators.js":[function(require,module,exports){
+var ApiUtils = require('../utils/ApiUtils.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    ModuleConstants = require('../constants/ModuleConstants.js');
 
-var Dispatcher = require('flux').Dispatcher;
-var assign = require('object-assign');
-
-var AppDispatcher = assign(new Dispatcher(), {
-    /**
-     * A bridge function between the views and the dispatcher, marking the action
-     * as a view action.  Another variant here could be handleServerAction.
-     * @param  {object} action The data coming from the view.
-     */
-    handleViewAction: function(action) {
-        this.dispatch({
-            source: 'VIEW_ACTION',
-            action: action
-        });
+var ModuleActions = {
+    fetchData: function (url, moduleId) {
+        ApiUtils.getModuleData(url, moduleId);
     }
-});
+};
 
-module.exports = AppDispatcher;
-
-},{"flux":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/flux/index.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
-var RemoveModule = require('../components/remove_module.component');
-
-var remove = function (editMode, pageId) {
-    if (editMode) {
-        return React.createElement(RemoveModule, {pageId: pageId});
-    } else {
-        return '';
-    }
-}
-
-module.exports = remove;
-},{"../components/remove_module.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/remove_module.component.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js":[function(require,module,exports){
-var AppDispatcher = require('../_dispatcher/app.dispatcher');
-var PageConstants = require('../constants/page.constants');
+module.exports = ModuleActions;
+},{"../constants/ModuleConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","../utils/ApiUtils.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js":[function(require,module,exports){
+var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var PageConstants = require('../constants/PageConstants.js');
 
 var PageActions = {
     initialize: function (moduleCollection, initiallyOnPage) {
@@ -26020,9 +26750,9 @@ var PageActions = {
 };
 
 module.exports = PageActions;
-},{"../_dispatcher/app.dispatcher":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page.constants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page_filter.actions.js":[function(require,module,exports){
-var AppDispatcher = require('../_dispatcher/app.dispatcher');
-var PageFilterConstants = require('../constants/page_filter.constants');
+},{"../constants/PageConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js":[function(require,module,exports){
+var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var PageFilterConstants = require('../constants/PageFilterConstants.js');
 
 var PageFilterActions = {
     initialize: function (modulesOnPage) {
@@ -26033,30 +26763,256 @@ var PageFilterActions = {
 };
 
 module.exports = PageFilterActions;
-},{"../_dispatcher/app.dispatcher":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page_filter.constants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page_filter.constants.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js":[function(require,module,exports){
+},{"../constants/PageFilterConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageFilterConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ServerActionCreators.js":[function(require,module,exports){
+var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var PageConstants = require('../constants/PageConstants.js');
+var ModuleConstants = require('../constants/ModuleConstants.js');
+
+var ServerActions = {
+    receivePageConfig: function (moduleCollection, initiallyOnPage) {
+        AppDispatcher.handleServerAction({
+            actionType: PageConstants.PAGE_RECEICVE_CONFIG,
+            moduleCollection: moduleCollection,
+            initiallyOnPage: initiallyOnPage
+        });
+    },
+
+    receiveModuleData: function (data, id) {
+        AppDispatcher.handleServerAction({
+            actionType: ModuleConstants.MODULE_RECEIVE_DATA,
+            moduleData: data,
+            pageId: id
+        });
+    }
+};
+
+module.exports = ServerActions;
+},{"../constants/ModuleConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js","../constants/PageConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AddMenuComponent.js":[function(require,module,exports){
+var React = require('react'),
+    _ = require('lodash'),
+    PageStore = require('../stores/PageStore.js'),
+    PageActions = require('../actions/PageActionCreators.js');
+
+var AddMenu = React.createClass({displayName: 'AddMenu',
+    render: function () {
+        var moduleList = _.map(this.props.moduleCollection, function (module, i) {
+            return(
+                React.createElement(ModuleItem, {
+                    key: i, 
+                    moduleId: module.id, 
+                    roles: module.roles, 
+                    cx: module.defaultClassName, 
+                    background: module.background}
+                )
+            );
+        });
+
+        return (
+            React.createElement("div", {className: "add-menu"}, 
+                moduleList
+            )
+        );
+    }
+});
+
+var ModuleItem = React.createClass({displayName: 'ModuleItem',
+    _addToPage: function (e) {
+        PageActions.addModule(this.props.moduleId);
+    },
+    render: function () {
+        var roles = this.props.roles.join(', '),
+            cx = "add-menu-preview " + this.props.cx.split(' ').pop() + ' ' + this.props.background;
+        return (
+            React.createElement("div", {className: "add-menu-item"}, 
+                React.createElement("div", {className: cx}, "Preview"), 
+                React.createElement("button", {onClick: this._addToPage, className: "btn btn-success"}, "+ Add to page"), 
+                React.createElement("strong", null, this.props.moduleId), React.createElement("br", null), 
+                React.createElement("span", null, "Roles: ", roles)
+            )
+        );
+    }
+});
+
+module.exports = AddMenu;
+},{"../actions/PageActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js","../stores/PageStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AppComponent.js":[function(require,module,exports){
+var React = require('react'),
+    Header = require('./HeaderComponent.js'),
+    Page = require('./PageComponent.js');
+
+var App = React.createClass({displayName: 'App',
+    render: function () {
+        return (
+            React.createElement("div", {className: "container-fluid"}, 
+                React.createElement(Header, null), 
+                React.createElement(Page, null)
+            )
+        );
+    }
+});
+
+module.exports = App;
+},{"./HeaderComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/HeaderComponent.js","./PageComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/PageComponent.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/DynamicKpiDataComponent.js":[function(require,module,exports){
+var React = require('react');
+
+var DynamicKpiDataComponent = React.createClass({displayName: 'DynamicKpiDataComponent',
+    render: function () {
+        return (
+            React.createElement("div", {className: "module-content"}, 
+                React.createElement("h4", null, "Dynamic Data"), 
+                React.createElement("p", null, "Value: ", this.props.data.value), 
+                React.createElement("p", null, "Trend: ", this.props.data.trend)
+            )
+        );
+    }
+});
+
+module.exports = DynamicKpiDataComponent;
+},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/HeaderComponent.js":[function(require,module,exports){
+var React = require('react'),
+    _ = require('lodash'),
+    PageActions = require('../actions/PageActionCreators.js');
+
+var Header = React.createClass({displayName: 'Header',
+    _onChange: function (e) {
+        PageActions.setCurrentRole(e.target.value);
+    },
+    render: function () {
+        var options = ['C-Level','SEO','Editor'];
+        var renderedOptions = _.map(options, function (option, i) {
+             return(
+                 React.createElement("option", {key: 'opt' + i, value: option}, option)
+             );
+        });
+
+        return (
+            React.createElement("nav", {className: "header navbar navbar-default navbar-fixed-top", role: "navigation"}, 
+                React.createElement("div", {className: "container-fluid"}, 
+                    React.createElement("a", {className: "navbar-brand bars", href: "/v1.html"}, React.createElement("i", {className: "fa fa-bars"})), 
+                    React.createElement("a", {className: "navbar-brand pull-right", href: "/v1.html"}, "S7 v0.1.0"), 
+                    React.createElement("select", {onChange: this._onChange}, 
+                        renderedOptions
+                    )
+                )
+            )
+        );
+    }
+});
+
+module.exports = Header;
+},{"../actions/PageActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/HeadlineComponent.js":[function(require,module,exports){
 var React = require('react');
 
 var Headline = React.createClass({displayName: 'Headline',
     render: function () {
         return (
-            React.createElement("strong", null, this.props.title)
+            React.createElement("h3", null, this.props.title)
         );
     }
 });
 
 module.exports = Headline;
-},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/page_edit_buttons.component.js":[function(require,module,exports){
+},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/PageComponent.js":[function(require,module,exports){
+var React = require('react'),
+    ReactCSSTransitionGroup = require('react/lib/ReactCSSTransitionGroup'),
+    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
+    _ = require('lodash'),
+    AllModules = require('../modules/_AllModules'),
+    PageActions = require('../actions/PageActionCreators.js'),
+    PageStore = require('../stores/PageStore.js'),
+    AddMenu = require('./AddMenuComponent.js'),
+    PageEditButtons = require('./PageEditButtonsComponent.js'),
+    Loader = require('./SpinnerComponent.js'),
+    PageFilter = require('../modules/PageFilterModule.js');
+
+var Page = React.createClass({displayName: 'Page',
+    store: PageStore,
+
+    mixins: [InitStoreInComponentMixin],
+
+    getStateFromStore: function () {
+        return {
+            modules: this.store.getModulesOnPage(),
+            moduleCollection: this.store.getModuleCollection(),
+            editMode: this.store.getEditMode(),
+            addMode: this.store.getAddMode()
+        };
+    },
+
+    render: function () {
+        var modules = null,
+            addMenu = null,
+            editButtons = null,
+            pageEditButtons = null,
+            loader = null,
+            editMode;
+
+        if (this.state) {
+            editMode = this.state.editMode;
+
+            if (this.state.modules.length) {
+                loader = null;
+                modules = _.map(this.state.modules, function (module, i) {
+                    var dragging = (i == this.state.dragging) ? ' dragging' : '',
+                        ModuleComponent = AllModules[module.type];
+
+                    return (
+                        React.createElement("div", {className: module.className + dragging, 
+                            key: module.pageId, 
+                            'data-id': i}, 
+                            React.createElement(ModuleComponent, {
+                                key: i, 
+                                moduleId: module.id, 
+                                action: module.action, 
+                                background: module.background, 
+                                pageId: module.pageId, 
+                                editMode: editMode, 
+                                roles: module.roles}
+                            )
+                        )
+                    );
+                }, this);
+            } else {
+                loader = React.createElement(Loader, null)
+            }
+
+            if (this.state.addMode) {
+                addMenu =  React.createElement(AddMenu, {moduleCollection: this.state.moduleCollection})
+            } else {
+                addMenu = null;
+            }
+
+            pageEditButtons = React.createElement(PageEditButtons, {key: "pe1", editMode: this.state.editMode, addMode: this.state.addMode});
+        }
+
+        return (
+            React.createElement("div", {className: "row"}, 
+                loader, 
+
+                React.createElement(ReactCSSTransitionGroup, {transitionName: "example"}, 
+                    modules
+                ), 
+
+                addMenu, 
+                pageEditButtons
+            )
+        );
+    }
+});
+
+module.exports = Page;
+},{"../actions/PageActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js","../mixins/InitStoreInComponentMixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../modules/PageFilterModule.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/PageFilterModule.js","../modules/_AllModules":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/_AllModules.js","../stores/PageStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","./AddMenuComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AddMenuComponent.js","./PageEditButtonsComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/PageEditButtonsComponent.js","./SpinnerComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/SpinnerComponent.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js","react/lib/ReactCSSTransitionGroup":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactCSSTransitionGroup.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/PageEditButtonsComponent.js":[function(require,module,exports){
 var React = require('react');
-var PageActions = require('../actions/page.actions');
+var PageActions = require('../actions/PageActionCreators.js');
 
 var PageEditButtons = React.createClass({displayName: 'PageEditButtons',
     _toggleEditMode: function () {
         PageActions.toggleEditMode();
     },
+
     _toggleAddMode: function () {
         PageActions.toggleAddMode();
-        PageActions.toggleDisableScroll();
     },
+
     render: function () {
         var cxe,
             cxeb = 'edit-buttons',
@@ -26087,9 +27043,9 @@ var PageEditButtons = React.createClass({displayName: 'PageEditButtons',
 });
 
 module.exports = PageEditButtons;
-},{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/remove_module.component.js":[function(require,module,exports){
+},{"../actions/PageActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/RemoveModuleComponent.js":[function(require,module,exports){
 var React = require('react');
-var PageActions = require('../actions/page.actions');
+var PageActions = require('../actions/PageActionCreators.js');
 
 var removeModule = React.createClass({displayName: 'removeModule',
     _deleteMe: function () {
@@ -26097,35 +27053,62 @@ var removeModule = React.createClass({displayName: 'removeModule',
     },
     render: function () {
         return (
-            React.createElement("button", {onClick: this._deleteMe, className: "btn-delete btn btn-default pull-right"}, '\u2a09')
+            React.createElement("button", {onClick: this._deleteMe, className: "btn-delete btn btn-default"}, '\u2a09')
         );
     }
 });
 
 module.exports = removeModule;
-},{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js":[function(require,module,exports){
-/*
- * PageConstants
- */
+},{"../actions/PageActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/SpinnerComponent.js":[function(require,module,exports){
+var React = require('react');
 
+var Spinner = React.createClass({displayName: 'Spinner',
+    render: function () {
+        return (
+            React.createElement("i", {className: "spin extra-large"})
+        );
+    }
+});
+
+module.exports = Spinner;
+},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/SpinnerModuleComponent.js":[function(require,module,exports){
+var React = require('react');
+
+var Spinner = React.createClass({displayName: 'Spinner',
+    render: function () {
+        return (
+            React.createElement("div", {className: "spin-mini-container"}, 
+                this.props.text, " ", React.createElement("i", {className: "spin small"})
+            )
+        );
+    }
+});
+
+module.exports = Spinner;
+},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js":[function(require,module,exports){
+var keyMirror = require('keymirror');
+
+var constants = keyMirror({
+    MODULE_FETCH_DATA: null,
+    MODULE_RECEIVE_DATA: null
+});
+
+module.exports = constants;
+},{"keymirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageConstants.js":[function(require,module,exports){
 var keyMirror = require('keymirror');
 
 var constants = keyMirror({
     MODULE_FILTER_BY_ROLE: null,
     MODULE_ADD: null,
     MODULE_REMOVE: null,
-    PAGE_INITIALIZE: null,
+    PAGE_RECEICVE_CONFIG: null,
     PAGE_TOGGLE_EDIT: null,
     PAGE_TOGGLE_ADD: null,
     PAGE_REORDER: null
 });
 
 module.exports = constants;
-},{"keymirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page_filter.constants.js":[function(require,module,exports){
-/*
- * PageFilterConstants
- */
-
+},{"keymirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageFilterConstants.js":[function(require,module,exports){
 var keyMirror = require('keymirror');
 
 var constants = keyMirror({
@@ -26133,221 +27116,114 @@ var constants = keyMirror({
 });
 
 module.exports = constants;
-},{"keymirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js":[function(require,module,exports){
-var React = require('react'),
-    _ = require('lodash'),
-    PageStore = require('../stores/page.store'),
-    PageActions = require('../actions/page.actions');
+},{"keymirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js":[function(require,module,exports){
+/*
+ * Copyright (c) 2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * AppDispatcher
+ *
+ * A singleton that operates as the central hub for application updates.
+ */
 
-var AddMenu = React.createClass({displayName: 'AddMenu',
-    render: function () {
-        var moduleList = _.map(this.props.moduleCollection, function (module) {
-            console.log(module);
-            return(
-                React.createElement(ModuleItem, {
-                    moduleId: module.id, 
-                    roles: module.roles, 
-                    cx: module.defaultClassName}
-                )
-            );
+var Dispatcher = require('flux').Dispatcher;
+var assign = require('object-assign');
+
+var AppDispatcher = assign(new Dispatcher(), {
+    /**
+     * A bridge function between the views and the dispatcher, marking the action
+     * as a view action.  Another variant here could be handleServerAction.
+     * @param  {object} action The data coming from the view.
+     */
+    handleViewAction: function(action) {
+        this.dispatch({
+            source: 'VIEW_ACTION',
+            action: action
         });
-
-        return (
-            React.createElement("div", {className: "add-menu"}, 
-                moduleList
-            )
-        );
-    }
-});
-
-var ModuleItem = React.createClass({displayName: 'ModuleItem',
-    _addToPage: function (e) {
-        PageActions.addModule(this.props.moduleId);
     },
-    render: function () {
-        var roles = this.props.roles.join(', '),
-            cx = "add-menu-preview " + this.props.cx.split(' ').pop();
-        return (
-            React.createElement("div", {className: "add-menu-item"}, 
-                React.createElement("div", {className: cx}, "Preview"), 
-                React.createElement("button", {onClick: this._addToPage, className: "btn btn-success"}, "+ Add to page"), 
-                React.createElement("strong", null, this.props.moduleId), React.createElement("br", null), 
-                React.createElement("span", null, "Roles: ", roles)
-            )
-        );
-    }
-});
 
-module.exports = AddMenu;
-},{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","../stores/page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/header.layout_module.js":[function(require,module,exports){
-var React = require('react'),
-    _ = require('lodash'),
-    PageActions = require('../actions/page.actions');
-
-var Header = React.createClass({displayName: 'Header',
-    _onChange: function (e) {
-        PageActions.setCurrentRole(e.target.value);
-    },
-    render: function () {
-        var options = ['C-Level','SEO','Editor'];
-        var renderedOptions = _.map(options, function (option, i) {
-             return(
-                 React.createElement("option", {key: 'opt' + i, value: option}, option)
-             );
+    handleServerAction: function(action) {
+        this.dispatch({
+            source: 'SERVER_ACTION',
+            action: action
         });
-
-        return (
-            React.createElement("nav", {className: "header navbar navbar-default navbar-fixed-top", role: "navigation"}, 
-                React.createElement("div", {className: "container-fluid"}, 
-                    React.createElement("a", {className: "navbar-brand bars", href: "/v1.html"}, React.createElement("i", {className: "fa fa-bars"})), 
-                    React.createElement("a", {className: "navbar-brand pull-right", href: "/v1.html"}, "S7 v0.1.0"), 
-                    React.createElement("select", {onChange: this._onChange}, 
-                        renderedOptions
-                    )
-                )
-            )
-        );
     }
 });
 
-module.exports = Header;
-},{"../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/page.layout_module.js":[function(require,module,exports){
-var React = require('react'),
-    _ = require('lodash'),
-    PageActions = require('../actions/page.actions'),
-    PageStore = require('../stores/page.store'),
-    AddMenu = require('./add_menu.layout_module'),
-    PageEditButtons = require('../components/page_edit_buttons.component'),
-    PageFilter = require('../modules/page_filter.module'),
-    _moduleCollection = require('../_config/module_collection'), // This will become an ajax call
-    _initiallyOnPage = require('../_config/static_page').modulesOnPage; // This will become an ajax call
+module.exports = AppDispatcher;
 
-function getPageState () {
-    return {
-        modules: PageStore.getModulesOnPage(),
-        moduleCollection: PageStore.getModuleCollection(),
-        editMode: PageStore.getEditMode(),
-        addMode: PageStore.getAddMode()
-    };
-}
-
-var Page = React.createClass({displayName: 'Page',
+},{"flux":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/flux/index.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js":[function(require,module,exports){
+var InitStoreInComponent = {
     getInitialState: function () {
-        return null;
-    },
-
-    componentDidMount: function () {
-        PageStore.addChangeListener(this._onChange);
-        PageActions.initialize(_moduleCollection, _initiallyOnPage);
-    },
-
-    componentWillUnmount: function () {
-        PageStore.removeChangeListener(this._onChange);
+        return this.getStateFromStore();
     },
 
     _onChange: function () {
-        this.setState(getPageState());
+        this.setState(this.getStateFromStore());
     },
 
-    _sort: function (modules, dragging) {
-        this.state.modules = modules;
-        this.state.dragging = dragging;
-        PageActions.updateModulesOrder(modules);
+    componentDidMount: function () {
+        this.store.addChangeListener(this._onChange);
     },
 
-    _dragStart: function (e) {
-        this._dragged = Number(e.currentTarget.dataset.id);
-        e.dataTransfer.effectAllowed = 'move';
-        // Firefox requires calling dataTransfer.setData
-        // for the drag to properly work
-        e.dataTransfer.setData("text/html", null);
-    },
-
-    _dragOver: function (e) {
-        var over = e.currentTarget;
-        var dragging = this.state.dragging;
-        var from = isFinite(dragging) ? dragging : this._dragged;
-        var to = Number(over.dataset.id);
-        if((e.clientY - over.offsetTop) > (over.offsetHeight / 2) ||
-            (e.clientX - over.offsetLeft) > (over.offsetWidth / 2)) {
-            to++;
-        }
-        if(from < to) to--;
-
-        // Move from 'a' to 'b'
-        var items = this.state.modules;
-        items.splice(to, 0, items.splice(from,1)[0]);
-        this._sort(items, to);
-    },
-
-    _dragEnd: function () {
-        this._sort(this.state.modules, undefined);
-    },
-
-    render: function () {
-        var modules = '',
-            addMenu = '',
-            editButtons = '',
-            pageEditButtons = '',
-            editMode;
-
-        if (this.state) {
-            editMode = this.state.editMode;
-            modules = _.map(this.state.modules, function (module, i) {
-                var dragging = (i == this.state.dragging) ? ' dragging' : '';
-                return (
-                    React.createElement("div", {className: module.className + dragging, 
-                        key: module.pageId, 
-                        'data-id': i, 
-                        draggable: editMode, 
-                        onDragEnd: this._dragEnd, 
-                        onDragOver: this._dragOver, 
-                        onDragStart: this._dragStart}, 
-                        React.createElement(module.type, {
-                            title: module.id, 
-                            action: module.action, 
-                            pageId: module.pageId, 
-                            editMode: editMode, 
-                            roles: module.roles}
-                        )
-                    )
-                );
-            }, this);
-
-            if (this.state.addMode) {
-                addMenu =  React.createElement(AddMenu, {moduleCollection: this.state.moduleCollection})
-            } else {
-                addMenu = '';
-            }
-
-            pageEditButtons = React.createElement(PageEditButtons, {editMode: this.state.editMode, addMode: this.state.addMode});
-        }
-
-        return (
-            React.createElement("div", {className: "row"}, 
-                modules, 
-                addMenu, 
-                pageEditButtons
-            )
-        );
+    componentWillUnmount: function () {
+        this.store.removeChangeListener(this._onChange);
     }
-});
+};
 
-module.exports = Page;
-},{"../_config/module_collection":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/module_collection.js","../_config/static_page":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_config/static_page.js","../actions/page.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page.actions.js","../components/page_edit_buttons.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/page_edit_buttons.component.js","../modules/page_filter.module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/page_filter.module.js","../stores/page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","./add_menu.layout_module":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/layout_modules/add_menu.layout_module.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/chart_basic.module.js":[function(require,module,exports){
-var React = require('react');
-var Headline = require('../components/headline.component');
-var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
+module.exports = InitStoreInComponent;
+},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/RemoveButtonMixin.js":[function(require,module,exports){
+/**
+ * @jsx React.DOM
+ */
+
+var RemoveModule = require('../components/RemoveModuleComponent.js');
+
+var remove = function (editMode, pageId) {
+    if (editMode) {
+        return React.createElement(RemoveModule, {pageId: pageId});
+    } else {
+        return '';
+    }
+}
+
+module.exports = remove;
+},{"../components/RemoveModuleComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/RemoveModuleComponent.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/ChartBasicModule.js":[function(require,module,exports){
+var React = require('react'),
+    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js'),
+    ModuleStore = require('../stores/ModuleStore'),
+    ModuleActionCreators = require('../actions/ModuleActionCreators'),
+    Headline = require('../components/HeadlineComponent.js'),
+    RemoveButtonMixin = require('../mixins/RemoveButtonMixin.js');
 
 var ConversionInside = React.createClass({displayName: 'ConversionInside',
+    store: ModuleStore,
+
+    mixins: [InitStoreInComponentMixin],
+
+    componentDidMount: function () {
+        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+    },
+
+    getStateFromStore: function () {
+        return {
+            moduleData: this.store.getModuleData()
+        };
+    },
+
     render: function () {
         var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
-            roles = 'Roles: ' + this.props.roles.join(', ');
+            roles = 'Roles: ' + this.props.roles.join(', '),
+            cx = 'module chart ' + this.props.background;;
 
         return (
-            React.createElement("div", {className: "chart module"}, 
+            React.createElement("div", {key: this.props.key, className: cx}, 
                 remove, 
-                React.createElement(Headline, {title: this.props.title}), 
+                React.createElement(Headline, {title: this.props.moduleId}), 
                 React.createElement("img", {src: "images/chart.png"})
             )
         );
@@ -26355,55 +27231,102 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
 });
 
 module.exports = ConversionInside;
-},{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/grid_basic.module.js":[function(require,module,exports){
-var React = require('react');
-var Headline = require('../components/headline.component');
-var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
-var _ = require('lodash');
+},{"../actions/ModuleActionCreators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ModuleActionCreators.js","../components/HeadlineComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/HeadlineComponent.js","../mixins/InitStoreInComponentMixin.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../mixins/RemoveButtonMixin.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/RemoveButtonMixin.js","../stores/ModuleStore":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/ModuleStore.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/GridBasicModule.js":[function(require,module,exports){
+var React = require('react'),
+    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js'),
+    ModuleStore = require('../stores/ModuleStore'),
+    ModuleActionCreators = require('../actions/ModuleActionCreators'),
+    Headline = require('../components/HeadlineComponent.js'),
+    RemoveButtonMixin = require('../mixins/RemoveButtonMixin'),
+    _ = require('lodash');
 
 var GridBasic = React.createClass({displayName: 'GridBasic',
+    store: ModuleStore,
+
+    mixins: [InitStoreInComponentMixin],
+
+    componentDidMount: function () {
+        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+    },
+
+    getStateFromStore: function () {
+        return {
+            moduleData: this.store.getModuleData()
+        };
+    },
+
     render: function () {
         var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
-            roles = 'Roles: ' + this.props.roles.join(', ');
+            roles = 'Roles: ' + this.props.roles.join(', '),
+            cx = 'module grid ' + this.props.background;
 
         return (
-            React.createElement("div", {className: "grid module"}, 
+            React.createElement("div", {key: this.props.key, className: cx}, 
                 remove, 
-                React.createElement(Headline, {title: this.props.title}), 
-                React.createElement("br", null), roles
+                React.createElement(Headline, {title: this.props.moduleId}), 
+                roles
             )
         );
     }
 });
 
 module.exports = GridBasic;
-},{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/kpi_basic.module.js":[function(require,module,exports){
-var React = require('react');
-var Headline = require('../components/headline.component');
-var RemoveButtonMixin = require('../_mixins/remove_button.mixin');
-var _ = require('lodash');
+},{"../actions/ModuleActionCreators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ModuleActionCreators.js","../components/HeadlineComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/HeadlineComponent.js","../mixins/InitStoreInComponentMixin.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../mixins/RemoveButtonMixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/RemoveButtonMixin.js","../stores/ModuleStore":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/ModuleStore.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/KpiBasicModule.js":[function(require,module,exports){
+var React = require('react'),
+    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js'),
+    ModuleStore = require('../stores/ModuleStore'),
+    ModuleActionCreators = require('../actions/ModuleActionCreators'),
+    Headline = require('../components/HeadlineComponent.js'),
+    SpinnerModule = require('../components/SpinnerModuleComponent.js'),
+    DynamicKpiDataComponent = require('../components/DynamicKpiDataComponent.js')
+    RemoveButtonMixin = require('../mixins/RemoveButtonMixin.js'),
+    _ = require('lodash');
 
 var KpiBasic = React.createClass({displayName: 'KpiBasic',
+    store: ModuleStore,
+
+    mixins: [InitStoreInComponentMixin],
+
+    componentDidMount: function () {
+        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+    },
+
+    getStateFromStore: function () {
+        return {
+            moduleData: this.store.getModuleData()
+        };
+    },
+
     render: function () {
         var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
-            roles = 'Roles: ' + this.props.roles.join(', ');
+            roles = 'Roles: ' + this.props.roles.join(', '),
+            cx = 'kpi module ' + this.props.background,
+            dynamicNodes;
+
+        if (_.isEmpty(this.state.moduleData) ||
+            _.isEmpty(this.state.moduleData[this.props.pageId])) {
+            dynamicNodes = React.createElement(SpinnerModule, {text: "Loading..."})
+        } else {
+            dynamicNodes = React.createElement(DynamicKpiDataComponent, {data: this.state.moduleData[this.props.pageId].data})
+        }
 
         return (
-            React.createElement("div", {className: "kpi module"}, 
+            React.createElement("div", {key: this.props.key, className: cx}, 
                 remove, 
-                React.createElement(Headline, {title: this.props.title}), 
-                React.createElement("br", null), roles
+                React.createElement(Headline, {title: this.props.moduleId}), 
+                React.createElement("p", null, roles), 
+                dynamicNodes
             )
         );
     }
 });
 
 module.exports = KpiBasic;
-},{"../_mixins/remove_button.mixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_mixins/remove_button.mixin.js","../components/headline.component":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/headline.component.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/page_filter.module.js":[function(require,module,exports){
+},{"../actions/ModuleActionCreators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ModuleActionCreators.js","../components/DynamicKpiDataComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/DynamicKpiDataComponent.js","../components/HeadlineComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/HeadlineComponent.js","../components/SpinnerModuleComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/SpinnerModuleComponent.js","../mixins/InitStoreInComponentMixin.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../mixins/RemoveButtonMixin.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/RemoveButtonMixin.js","../stores/ModuleStore":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/ModuleStore.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/PageFilterModule.js":[function(require,module,exports){
 var React = require('react'),
     _ = require('lodash'),
-    PageFilterActions = require('../actions/page_filter.actions'),
-    PageFilterStore = require('../stores/page_filter.store.js');
+    PageFilterActions = require('../actions/PageFilterActionCreators.js'),
+    PageFilterStore = require('../stores/PageFilterStore.js');
 
 function getPageFilterState () {
     return {
@@ -26430,110 +27353,38 @@ var Page = React.createClass({displayName: 'Page',
 
     render: function () {
         return (
-            React.createElement("div", {className: "col-xs-12 page-filter"}, "Page Filter")
+            React.createElement("div", {key: this.props.key, className: "col-xs-12 page-filter"}, "Page Filter")
         );
     }
 });
 
 module.exports = Page;
-},{"../actions/page_filter.actions":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/page_filter.actions.js","../stores/page_filter.store.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page_filter.store.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js":[function(require,module,exports){
+},{"../actions/PageFilterActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js","../stores/PageFilterStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageFilterStore.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/_AllModules.js":[function(require,module,exports){
+var ModuleObject = {
+    ChartBasicModule: require('./ChartBasicModule'),
+    GridBasicModule: require('./GridBasicModule'),
+    KpiBasicModule: require('./KpiBasicModule'),
+    PageFilterModule: require('./PageFilterModule')
+};
+
+module.exports = ModuleObject;
+},{"./ChartBasicModule":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/ChartBasicModule.js","./GridBasicModule":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/GridBasicModule.js","./KpiBasicModule":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/KpiBasicModule.js","./PageFilterModule":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/PageFilterModule.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/ModuleStore.js":[function(require,module,exports){
 /*
  * ModuleStore
  */
 
 var _ = require('lodash'),
-    AppDispatcher = require('../_dispatcher/app.dispatcher.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    ModuleConstants = require('../constants/ModuleConstants.js'),
     EventEmitter = require('events').EventEmitter,
-    PageConstants = require('../constants/page.constants.js'),
+    PageStore = require('./PageStore.js'),
     assign = require('object-assign'),
     CHANGE_EVENT = 'change',
-    _currentlyOnPage = [],
-    _moduleCollection = [],
-    _currentRole = 'c',
-    _mode = {
-        edit: false,
-        add: false
-    };
+    _moduleData = {};
 
-function mergePageArrays (moduleCollection, initiallyOnPage) {
-    var arr = [],
-        key,
-        module,
-        obj,
-        i;
-
-    _moduleCollection = moduleCollection;
-
-    for (i = 0; i < initiallyOnPage.length; i++) {
-        key = initiallyOnPage[i].id;
-        module = _.find(_moduleCollection, {id: key});
-
-        if (module) {
-            obj = {
-                id: key,
-                type: module.type,
-                action: module.action,
-                roles: module.roles,
-                pageId: _.uniqueId(),
-                className: module.defaultClassName
-            }
-            arr.push(obj);
-        }
-    }
-    _currentlyOnPage = arr;
-}
-
-function toggleMode (val) {
-    _mode[val] = !_mode[val];
-}
-
-function setCurrentRole (role) {
-    _currentRole = role[0].toLowerCase();
-}
-
-function removeModuleFromPage (moduleId) {
-    _currentlyOnPage = _.reject(_currentlyOnPage, {pageId: moduleId});
-}
-
-function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
-    var module = _.find(moduleCollection, {id: moduleId});
-    module.pageId = _.uniqueId();
-    module.className = module.defaultClassName;
-    currentlyOnPage.push(module);
-    _mode.add = false;
-}
-
-function filterByRole (arr) {
-    return _.filter(arr, function (el) { return el.roles.indexOf(_currentRole) > -1; });
-}
-
-function updateCurrentlyOnPage (modules) {
-    _currentlyOnPage = modules;
-}
-
-var PageStore = assign({}, EventEmitter.prototype, {
-    /**
-     * Get the entire collection of views.
-     * @return {object}
-     */
-    getModulesOnPage: function () {
-        return filterByRole(_currentlyOnPage);
-    },
-
-    getModuleCollection: function () {
-        return filterByRole(_moduleCollection);
-    },
-
-    getEditMode: function () {
-        return _mode.edit;
-    },
-
-    getAddMode: function () {
-        return _mode.add;
-    },
-
-    getCurrentRole: function () {
-        return _currentRole;
+var ModuleStore = assign({}, EventEmitter.prototype, {
+    getModuleData: function () {
+        return _moduleData;
     },
 
     emitChange: function () {
@@ -26556,43 +27407,20 @@ var PageStore = assign({}, EventEmitter.prototype, {
 });
 
 // Register to handle all updates
-PageStore.dispatchToken = AppDispatcher.register(function (payload) {
+ModuleStore.dispatchToken = AppDispatcher.register(function (payload) {
+    AppDispatcher.waitFor([
+        PageStore.dispatchToken
+    ]);
+
     var action = payload.action;
 
     switch (action.actionType) {
-        case PageConstants.PAGE_INITIALIZE:
-            mergePageArrays(action.moduleCollection, action.initiallyOnPage);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.PAGE_TOGGLE_EDIT:
-            toggleMode('edit');
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.PAGE_TOGGLE_ADD:
-            toggleMode('add');
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.MODULE_FILTER_BY_ROLE:
-            setCurrentRole(action.role);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.MODULE_ADD:
-            addModuleToPage(_moduleCollection, _currentlyOnPage, action.moduleId);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.MODULE_REMOVE:
-            removeModuleFromPage(action.moduleId);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.PAGE_REORDER:
-            updateCurrentlyOnPage(action.modules);
-            PageStore.emitChange();
+        case ModuleConstants.MODULE_RECEIVE_DATA:
+            _moduleData[action.pageId] = {
+                data: JSON.parse(action.moduleData),
+                moduleId: PageStore.getModuleByPageId(action.pageId).id
+            }
+            ModuleStore.emitChange();
             break;
 
         default:
@@ -26602,17 +27430,17 @@ PageStore.dispatchToken = AppDispatcher.register(function (payload) {
     return true; // No errors.  Needed by promise in Dispatcher.
 });
 
-module.exports = PageStore;
-},{"../_dispatcher/app.dispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page.constants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page.constants.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page_filter.store.js":[function(require,module,exports){
+module.exports = ModuleStore;
+},{"../constants/ModuleConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","./PageStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageFilterStore.js":[function(require,module,exports){
 /*
  * ModuleStore
  */
 
 var _ = require('lodash'),
-    AppDispatcher = require('../_dispatcher/app.dispatcher.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
     EventEmitter = require('events').EventEmitter,
-    PageStore = require('./page.store'),
-    PageFilterConstants = require('../constants/page_filter.constants.js'),
+    PageStore = require('./PageStore.js'),
+    PageFilterConstants = require('../constants/PageFilterConstants.js'),
     assign = require('object-assign'),
     CHANGE_EVENT = 'change',
     _filterParamsOnPage = [];
@@ -26662,4 +27490,237 @@ PageFilterStore.dispatchToken = AppDispatcher.register(function (payload) {
 });
 
 module.exports = PageFilterStore;
-},{"../_dispatcher/app.dispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/_dispatcher/app.dispatcher.js","../constants/page_filter.constants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/page_filter.constants.js","./page.store":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/page.store.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}]},{},["./public/js/app.js"]);
+},{"../constants/PageFilterConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageFilterConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","./PageStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js":[function(require,module,exports){
+/*
+ * ModuleStore
+ */
+
+var _ = require('lodash'),
+    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    EventEmitter = require('events').EventEmitter,
+    PageConstants = require('../constants/PageConstants.js'),
+    assign = require('object-assign'),
+    CHANGE_EVENT = 'change',
+    _currentlyOnPage = [],
+    _moduleCollection = [],
+    _currentRole = 'c',
+    _mode = {
+        edit: false,
+        add: false
+    };
+
+function mergePageArrays (moduleCollection, initiallyOnPage) {
+    var arr = [],
+        key,
+        module,
+        obj,
+        i;
+
+    _moduleCollection = moduleCollection;
+
+    for (i = 0; i < initiallyOnPage.length; i++) {
+        key = initiallyOnPage[i].id;
+        module = _.find(_moduleCollection, {id: key});
+
+        if (module) {
+            obj = {
+                id: key,
+                type: module.type,
+                action: module.action,
+                roles: module.roles,
+                pageId: _.uniqueId(),
+                className: module.defaultClassName,
+                background: module.background
+            }
+            arr.push(obj);
+        }
+    }
+    _currentlyOnPage = arr;
+}
+
+function toggleMode (val) {
+    _mode[val] = !_mode[val];
+}
+
+function setCurrentRole (role) {
+    _currentRole = role[0].toLowerCase();
+}
+
+function removeModuleFromPage (moduleId) {
+    _currentlyOnPage = _.reject(_currentlyOnPage, {pageId: moduleId});
+}
+
+function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
+    var module = _.find(moduleCollection, {id: moduleId});
+    module.pageId = _.uniqueId();
+    module.className = module.defaultClassName;
+    currentlyOnPage.push(module);
+    _mode.add = false;
+}
+
+function filterByRole (arr) {
+    return _.filter(arr, function (el) { return el.roles.indexOf(_currentRole) > -1; });
+}
+
+function updateCurrentlyOnPage (modules) {
+    _currentlyOnPage = modules;
+}
+
+var PageStore = assign({}, EventEmitter.prototype, {
+    /**
+     * Get the entire collection of views.
+     * @return {object}
+     */
+    getModulesOnPage: function () {
+        return filterByRole(_currentlyOnPage);
+    },
+
+    getModuleCollection: function () {
+        return filterByRole(_moduleCollection);
+    },
+
+    getModuleByPageId: function (pageId) {
+        return _.find(_currentlyOnPage, {pageId: pageId});
+    },
+
+    getEditMode: function () {
+        return _mode.edit;
+    },
+
+    getAddMode: function () {
+        return _mode.add;
+    },
+
+    getCurrentRole: function () {
+        return _currentRole;
+    },
+
+    emitChange: function () {
+        this.emit(CHANGE_EVENT);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    addChangeListener: function (callback) {
+        this.on(CHANGE_EVENT, callback);
+    },
+
+    /**
+     * @param {function} callback
+     */
+    removeChangeListener: function (callback) {
+        this.removeListener(CHANGE_EVENT, callback);
+    }
+});
+
+// Register to handle all updates
+PageStore.dispatchToken = AppDispatcher.register(function (payload) {
+    var action = payload.action;
+    switch (action.actionType) {
+        case PageConstants.PAGE_RECEICVE_CONFIG:
+            mergePageArrays(action.moduleCollection, action.initiallyOnPage);
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.PAGE_TOGGLE_EDIT:
+            toggleMode('edit');
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.PAGE_TOGGLE_ADD:
+            toggleMode('add');
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.MODULE_FILTER_BY_ROLE:
+            setCurrentRole(action.role);
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.MODULE_ADD:
+            addModuleToPage(_moduleCollection, _currentlyOnPage, action.moduleId);
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.MODULE_REMOVE:
+            removeModuleFromPage(action.moduleId);
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.PAGE_REORDER:
+            updateCurrentlyOnPage(action.modules);
+            PageStore.emitChange();
+            break;
+
+        default:
+            return true;
+    }
+
+    return true; // No errors.  Needed by promise in Dispatcher.
+});
+
+module.exports = PageStore;
+},{"../constants/PageConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js":[function(require,module,exports){
+var ServerActionCreators = require('../actions/ServerActionCreators.js');
+
+// !!! Please Note !!!
+// We are using localStorage as an example, but in a real-world scenario, this
+// would involve XMLHttpRequest, or perhaps a newer client-server protocol.
+// The function signatures below might be similar to what you would build, but
+// the contents of the functions are just trying to simulate client-server
+// communication and server-side processing.
+
+function get(url) {
+    // Return a new promise.
+    return new Promise(function(resolve, reject) {
+        // Do the usual XHR stuff
+        var req = new XMLHttpRequest();
+        req.open('GET', url);
+
+        req.onload = function() {
+            // This is called even on 404 etc
+            // so check the status
+            if (req.status == 200) {
+                // Resolve the promise with the response text
+                resolve(req.response);
+            }
+            else {
+                // Otherwise reject with the status text
+                // which will hopefully be a meaningful error
+                reject(Error(req.statusText));
+            }
+        };
+
+        // Handle network errors
+        req.onerror = function() {
+            reject(Error("Network Error"));
+        };
+
+        // Make the request
+        req.send();
+    });
+}
+
+module.exports = {
+
+    getPageConfig: function() {
+        // simulate retrieving data from server
+        var pageConfig = JSON.parse(localStorage.getItem('pageConfig')),
+            moduleCollection = JSON.parse(localStorage.getItem('moduleCollection'));
+
+        // simulate success callback after 200ms
+        setTimeout(function () {
+            ServerActionCreators.receivePageConfig(moduleCollection, pageConfig.modulesOnPage);
+        }, 200);
+    },
+
+    getModuleData: function (url, id) {
+        get(url).then(function (response) {
+            ServerActionCreators.receiveModuleData(response, id);
+        }, function (error) {
+            console.error("Failed!", error);
+        });
+    }
+};
+},{"../actions/ServerActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ServerActionCreators.js"}]},{},["./public/js/app.js"]);

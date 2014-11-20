@@ -1,28 +1,16 @@
-/**
- * @jsx React.DOM
- */
-
-var React = require('react');
-var Header = require('./layout_modules/header.layout_module');
-var Page = require('./layout_modules/page.layout_module');
-var EditMenu = require('./layout_modules/add_menu.layout_module.js');
+var React = require('react'),
+    App = require('./components/AppComponent'),
+    AppExampleData = require('./AppExampleData'),
+    ApiUtils = require('./utils/ApiUtils');
 
 // For React DevTools
 window.React = React;
 
-var Main = React.createClass({
-    render: function () {
-        return (
-            <div className="container-fluid">
-                <Header />
-                <Page />
-            </div>
-        );
-    }
-});
+AppExampleData.init(); // Write static data to localStorage
 
+ApiUtils.getPageConfig();
 
 React.render(
-    <Main />,
-    document.getElementById('main')
+    <App />,
+    document.getElementById('app')
 );
