@@ -1,7 +1,7 @@
 var keyMirror = require('keymirror');
 
 var constants = keyMirror({
-    PAGE_FILTER_INITIALIZE: null
+    RECEIVE_PAGE_MODULES: null
 });
 
 module.exports = constants;

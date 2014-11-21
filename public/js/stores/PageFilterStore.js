@@ -11,9 +11,24 @@ var _ = require('lodash'),
     CHANGE_EVENT = 'change',
     _filterParamsOnPage = [];
 
+function buildFilterArray () {
+    var arr = [];
+
+    // Generate array of filterParams from modules on page,
+    _.filter(PageStore.getModulesOnPage(), function (el) {
+        if(el.filterParams) arr.push(el.filterParams);
+    });
+
+    // Flatten array and remove duplicates
+    arr = _.uniq(_.flatten(arr));
+
+    // Remove all blacklisted items
+    _filterParamsOnPage = _.difference(arr, PageStore.getPageFilter().blacklist);
+}
+
 var PageFilterStore = assign({}, EventEmitter.prototype, {
     getFilterParamsOnPage: function () {
-        return _.uniq(_.flatten(_.map(PageStore.getModulesOnPage(), 'filterParams')));
+        return _filterParamsOnPage;
     },
 
     emitChange: function () {
@@ -44,7 +59,8 @@ PageFilterStore.dispatchToken = AppDispatcher.register(function (payload) {
     var action = payload.action;
 
     switch (action.actionType) {
-        case PageFilterConstants.PAGE_FILTER_INITIALIZE:
+        case PageFilterConstants.RECEIVE_PAGE_MODULES:
+            buildFilterArray(PageStore.getModulesOnPage());
             PageFilterStore.emitChange();
             break;
 

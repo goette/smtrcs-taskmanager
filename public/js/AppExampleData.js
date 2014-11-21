@@ -3,35 +3,29 @@ module.exports = {
         localStorage.clear();
         localStorage.setItem('moduleCollection', JSON.stringify([
             {
-                id: 'PageFilter',
-                type: 'PageFilterModule',
-                roles: ['c','s','e'],
-                action: 'some/filter/action',
-                defaultClassName: 'col-xs-12',
-                background: 'lightgrey'
-            },
-            {
                 id: 'KpiConversionInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
-                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
-                defaultClassName: 'col-sm-6 col-md-3',
-                background: 'green'
+                action: 'http://total-perfect.codio.io:3000/services/rankings-cs-statistic/position-trend',
+                className: 'col-sm-6 col-md-3',
+                background: 'green',
+                filterParams: ['tags','engine']
             },
             {
                 id: 'KpiSocial',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
-                defaultClassName: 'col-sm-6 col-md-3',
-                background: 'steelblue'
+                className: 'col-sm-6 col-md-3',
+                background: 'steelblue',
+                filterParams: ['tags','interval']
             },
             {
                 id: 'KpiTrafficInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
-                defaultClassName: 'col-sm-12',
+                className: 'col-sm-12',
                 background: 'orange'
             },
             {
@@ -39,7 +33,7 @@ module.exports = {
                 type: 'KpiBasicModule',
                 roles: ['c'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
-                defaultClassName: 'col-sm-6',
+                className: 'col-sm-6',
                 background: 'red'
             },
             {
@@ -47,7 +41,7 @@ module.exports = {
                 type: 'ChartBasicModule',
                 roles: ['c'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
-                defaultClassName: 'col-sm-12',
+                className: 'col-sm-12',
                 background: 'lightgrey'
             },
             {
@@ -55,16 +49,17 @@ module.exports = {
                 type: 'GridBasicModule',
                 roles: ['c','s','e'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
-                defaultClassName: 'col-sm-12',
+                className: 'col-sm-12',
                 background: 'blue'
             }
         ]));
         localStorage.setItem('pageConfig', JSON.stringify({
             url: '/some-page', // = id
+            pageFilter: {
+                roles: ['c','s','e'],
+                blacklist: ['']
+            },
             modulesOnPage: [ // Array of ordered modules
-                {
-                    id: 'PageFilter'
-                },
                 {
                     id: 'KpiConversionInsight'
                 },

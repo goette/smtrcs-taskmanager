@@ -2,9 +2,9 @@ var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var PageFilterConstants = require('../constants/PageFilterConstants.js');
 
 var PageFilterActions = {
-    initialize: function (modulesOnPage) {
+    update: function () {
         AppDispatcher.handleViewAction({
-            actionType: PageFilterConstants.PAGE_FILTER_INITIALIZE
+            actionType: PageFilterConstants.RECEIVE_PAGE_MODULES
         });
     }
 };

@@ -39,7 +39,6 @@ function get(url) {
 }
 
 module.exports = {
-
     getPageConfig: function() {
         // simulate retrieving data from server
         var pageConfig = JSON.parse(localStorage.getItem('pageConfig')),
@@ -47,8 +46,8 @@ module.exports = {
 
         // simulate success callback after 200ms
         setTimeout(function () {
-            ServerActionCreators.receivePageConfig(moduleCollection, pageConfig.modulesOnPage);
-        }, 200);
+            ServerActionCreators.receivePageConfig(moduleCollection, pageConfig);
+        }, 500);
     },
 
     getModuleData: function (url, id) {

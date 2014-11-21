@@ -3,46 +3,53 @@
  */
 
 var _ = require('lodash'),
-    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher'),
     EventEmitter = require('events').EventEmitter,
-    PageConstants = require('../constants/PageConstants.js'),
+    PageConstants = require('../constants/PageConstants'),
+    PageFilterActions = require('../actions/PageFilterActionCreators'),
     assign = require('object-assign'),
     CHANGE_EVENT = 'change',
     _currentlyOnPage = [],
     _moduleCollection = [],
+    _pageConfig = {},
     _currentRole = 'c',
     _mode = {
         edit: false,
         add: false
     };
 
-function mergePageArrays (moduleCollection, initiallyOnPage) {
+function buildPageArrays (moduleCollection, pageConfig) {
     var arr = [],
+        obj,
         key,
         module,
-        obj,
+        val,
         i;
 
-    _moduleCollection = moduleCollection;
-
-    for (i = 0; i < initiallyOnPage.length; i++) {
-        key = initiallyOnPage[i].id;
-        module = _.find(_moduleCollection, {id: key});
+    // Merge arrays to generate currentlyOnPage array
+    for (i = 0; i < pageConfig.modulesOnPage.length; i++) {
+        obj = {};
+        key = pageConfig.modulesOnPage[i].id;
+        module = _.find(moduleCollection, {id: key});
 
         if (module) {
-            obj = {
-                id: key,
-                type: module.type,
-                action: module.action,
-                roles: module.roles,
-                pageId: _.uniqueId(),
-                className: module.defaultClassName,
-                background: module.background
-            }
+            for (val in module) {
+                obj[val] = module[val]
+;           }
+
+            obj.pageId = _.uniqueId();
             arr.push(obj);
         }
     }
     _currentlyOnPage = arr;
+
+    // Store moduleCollection and pageCollection, so it is available for later
+    _moduleCollection = moduleCollection;
+    _pageConfig = pageConfig;
+}
+
+function checkForPageFilter () {
+    //console.log(_.find(_currentlyOnPage, {id: 'Pag'});
 }
 
 function toggleMode (val) {
@@ -102,6 +109,10 @@ var PageStore = assign({}, EventEmitter.prototype, {
         return _currentRole;
     },
 
+    getPageFilter: function () {
+        return _pageConfig.pageFilter;
+    },
+
     emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
@@ -126,7 +137,7 @@ PageStore.dispatchToken = AppDispatcher.register(function (payload) {
     var action = payload.action;
     switch (action.actionType) {
         case PageConstants.PAGE_RECEICVE_CONFIG:
-            mergePageArrays(action.moduleCollection, action.initiallyOnPage);
+            buildPageArrays(action.moduleCollection, action.pageConfig);
             PageStore.emitChange();
             break;
 

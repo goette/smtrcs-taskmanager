@@ -11,7 +11,7 @@ var AddMenu = React.createClass({
                     key={i}
                     moduleId={module.id}
                     roles={module.roles}
-                    cx={module.defaultClassName}
+                    cx={module.className}
                     background={module.background}
                 />
             );

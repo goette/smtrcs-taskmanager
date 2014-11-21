@@ -7,6 +7,7 @@ var _ = require('lodash'),
     ModuleConstants = require('../constants/ModuleConstants.js'),
     EventEmitter = require('events').EventEmitter,
     PageStore = require('./PageStore.js'),
+    PageFilterStore = require('./PageFilterStore.js'),
     assign = require('object-assign'),
     CHANGE_EVENT = 'change',
     _moduleData = {};
@@ -38,7 +39,8 @@ var ModuleStore = assign({}, EventEmitter.prototype, {
 // Register to handle all updates
 ModuleStore.dispatchToken = AppDispatcher.register(function (payload) {
     AppDispatcher.waitFor([
-        PageStore.dispatchToken
+        PageStore.dispatchToken,
+        PageFilterStore.dispatchToken
     ]);
 
     var action = payload.action;

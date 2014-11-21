@@ -1,14 +1,16 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var PageConstants = require('../constants/PageConstants.js');
 var ModuleConstants = require('../constants/ModuleConstants.js');
+var PageFilterActions = require('../actions/PageFilterActionCreators.js');
 
 var ServerActions = {
-    receivePageConfig: function (moduleCollection, initiallyOnPage) {
+    receivePageConfig: function (moduleCollection, pageConfig) {
         AppDispatcher.handleServerAction({
             actionType: PageConstants.PAGE_RECEICVE_CONFIG,
             moduleCollection: moduleCollection,
-            initiallyOnPage: initiallyOnPage
+            pageConfig: pageConfig
         });
+        PageFilterActions.update();
     },
 
     receiveModuleData: function (data, id) {

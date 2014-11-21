@@ -4,7 +4,7 @@ var React = require('react'),
     ModuleActionCreators = require('../actions/ModuleActionCreators'),
     Headline = require('../components/HeadlineComponent.js'),
     SpinnerModule = require('../components/SpinnerModuleComponent.js'),
-    DynamicKpiDataComponent = require('../components/DynamicKpiDataComponent.js')
+    DynamicKpiDataComponent = require('../components/DynamicKpiDataComponent.js'),
     RemoveButtonMixin = require('../mixins/RemoveButtonMixin.js'),
     _ = require('lodash');
 

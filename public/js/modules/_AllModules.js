@@ -2,7 +2,7 @@ var ModuleObject = {
     ChartBasicModule: require('./ChartBasicModule'),
     GridBasicModule: require('./GridBasicModule'),
     KpiBasicModule: require('./KpiBasicModule'),
-    PageFilterModule: require('./PageFilterModule')
+    PageFilterModule: require('./../filter/PageFilter')
 };
 
 module.exports = ModuleObject;
