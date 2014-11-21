@@ -27612,7 +27612,7 @@ function removeModuleFromPage (moduleId) {
 function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
     var module = _.find(moduleCollection, {id: moduleId});
     module.pageId = _.uniqueId();
-    module.className = module.defaultClassName;
+    module.className = module.className;
     currentlyOnPage.push(module);
     _mode.add = false;
 }
