@@ -1,10 +1,10 @@
-var React = require('react'),
-    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js'),
-    ModuleStore = require('../stores/ModuleStore'),
-    ModuleActionCreators = require('../actions/ModuleActionCreators'),
-    Headline = require('../components/HeadlineComponent.js'),
-    RemoveButtonMixin = require('../mixins/RemoveButtonMixin'),
-    _ = require('lodash');
+var React = require('react');
+var InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js');
+var ModuleStore = require('../stores/ModuleStore');
+var ModuleActionCreators = require('../actions/ModuleActionCreators');
+var Headline = require('../components/HeadlineComponent.js');
+var RemoveButtonMixin = require('../mixins/RemoveButtonMixin');
+var _ = require('lodash');
 
 var GridBasic = React.createClass({
     store: ModuleStore,

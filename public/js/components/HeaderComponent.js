@@ -1,6 +1,6 @@
-var React = require('react'),
-    _ = require('lodash'),
-    PageActions = require('../actions/PageActionCreators.js');
+var React = require('react');
+var _ = require('lodash');
+var PageActions = require('../actions/PageActionCreators.js');
 
 var Header = React.createClass({
     _onChange: function (e) {

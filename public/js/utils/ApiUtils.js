@@ -1,12 +1,5 @@
 var ServerActionCreators = require('../actions/ServerActionCreators.js');
 
-// !!! Please Note !!!
-// We are using localStorage as an example, but in a real-world scenario, this
-// would involve XMLHttpRequest, or perhaps a newer client-server protocol.
-// The function signatures below might be similar to what you would build, but
-// the contents of the functions are just trying to simulate client-server
-// communication and server-side processing.
-
 function get(url) {
     // Return a new promise.
     return new Promise(function(resolve, reject) {
@@ -53,6 +46,16 @@ module.exports = {
     getModuleData: function (url, id) {
         get(url).then(function (response) {
             ServerActionCreators.receiveModuleData(response, id);
+        }, function (error) {
+            console.error("Failed!", error);
+        });
+    },
+
+    getFilterData: function (url, filterParam) {
+        get(url).then(function (response) {
+            setTimeout(function () {
+                ServerActionCreators.receiveFilterData(response, filterParam);
+            }, 200);
         }, function (error) {
             console.error("Failed!", error);
         });

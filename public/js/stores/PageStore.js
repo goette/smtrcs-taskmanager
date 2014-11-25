@@ -1,7 +1,3 @@
-/*
- * ModuleStore
- */
-
 var _ = require('lodash'),
     AppDispatcher = require('../dispatcher/AppDispatcher'),
     EventEmitter = require('events').EventEmitter,
@@ -68,7 +64,7 @@ function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
     var module = _.find(moduleCollection, {id: moduleId});
     module.pageId = _.uniqueId();
     module.className = module.className;
-    currentlyOnPage.push(module);
+    currentlyOnPage.unshift(module);
     _mode.add = false;
 }
 

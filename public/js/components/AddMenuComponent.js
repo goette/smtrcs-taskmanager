@@ -1,7 +1,7 @@
-var React = require('react'),
-    _ = require('lodash'),
-    PageStore = require('../stores/PageStore.js'),
-    PageActions = require('../actions/PageActionCreators.js');
+var React = require('react');
+var _ = require('lodash');
+var PageStore = require('../stores/PageStore.js');
+var PageActions = require('../actions/PageActionCreators.js');
 
 var AddMenu = React.createClass({
     render: function () {

@@ -15,7 +15,6 @@ React.render(
     React.createElement(App, null),
     document.getElementById('app')
 );
-
 },{"./AppExampleData":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/AppExampleData.js","./components/AppComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AppComponent.js","./utils/ApiUtils":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js":[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -7541,7 +7540,7 @@ module.exports = keyMirror;
 
   // some AMD build optimizers like r.js check for condition patterns like the following:
   if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
-    // Expose Lo-Dash to the global object even when an AMD spinner is present in
+    // Expose Lo-Dash to the global object even when an AMD loader is present in
     // case Lo-Dash is loaded with a RequireJS shim config.
     // See http://requirejs.org/docs/api.html#config-shim
     root._ = _;
@@ -11946,7 +11945,7 @@ if ("production" !== process.env.NODE_ENV) {
 
 // Version exists only in the open-source version of React, not in Facebook's
 // internal version.
-React.version = '0.12.0';
+React.version = '0.12.1';
 
 module.exports = React;
 
@@ -14579,7 +14578,7 @@ var ReactCompositeComponentMixin = {
       boundMethod.__reactBoundArguments = null;
       var componentName = component.constructor.displayName;
       var _bind = boundMethod.bind;
-      boundMethod.bind = function(newThis ) {var args=Array.prototype.slice.call(arguments,1);
+      boundMethod.bind = function(newThis ) {for (var args=[],$__0=1,$__1=arguments.length;$__0<$__1;$__0++) args.push(arguments[$__0]);
         // User is trying to bind() an autobound method; we effectively will
         // ignore the value of "this" that the user is trying to use, so
         // let's warn.
@@ -16928,7 +16927,7 @@ var ReactDefaultPerf = {
   },
 
   measure: function(moduleName, fnName, func) {
-    return function() {var args=Array.prototype.slice.call(arguments,0);
+    return function() {for (var args=[],$__0=0,$__1=arguments.length;$__0<$__1;$__0++) args.push(arguments[$__0]);
       var totalTime;
       var rv;
       var start;
@@ -26567,7 +26566,7 @@ var emptyFunction = require("./emptyFunction");
 var warning = emptyFunction;
 
 if ("production" !== process.env.NODE_ENV) {
-  warning = function(condition, format ) {var args=Array.prototype.slice.call(arguments,2);
+  warning = function(condition, format ) {for (var args=[],$__0=2,$__1=arguments.length;$__0<$__1;$__0++) args.push(arguments[$__0]);
     if (format === undefined) {
       throw new Error(
         '`warning(condition, format, ...args)` requires a warning ' +
@@ -26597,7 +26596,7 @@ module.exports = {
                 id: 'KpiConversionInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
-                action: 'http://total-perfect.codio.io:3000/services/rankings-cs-statistic/position-trend',
+                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
                 background: 'green',
                 filterParams: ['tags','engine']
@@ -26633,7 +26632,8 @@ module.exports = {
                 roles: ['c'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-12',
-                background: 'lightgrey'
+                background: 'lightgrey',
+                filterParams: ['tags','engine']
             },
             {
                 id: 'GridUrlRankings',
@@ -26658,12 +26658,6 @@ module.exports = {
                     id: 'KpiSocial'
                 },
                 {
-                    id: 'KpiSocial'
-                },
-                {
-                    id: 'KpiConversionInsight'
-                },
-                {
                     id: 'ChartChannelInsight'
                 },
                 {
@@ -26684,10 +26678,22 @@ module.exports = {
 
 };
 
-},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ModuleActionCreators.js":[function(require,module,exports){
-var ApiUtils = require('../utils/ApiUtils.js'),
-    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
-    ModuleConstants = require('../constants/ModuleConstants.js');
+},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/FilterActionCreators.js":[function(require,module,exports){
+var ApiUtils = require('../utils/ApiUtils.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var FilterConstants = require('../constants/FilterConstants.js');
+
+var FilterActionCreators = {
+    fetchData: function (url, filterParam) {
+        ApiUtils.getFilterData(url, filterParam);
+    }
+};
+
+module.exports = FilterActionCreators;
+},{"../constants/FilterConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/FilterConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","../utils/ApiUtils.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ModuleActionCreators.js":[function(require,module,exports){
+var ApiUtils = require('../utils/ApiUtils.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var ModuleConstants = require('../constants/ModuleConstants.js');
 
 var ModuleActions = {
     fetchData: function (url, moduleId) {
@@ -26699,7 +26705,7 @@ module.exports = ModuleActions;
 },{"../constants/ModuleConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","../utils/ApiUtils.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js":[function(require,module,exports){
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var PageConstants = require('../constants/PageConstants.js');
-var PageFilterActions = require('../actions/PageFilterActionCreators.js');
+var PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
 
 var PageActions = {
     toggleEditMode: function () {
@@ -26723,14 +26729,14 @@ var PageActions = {
             actionType: PageConstants.MODULE_ADD,
             moduleId: moduleId
         });
-        PageFilterActions.update();
+        PageFilterActionCreators.update();
     },
     removeModule: function (moduleId) {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.MODULE_REMOVE,
             moduleId: moduleId
         });
-        PageFilterActions.update();
+        PageFilterActionCreators.update();
     },
     updateModulesOrder: function (modules) {
         AppDispatcher.handleViewAction({
@@ -26758,16 +26764,17 @@ module.exports = PageFilterActions;
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var PageConstants = require('../constants/PageConstants.js');
 var ModuleConstants = require('../constants/ModuleConstants.js');
-var PageFilterActions = require('../actions/PageFilterActionCreators.js');
+var FilterConstants = require('../constants/FilterConstants.js');
+var PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
 
-var ServerActions = {
+var ServerActionCreators = {
     receivePageConfig: function (moduleCollection, pageConfig) {
         AppDispatcher.handleServerAction({
             actionType: PageConstants.PAGE_RECEICVE_CONFIG,
             moduleCollection: moduleCollection,
             pageConfig: pageConfig
         });
-        PageFilterActions.update();
+        PageFilterActionCreators.update();
     },
 
     receiveModuleData: function (data, id) {
@@ -26776,15 +26783,23 @@ var ServerActions = {
             moduleData: data,
             pageId: id
         });
+    },
+
+    receiveFilterData: function (data, filterParam) {
+        AppDispatcher.handleServerAction({
+            actionType: FilterConstants.FILTER_RECEIVE_DATA,
+            filterData: data,
+            filterParam: filterParam
+        });
     }
 };
 
-module.exports = ServerActions;
-},{"../actions/PageFilterActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js","../constants/ModuleConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js","../constants/PageConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AddMenuComponent.js":[function(require,module,exports){
-var React = require('react'),
-    _ = require('lodash'),
-    PageStore = require('../stores/PageStore.js'),
-    PageActions = require('../actions/PageActionCreators.js');
+module.exports = ServerActionCreators;
+},{"../actions/PageFilterActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js","../constants/FilterConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/FilterConstants.js","../constants/ModuleConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js","../constants/PageConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AddMenuComponent.js":[function(require,module,exports){
+var React = require('react');
+var _ = require('lodash');
+var PageStore = require('../stores/PageStore.js');
+var PageActions = require('../actions/PageActionCreators.js');
 
 var AddMenu = React.createClass({displayName: 'AddMenu',
     render: function () {
@@ -26828,9 +26843,9 @@ var ModuleItem = React.createClass({displayName: 'ModuleItem',
 
 module.exports = AddMenu;
 },{"../actions/PageActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js","../stores/PageStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AppComponent.js":[function(require,module,exports){
-var React = require('react'),
-    Header = require('./HeaderComponent.js'),
-    Page = require('../pages/DefaultPage.js');
+var React = require('react');
+var Header = require('./HeaderComponent.js');
+var Page = require('../pages/DefaultPage.js');
 
 var App = React.createClass({displayName: 'App',
     render: function () {
@@ -26861,9 +26876,9 @@ var DynamicKpiDataComponent = React.createClass({displayName: 'DynamicKpiDataCom
 
 module.exports = DynamicKpiDataComponent;
 },{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/HeaderComponent.js":[function(require,module,exports){
-var React = require('react'),
-    _ = require('lodash'),
-    PageActions = require('../actions/PageActionCreators.js');
+var React = require('react');
+var _ = require('lodash');
+var PageActions = require('../actions/PageActionCreators.js');
 
 var Header = React.createClass({displayName: 'Header',
     _onChange: function (e) {
@@ -26989,7 +27004,16 @@ var Spinner = React.createClass({displayName: 'Spinner',
 });
 
 module.exports = Spinner;
-},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js":[function(require,module,exports){
+},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/FilterConstants.js":[function(require,module,exports){
+var keyMirror = require('keymirror');
+
+var constants = keyMirror({
+    FILTER_FETCH_DATA: null,
+    FILTER_RECEIVE_DATA: null
+});
+
+module.exports = constants;
+},{"keymirror":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js":[function(require,module,exports){
 var keyMirror = require('keymirror');
 
 var constants = keyMirror({
@@ -27061,42 +27085,67 @@ var AppDispatcher = assign(new Dispatcher(), {
 module.exports = AppDispatcher;
 
 },{"flux":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/flux/index.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/AutosuggestFilterComponent.js":[function(require,module,exports){
-var React = require('react');
+var React = require('react'),
+    SpinnerModule = require('../components/SpinnerModuleComponent.js');
 
 var AutosuggestFilter = React.createClass({displayName: 'AutosuggestFilter',
     render: function () {
+        var nodes;
+
+        if (this.props.filterData) {
+            nodes = React.createElement("input", {type: "text", name: "fuzzysearch", placeholder: "Start typing..."})
+        } else {
+            nodes = React.createElement(SpinnerModule, null)
+        }
+
         return (
-            React.createElement("div", null, this.props.filterParam)
+            React.createElement("div", {className: "page-filter-autosuggest"}, 
+                nodes
+            )
         );
     }
 });
 
 module.exports = AutosuggestFilter;
-},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/DropdownFilterComponent.js":[function(require,module,exports){
-var React = require('react');
+},{"../components/SpinnerModuleComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/SpinnerModuleComponent.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/DropdownFilterComponent.js":[function(require,module,exports){
+var React = require('react'),
+    _ = require('lodash'),
+    SpinnerModule = require('../components/SpinnerModuleComponent.js');
 
 var DropdownFilter = React.createClass({displayName: 'DropdownFilter',
     render: function () {
+        var renderedOptions,
+            nodes,
+            optionsArray;
+
+        if (this.props.filterData) {
+            renderedOptions = _.map(this.props.filterData, function (option, i) {
+                return (
+                    React.createElement("option", {key: 'opt' + i, value: option}, option)
+                );
+            });
+            nodes = React.createElement("select", null, renderedOptions)
+        } else {
+            nodes = React.createElement(SpinnerModule, null);
+        }
+
         return (
-            React.createElement("div", null, this.props.filterParam)
+            React.createElement("div", {className: "page-filter-dropdown"}, 
+                nodes
+            )
         );
     }
 });
 
 module.exports = DropdownFilter;
-},{"react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/PageFilter.js":[function(require,module,exports){
+},{"../components/SpinnerModuleComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/SpinnerModuleComponent.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/PageFilter.js":[function(require,module,exports){
 var React = require('react'),
     _ = require('lodash'),
     InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
+    FilterConfig = require('./_FilterConfig'),
     FilterComponents = require('./_AllFilterComponents'),
-    PageFilterActions = require('../actions/PageFilterActionCreators.js'),
-    PageFilterStore = require('../stores/PageFilterStore.js');
-
-function getPageFilterState () {
-    return {
-        filterParamsOnPage: PageFilterStore.getFilterParamsOnPage()
-    };
-}
+    PageFilterActions = require('../actions/PageFilterActionCreators'),
+    PageFilterStore = require('../stores/PageFilterStore');
 
 var PageFilter = React.createClass({displayName: 'PageFilter',
     store: PageFilterStore,
@@ -27105,33 +27154,67 @@ var PageFilter = React.createClass({displayName: 'PageFilter',
 
     getStateFromStore: function () {
         return {
-            filterParamsOnPage: this.store.getFilterParamsOnPage()
+            filterParamsOnPage: this.store.getFilterParamsOnPage(),
+            filterDataOnPage: this.store.getFilterDataOnPage()
         };
     },
 
     render: function () {
-        var nodes = this.state.filterParamsOnPage.map(function (el, i) {
-            var key = 'pageFilterItems' + i;
-                //FilterComponent = FilterComponents[];
+        var filterComponents = this.state.filterParamsOnPage.map(function (filterParam, i) {
+            var key = 'pageFilterItems' + i,
+                type = FilterConfig[filterParam].type,
+                action = FilterConfig[filterParam].action,
+                FilterComponent = FilterComponents[type],
+                data = this.state.filterDataOnPage[filterParam];
+
             return (
-                React.createElement("div", {key: key}, el)
+                React.createElement(FilterComponent, {key: key, action: action, text: type, filterParam: filterParam, filterData: data})
             );
-        });
+        }, this);
+
+        if (!this.state.filterParamsOnPage.length) {
+            return null;
+        }
+
         return (
-            React.createElement("div", {className: "col-xs-12 page-filter"}, nodes)
+            React.createElement("div", {className: "col-xs-12"}, 
+                React.createElement("div", {className: "page-filter"}, 
+                    React.createElement("h4", null, "Page filter"), 
+                    filterComponents, 
+                    React.createElement("button", {className: "btn btn-success page-filter-submit"}, "Submit")
+                )
+            )
         );
     }
 });
 
 module.exports = PageFilter;
-},{"../actions/PageFilterActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js","../mixins/InitStoreInComponentMixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../stores/PageFilterStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageFilterStore.js","./_AllFilterComponents":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/_AllFilterComponents.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/_AllFilterComponents.js":[function(require,module,exports){
+},{"../actions/PageFilterActionCreators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js","../mixins/InitStoreInComponentMixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../stores/PageFilterStore":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageFilterStore.js","./_AllFilterComponents":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/_AllFilterComponents.js","./_FilterConfig":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/_FilterConfig.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/_AllFilterComponents.js":[function(require,module,exports){
 var FilterComponents = {
-    DropdownFilter: require('./DropdownFilterComponent'),
-    AutosuggestFilter: require('./AutosuggestFilterComponent')
+    dropdown: require('./DropdownFilterComponent'),
+    autosuggest: require('./AutosuggestFilterComponent')
 };
 
 module.exports = FilterComponents;
-},{"./AutosuggestFilterComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/AutosuggestFilterComponent.js","./DropdownFilterComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/DropdownFilterComponent.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js":[function(require,module,exports){
+},{"./AutosuggestFilterComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/AutosuggestFilterComponent.js","./DropdownFilterComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/DropdownFilterComponent.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/_FilterConfig.js":[function(require,module,exports){
+module.exports = {
+    tags: {
+        type: 'autosuggest',
+        action: 'http://frontend.local/app/suite7/controller_php/services/filter/tags.php',
+        default: false // true: first option; false: empty
+    },
+    engine: {
+        type: 'dropdown',
+        action: 'http://frontend.local/app/suite7/controller_php/services/filter/engines.php',
+        default: true // true: first option; false: empty
+    },
+    interval: {
+        type: 'dropdown',
+        action: 'http://frontend.local/app/suite7/controller_php/services/filter/tags.php',
+        default: true // true: first option; false: empty
+    }
+};
+},{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js":[function(require,module,exports){
 var InitStoreInComponent = {
     getInitialState: function () {
         return this.getStateFromStore();
@@ -27152,10 +27235,6 @@ var InitStoreInComponent = {
 
 module.exports = InitStoreInComponent;
 },{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/RemoveButtonMixin.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-
 var RemoveModule = require('../components/RemoveModuleComponent.js');
 
 var remove = function (editMode, pageId) {
@@ -27168,12 +27247,12 @@ var remove = function (editMode, pageId) {
 
 module.exports = remove;
 },{"../components/RemoveModuleComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/RemoveModuleComponent.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/ChartBasicModule.js":[function(require,module,exports){
-var React = require('react'),
-    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js'),
-    ModuleStore = require('../stores/ModuleStore'),
-    ModuleActionCreators = require('../actions/ModuleActionCreators'),
-    Headline = require('../components/HeadlineComponent.js'),
-    RemoveButtonMixin = require('../mixins/RemoveButtonMixin.js');
+var React = require('react');
+var InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js');
+var ModuleStore = require('../stores/ModuleStore');
+var ModuleActionCreators = require('../actions/ModuleActionCreators');
+var Headline = require('../components/HeadlineComponent.js');
+var RemoveButtonMixin = require('../mixins/RemoveButtonMixin.js');
 
 var ConversionInside = React.createClass({displayName: 'ConversionInside',
     store: ModuleStore,
@@ -27207,13 +27286,13 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
 
 module.exports = ConversionInside;
 },{"../actions/ModuleActionCreators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ModuleActionCreators.js","../components/HeadlineComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/HeadlineComponent.js","../mixins/InitStoreInComponentMixin.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../mixins/RemoveButtonMixin.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/RemoveButtonMixin.js","../stores/ModuleStore":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/ModuleStore.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/GridBasicModule.js":[function(require,module,exports){
-var React = require('react'),
-    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js'),
-    ModuleStore = require('../stores/ModuleStore'),
-    ModuleActionCreators = require('../actions/ModuleActionCreators'),
-    Headline = require('../components/HeadlineComponent.js'),
-    RemoveButtonMixin = require('../mixins/RemoveButtonMixin'),
-    _ = require('lodash');
+var React = require('react');
+var InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin.js');
+var ModuleStore = require('../stores/ModuleStore');
+var ModuleActionCreators = require('../actions/ModuleActionCreators');
+var Headline = require('../components/HeadlineComponent.js');
+var RemoveButtonMixin = require('../mixins/RemoveButtonMixin');
+var _ = require('lodash');
 
 var GridBasic = React.createClass({displayName: 'GridBasic',
     store: ModuleStore,
@@ -27307,17 +27386,17 @@ var ModuleObject = {
 
 module.exports = ModuleObject;
 },{"./../filter/PageFilter":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/PageFilter.js","./ChartBasicModule":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/ChartBasicModule.js","./GridBasicModule":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/GridBasicModule.js","./KpiBasicModule":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/KpiBasicModule.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/pages/DefaultPage.js":[function(require,module,exports){
-var React = require('react'),
-    ReactCSSTransitionGroup = require('react/lib/ReactCSSTransitionGroup'),
-    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
-    _ = require('lodash'),
-    AllModules = require('../modules/_AllModules'),
-    PageActions = require('../actions/PageActionCreators.js'),
-    PageStore = require('../stores/PageStore.js'),
-    AddMenu = require('./../components/AddMenuComponent.js'),
-    PageEditButtons = require('./../components/PageEditButtonsComponent.js'),
-    Loader = require('./../components/SpinnerComponent.js'),
-    PageFilter = require('../filter/PageFilter.js');
+var React = require('react');
+var ReactCSSTransitionGroup = require('react/lib/ReactCSSTransitionGroup');
+var InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin');
+var _ = require('lodash');
+var AllModules = require('../modules/_AllModules');
+var PageActions = require('../actions/PageActionCreators');
+var PageStore = require('../stores/PageStore');
+var AddMenu = require('./../components/AddMenuComponent');
+var PageEditButtons = require('./../components/PageEditButtonsComponent');
+var Loader = require('./../components/SpinnerComponent');
+var PageFilter = require('../filter/PageFilter');
 
 var Page = React.createClass({displayName: 'Page',
     store: PageStore,
@@ -27380,7 +27459,7 @@ var Page = React.createClass({displayName: 'Page',
         if (this.state.pageFilter) {
             pageFilter = React.createElement(PageFilter, null);
         } else {
-            pageFilter = null;
+            pageFilter = React.createElement("div", null);
         }
 
         pageEditButtons = React.createElement(PageEditButtons, {key: "pe1", editMode: this.state.editMode, addMode: this.state.addMode});
@@ -27388,7 +27467,10 @@ var Page = React.createClass({displayName: 'Page',
         return (
             React.createElement("div", {className: "row"}, 
                 loader, 
-                pageFilter, 
+
+                React.createElement(ReactCSSTransitionGroup, {transitionName: "module"}, 
+                    pageFilter
+                ), 
 
                 React.createElement(ReactCSSTransitionGroup, {transitionName: "module"}, 
                     modules
@@ -27402,20 +27484,20 @@ var Page = React.createClass({displayName: 'Page',
 });
 
 module.exports = Page;
-},{"../actions/PageActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js","../filter/PageFilter.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/PageFilter.js","../mixins/InitStoreInComponentMixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../modules/_AllModules":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/_AllModules.js","../stores/PageStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","./../components/AddMenuComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AddMenuComponent.js","./../components/PageEditButtonsComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/PageEditButtonsComponent.js","./../components/SpinnerComponent.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/SpinnerComponent.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js","react/lib/ReactCSSTransitionGroup":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactCSSTransitionGroup.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/ModuleStore.js":[function(require,module,exports){
+},{"../actions/PageActionCreators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js","../filter/PageFilter":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/PageFilter.js","../mixins/InitStoreInComponentMixin":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/InitStoreInComponentMixin.js","../modules/_AllModules":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/modules/_AllModules.js","../stores/PageStore":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","./../components/AddMenuComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/AddMenuComponent.js","./../components/PageEditButtonsComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/PageEditButtonsComponent.js","./../components/SpinnerComponent":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/components/SpinnerComponent.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/react.js","react/lib/ReactCSSTransitionGroup":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/react/lib/ReactCSSTransitionGroup.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/ModuleStore.js":[function(require,module,exports){
 /*
  * ModuleStore
  */
 
-var _ = require('lodash'),
-    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
-    ModuleConstants = require('../constants/ModuleConstants.js'),
-    EventEmitter = require('events').EventEmitter,
-    PageStore = require('./PageStore.js'),
-    PageFilterStore = require('./PageFilterStore.js'),
-    assign = require('object-assign'),
-    CHANGE_EVENT = 'change',
-    _moduleData = {};
+var _ = require('lodash');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var ModuleConstants = require('../constants/ModuleConstants.js');
+var EventEmitter = require('events').EventEmitter;
+var PageStore = require('./PageStore.js');
+var PageFilterStore = require('./PageFilterStore.js');
+var assign = require('object-assign');
+var CHANGE_EVENT = 'change';
+var _moduleData = {};
 
 var ModuleStore = assign({}, EventEmitter.prototype, {
     getModuleData: function () {
@@ -27473,20 +27555,26 @@ module.exports = ModuleStore;
  */
 
 var _ = require('lodash'),
-    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher'),
     EventEmitter = require('events').EventEmitter,
-    PageStore = require('./PageStore.js'),
-    PageFilterConstants = require('../constants/PageFilterConstants.js'),
+    PageStore = require('./PageStore'),
+    FilterConfig = require('../filter/_FilterConfig'),
+    FilterActionCreators = require('../actions/FilterActionCreators'),
+    PageFilterConstants = require('../constants/PageFilterConstants'),
+    FilterConstants = require('../constants/FilterConstants'),
     assign = require('object-assign'),
     CHANGE_EVENT = 'change',
-    _filterParamsOnPage = [];
+    _filterParamsOnPage = [],
+    _filterDataOnPage = {};
 
-function buildFilterArray () {
+function _buildFilterArray () {
     var arr = [];
 
     // Generate array of filterParams from modules on page,
     _.filter(PageStore.getModulesOnPage(), function (el) {
-        if(el.filterParams) arr.push(el.filterParams);
+        if(el.filterParams) {
+            arr.push(el.filterParams);
+        }
     });
 
     // Flatten array and remove duplicates
@@ -27496,9 +27584,23 @@ function buildFilterArray () {
     _filterParamsOnPage = _.difference(arr, PageStore.getPageFilter().blacklist);
 }
 
+function _triggerFetchFilterData () {
+    _.each(_filterParamsOnPage, function (el) {
+        FilterActionCreators.fetchData(FilterConfig[el].action, el);
+    });
+}
+
+function _setFilterData (filterData, filterParam) {
+    if (!_filterDataOnPage[filterParam]) _filterDataOnPage[filterParam] = JSON.parse(filterData);
+}
+
 var PageFilterStore = assign({}, EventEmitter.prototype, {
     getFilterParamsOnPage: function () {
         return _filterParamsOnPage;
+    },
+
+    getFilterDataOnPage: function () {
+        return _filterDataOnPage;
     },
 
     emitChange: function () {
@@ -27530,7 +27632,13 @@ PageFilterStore.dispatchToken = AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case PageFilterConstants.RECEIVE_PAGE_MODULES:
-            buildFilterArray(PageStore.getModulesOnPage());
+            _buildFilterArray(PageStore.getModulesOnPage());
+            _triggerFetchFilterData();
+            PageFilterStore.emitChange();
+            break;
+
+        case FilterConstants.FILTER_RECEIVE_DATA:
+            _setFilterData(action.filterData, action.filterParam);
             PageFilterStore.emitChange();
             break;
 
@@ -27542,11 +27650,7 @@ PageFilterStore.dispatchToken = AppDispatcher.register(function (payload) {
 });
 
 module.exports = PageFilterStore;
-},{"../constants/PageFilterConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageFilterConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","./PageStore.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js":[function(require,module,exports){
-/*
- * ModuleStore
- */
-
+},{"../actions/FilterActionCreators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/FilterActionCreators.js","../constants/FilterConstants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/FilterConstants.js","../constants/PageFilterConstants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageFilterConstants.js","../dispatcher/AppDispatcher":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","../filter/_FilterConfig":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/filter/_FilterConfig.js","./PageStore":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/stores/PageStore.js":[function(require,module,exports){
 var _ = require('lodash'),
     AppDispatcher = require('../dispatcher/AppDispatcher'),
     EventEmitter = require('events').EventEmitter,
@@ -27613,7 +27717,7 @@ function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
     var module = _.find(moduleCollection, {id: moduleId});
     module.pageId = _.uniqueId();
     module.className = module.className;
-    currentlyOnPage.push(module);
+    currentlyOnPage.unshift(module);
     _mode.add = false;
 }
 
@@ -27727,13 +27831,6 @@ module.exports = PageStore;
 },{"../actions/PageFilterActionCreators":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js","../constants/PageConstants":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageConstants.js","../dispatcher/AppDispatcher":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","events":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite/frontend/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js":[function(require,module,exports){
 var ServerActionCreators = require('../actions/ServerActionCreators.js');
 
-// !!! Please Note !!!
-// We are using localStorage as an example, but in a real-world scenario, this
-// would involve XMLHttpRequest, or perhaps a newer client-server protocol.
-// The function signatures below might be similar to what you would build, but
-// the contents of the functions are just trying to simulate client-server
-// communication and server-side processing.
-
 function get(url) {
     // Return a new promise.
     return new Promise(function(resolve, reject) {
@@ -27780,6 +27877,16 @@ module.exports = {
     getModuleData: function (url, id) {
         get(url).then(function (response) {
             ServerActionCreators.receiveModuleData(response, id);
+        }, function (error) {
+            console.error("Failed!", error);
+        });
+    },
+
+    getFilterData: function (url, filterParam) {
+        get(url).then(function (response) {
+            setTimeout(function () {
+                ServerActionCreators.receiveFilterData(response, filterParam);
+            }, 200);
         }, function (error) {
             console.error("Failed!", error);
         });

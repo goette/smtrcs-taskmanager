@@ -6,7 +6,7 @@ module.exports = {
                 id: 'KpiConversionInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
-                action: 'http://total-perfect.codio.io:3000/services/rankings-cs-statistic/position-trend',
+                action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
                 background: 'green',
                 filterParams: ['tags','engine']
@@ -42,7 +42,8 @@ module.exports = {
                 roles: ['c'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-12',
-                background: 'lightgrey'
+                background: 'lightgrey',
+                filterParams: ['tags','engine']
             },
             {
                 id: 'GridUrlRankings',
@@ -65,12 +66,6 @@ module.exports = {
                 },
                 {
                     id: 'KpiSocial'
-                },
-                {
-                    id: 'KpiSocial'
-                },
-                {
-                    id: 'KpiConversionInsight'
                 },
                 {
                     id: 'ChartChannelInsight'

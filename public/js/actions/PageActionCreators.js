@@ -1,6 +1,6 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var PageConstants = require('../constants/PageConstants.js');
-var PageFilterActions = require('../actions/PageFilterActionCreators.js');
+var PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
 
 var PageActions = {
     toggleEditMode: function () {
@@ -24,14 +24,14 @@ var PageActions = {
             actionType: PageConstants.MODULE_ADD,
             moduleId: moduleId
         });
-        PageFilterActions.update();
+        PageFilterActionCreators.update();
     },
     removeModule: function (moduleId) {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.MODULE_REMOVE,
             moduleId: moduleId
         });
-        PageFilterActions.update();
+        PageFilterActionCreators.update();
     },
     updateModulesOrder: function (modules) {
         AppDispatcher.handleViewAction({

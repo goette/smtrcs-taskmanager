@@ -1,6 +1,6 @@
-var React = require('react'),
-    Header = require('./HeaderComponent.js'),
-    Page = require('../pages/DefaultPage.js');
+var React = require('react');
+var Header = require('./HeaderComponent.js');
+var Page = require('../pages/DefaultPage.js');
 
 var App = React.createClass({
     render: function () {

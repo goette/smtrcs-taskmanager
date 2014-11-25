@@ -3,20 +3,26 @@
  */
 
 var _ = require('lodash'),
-    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher'),
     EventEmitter = require('events').EventEmitter,
-    PageStore = require('./PageStore.js'),
-    PageFilterConstants = require('../constants/PageFilterConstants.js'),
+    PageStore = require('./PageStore'),
+    FilterConfig = require('../filter/_FilterConfig'),
+    FilterActionCreators = require('../actions/FilterActionCreators'),
+    PageFilterConstants = require('../constants/PageFilterConstants'),
+    FilterConstants = require('../constants/FilterConstants'),
     assign = require('object-assign'),
     CHANGE_EVENT = 'change',
-    _filterParamsOnPage = [];
+    _filterParamsOnPage = [],
+    _filterDataOnPage = {};
 
-function buildFilterArray () {
+function _buildFilterArray () {
     var arr = [];
 
     // Generate array of filterParams from modules on page,
     _.filter(PageStore.getModulesOnPage(), function (el) {
-        if(el.filterParams) arr.push(el.filterParams);
+        if(el.filterParams) {
+            arr.push(el.filterParams);
+        }
     });
 
     // Flatten array and remove duplicates
@@ -26,9 +32,23 @@ function buildFilterArray () {
     _filterParamsOnPage = _.difference(arr, PageStore.getPageFilter().blacklist);
 }
 
+function _triggerFetchFilterData () {
+    _.each(_filterParamsOnPage, function (el) {
+        FilterActionCreators.fetchData(FilterConfig[el].action, el);
+    });
+}
+
+function _setFilterData (filterData, filterParam) {
+    if (!_filterDataOnPage[filterParam]) _filterDataOnPage[filterParam] = JSON.parse(filterData);
+}
+
 var PageFilterStore = assign({}, EventEmitter.prototype, {
     getFilterParamsOnPage: function () {
         return _filterParamsOnPage;
+    },
+
+    getFilterDataOnPage: function () {
+        return _filterDataOnPage;
     },
 
     emitChange: function () {
@@ -60,7 +80,13 @@ PageFilterStore.dispatchToken = AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case PageFilterConstants.RECEIVE_PAGE_MODULES:
-            buildFilterArray(PageStore.getModulesOnPage());
+            _buildFilterArray(PageStore.getModulesOnPage());
+            _triggerFetchFilterData();
+            PageFilterStore.emitChange();
+            break;
+
+        case FilterConstants.FILTER_RECEIVE_DATA:
+            _setFilterData(action.filterData, action.filterParam);
             PageFilterStore.emitChange();
             break;
 

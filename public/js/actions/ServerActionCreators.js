@@ -1,16 +1,17 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var PageConstants = require('../constants/PageConstants.js');
 var ModuleConstants = require('../constants/ModuleConstants.js');
-var PageFilterActions = require('../actions/PageFilterActionCreators.js');
+var FilterConstants = require('../constants/FilterConstants.js');
+var PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
 
-var ServerActions = {
+var ServerActionCreators = {
     receivePageConfig: function (moduleCollection, pageConfig) {
         AppDispatcher.handleServerAction({
             actionType: PageConstants.PAGE_RECEICVE_CONFIG,
             moduleCollection: moduleCollection,
             pageConfig: pageConfig
         });
-        PageFilterActions.update();
+        PageFilterActionCreators.update();
     },
 
     receiveModuleData: function (data, id) {
@@ -19,7 +20,15 @@ var ServerActions = {
             moduleData: data,
             pageId: id
         });
+    },
+
+    receiveFilterData: function (data, filterParam) {
+        AppDispatcher.handleServerAction({
+            actionType: FilterConstants.FILTER_RECEIVE_DATA,
+            filterData: data,
+            filterParam: filterParam
+        });
     }
 };
 
-module.exports = ServerActions;
+module.exports = ServerActionCreators;

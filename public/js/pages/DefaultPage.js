@@ -1,14 +1,14 @@
-var React = require('react'),
-    ReactCSSTransitionGroup = require('react/lib/ReactCSSTransitionGroup'),
-    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
-    _ = require('lodash'),
-    AllModules = require('../modules/_AllModules'),
-    PageActions = require('../actions/PageActionCreators.js'),
-    PageStore = require('../stores/PageStore.js'),
-    AddMenu = require('./../components/AddMenuComponent.js'),
-    PageEditButtons = require('./../components/PageEditButtonsComponent.js'),
-    Loader = require('./../components/SpinnerComponent.js'),
-    PageFilter = require('../filter/PageFilter.js');
+var React = require('react');
+var ReactCSSTransitionGroup = require('react/lib/ReactCSSTransitionGroup');
+var InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin');
+var _ = require('lodash');
+var AllModules = require('../modules/_AllModules');
+var PageActions = require('../actions/PageActionCreators');
+var PageStore = require('../stores/PageStore');
+var AddMenu = require('./../components/AddMenuComponent');
+var PageEditButtons = require('./../components/PageEditButtonsComponent');
+var Loader = require('./../components/SpinnerComponent');
+var PageFilter = require('../filter/PageFilter');
 
 var Page = React.createClass({
     store: PageStore,
@@ -71,7 +71,7 @@ var Page = React.createClass({
         if (this.state.pageFilter) {
             pageFilter = <PageFilter />;
         } else {
-            pageFilter = null;
+            pageFilter = <div></div>;
         }
 
         pageEditButtons = <PageEditButtons key="pe1" editMode={this.state.editMode} addMode={this.state.addMode} />;
@@ -79,7 +79,10 @@ var Page = React.createClass({
         return (
             <div className="row">
                 {loader}
-                {pageFilter}
+
+                <ReactCSSTransitionGroup transitionName="module">
+                    {pageFilter}
+                </ReactCSSTransitionGroup>
 
                 <ReactCSSTransitionGroup transitionName="module">
                     {modules}

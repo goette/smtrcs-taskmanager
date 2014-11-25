@@ -1,6 +1,6 @@
 var FilterComponents = {
-    DropdownFilter: require('./DropdownFilterComponent'),
-    AutosuggestFilter: require('./AutosuggestFilterComponent')
+    dropdown: require('./DropdownFilterComponent'),
+    autosuggest: require('./AutosuggestFilterComponent')
 };
 
 module.exports = FilterComponents;

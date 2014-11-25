@@ -2,15 +2,15 @@
  * ModuleStore
  */
 
-var _ = require('lodash'),
-    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
-    ModuleConstants = require('../constants/ModuleConstants.js'),
-    EventEmitter = require('events').EventEmitter,
-    PageStore = require('./PageStore.js'),
-    PageFilterStore = require('./PageFilterStore.js'),
-    assign = require('object-assign'),
-    CHANGE_EVENT = 'change',
-    _moduleData = {};
+var _ = require('lodash');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var ModuleConstants = require('../constants/ModuleConstants.js');
+var EventEmitter = require('events').EventEmitter;
+var PageStore = require('./PageStore.js');
+var PageFilterStore = require('./PageFilterStore.js');
+var assign = require('object-assign');
+var CHANGE_EVENT = 'change';
+var _moduleData = {};
 
 var ModuleStore = assign({}, EventEmitter.prototype, {
     getModuleData: function () {
