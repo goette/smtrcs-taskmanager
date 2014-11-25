@@ -11,7 +11,7 @@ var ConversionInside = React.createClass({
     mixins: [InitStoreInComponentMixin],
 
     componentDidMount: function () {
-        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+        ModuleActionCreators.fetchData(this.props.action, this.props.moduleIdOnPage);
     },
 
     getStateFromStore: function () {
@@ -21,7 +21,7 @@ var ConversionInside = React.createClass({
     },
 
     render: function () {
-        var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
+        var remove = RemoveButtonMixin(this.props.editMode, this.props.moduleIdOnPage),
             roles = 'Roles: ' + this.props.roles.join(', '),
             cx = 'module chart ' + this.props.background;;
 

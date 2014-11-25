@@ -104,9 +104,9 @@ describe('PageStoreTest', function() {
     it('removes a module from the page', function () {
         // Add one module
         callback(actionModuleAdd);
-        // Set moduleId in remove action to pageId of the first (and only) entry
+        // Set moduleId in remove action to moduleIdOnPage of the first (and only) entry
         // and trigger the "remove" action
-		actionModuleRemove.action.moduleId = PageStore.getModulesOnPage()[0].pageId;
+		actionModuleRemove.action.moduleId = PageStore.getModulesOnPage()[0].moduleIdOnPage;
         callback(actionModuleRemove);
         // The module should be removed, which means there is 0 modules on page again
         expect(PageStore.getModulesOnPage().length).toEqual(0);

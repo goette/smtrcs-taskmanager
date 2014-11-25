@@ -3,7 +3,7 @@ var PageActions = require('../actions/PageActionCreators.js');
 
 var removeModule = React.createClass({
     _deleteMe: function () {
-        PageActions.removeModule(this.props.pageId);
+        PageActions.removeModule(this.props.moduleIdOnPage);
     },
     render: function () {
         return (

@@ -26598,8 +26598,7 @@ module.exports = {
                 roles: ['c','s','e'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
-                background: 'green',
-                filterParams: ['tags','engine']
+                background: 'green'
             },
             {
                 id: 'KpiSocial',
@@ -26648,7 +26647,7 @@ module.exports = {
             url: '/some-page', // = id
             pageFilter: {
                 roles: ['c','s','e'],
-                blacklist: ['']
+                blacklist: ['engine']
             },
             modulesOnPage: [ // Array of ordered modules
                 {
@@ -26679,9 +26678,9 @@ module.exports = {
 };
 
 },{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/FilterActionCreators.js":[function(require,module,exports){
-var ApiUtils = require('../utils/ApiUtils.js');
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var FilterConstants = require('../constants/FilterConstants.js');
+var ApiUtils = require('../utils/ApiUtils.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    FilterConstants = require('../constants/FilterConstants.js');
 
 var FilterActionCreators = {
     fetchData: function (url, filterParam) {
@@ -26691,23 +26690,23 @@ var FilterActionCreators = {
 
 module.exports = FilterActionCreators;
 },{"../constants/FilterConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/FilterConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","../utils/ApiUtils.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ModuleActionCreators.js":[function(require,module,exports){
-var ApiUtils = require('../utils/ApiUtils.js');
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var ModuleConstants = require('../constants/ModuleConstants.js');
+var ApiUtils = require('../utils/ApiUtils.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    ModuleConstants = require('../constants/ModuleConstants.js');
 
-var ModuleActions = {
+var ModuleActionCreators = {
     fetchData: function (url, moduleId) {
         ApiUtils.getModuleData(url, moduleId);
     }
 };
 
-module.exports = ModuleActions;
+module.exports = ModuleActionCreators;
 },{"../constants/ModuleConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/ModuleConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js","../utils/ApiUtils.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/utils/ApiUtils.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageActionCreators.js":[function(require,module,exports){
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var PageConstants = require('../constants/PageConstants.js');
-var PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    PageConstants = require('../constants/PageConstants.js'),
+    PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
 
-var PageActions = {
+var PageActionCreators = {
     toggleEditMode: function () {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.PAGE_TOGGLE_EDIT
@@ -26746,12 +26745,12 @@ var PageActions = {
     }
 };
 
-module.exports = PageActions;
+module.exports = PageActionCreators;
 },{"../actions/PageFilterActionCreators.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js","../constants/PageConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/PageFilterActionCreators.js":[function(require,module,exports){
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var PageFilterConstants = require('../constants/PageFilterConstants.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    PageFilterConstants = require('../constants/PageFilterConstants.js');
 
-var PageFilterActions = {
+var PageFilterActionCreators = {
     update: function () {
         AppDispatcher.handleViewAction({
             actionType: PageFilterConstants.RECEIVE_PAGE_MODULES
@@ -26759,13 +26758,13 @@ var PageFilterActions = {
     }
 };
 
-module.exports = PageFilterActions;
+module.exports = PageFilterActionCreators;
 },{"../constants/PageFilterConstants.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/constants/PageFilterConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/actions/ServerActionCreators.js":[function(require,module,exports){
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var PageConstants = require('../constants/PageConstants.js');
-var ModuleConstants = require('../constants/ModuleConstants.js');
-var FilterConstants = require('../constants/FilterConstants.js');
-var PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    PageConstants = require('../constants/PageConstants.js'),
+    ModuleConstants = require('../constants/ModuleConstants.js'),
+    FilterConstants = require('../constants/FilterConstants.js'),
+    PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
 
 var ServerActionCreators = {
     receivePageConfig: function (moduleCollection, pageConfig) {
@@ -26781,7 +26780,7 @@ var ServerActionCreators = {
         AppDispatcher.handleServerAction({
             actionType: ModuleConstants.MODULE_RECEIVE_DATA,
             moduleData: data,
-            pageId: id
+            moduleIdOnPage: id
         });
     },
 
@@ -26968,7 +26967,7 @@ var PageActions = require('../actions/PageActionCreators.js');
 
 var removeModule = React.createClass({displayName: 'removeModule',
     _deleteMe: function () {
-        PageActions.removeModule(this.props.pageId);
+        PageActions.removeModule(this.props.moduleIdOnPage);
     },
     render: function () {
         return (
@@ -27237,9 +27236,9 @@ module.exports = InitStoreInComponent;
 },{}],"/Users/mgoette/Development/Sources/suite/frontend/suite7/public/js/mixins/RemoveButtonMixin.js":[function(require,module,exports){
 var RemoveModule = require('../components/RemoveModuleComponent.js');
 
-var remove = function (editMode, pageId) {
+var remove = function (editMode, moduleIdOnPage) {
     if (editMode) {
-        return React.createElement(RemoveModule, {pageId: pageId});
+        return React.createElement(RemoveModule, {moduleIdOnPage: moduleIdOnPage});
     } else {
         return '';
     }
@@ -27260,7 +27259,7 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
     mixins: [InitStoreInComponentMixin],
 
     componentDidMount: function () {
-        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+        ModuleActionCreators.fetchData(this.props.action, this.props.moduleIdOnPage);
     },
 
     getStateFromStore: function () {
@@ -27270,7 +27269,7 @@ var ConversionInside = React.createClass({displayName: 'ConversionInside',
     },
 
     render: function () {
-        var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
+        var remove = RemoveButtonMixin(this.props.editMode, this.props.moduleIdOnPage),
             roles = 'Roles: ' + this.props.roles.join(', '),
             cx = 'module chart ' + this.props.background;;
 
@@ -27300,7 +27299,7 @@ var GridBasic = React.createClass({displayName: 'GridBasic',
     mixins: [InitStoreInComponentMixin],
 
     componentDidMount: function () {
-        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+        ModuleActionCreators.fetchData(this.props.action, this.props.moduleIdOnPage);
     },
 
     getStateFromStore: function () {
@@ -27310,7 +27309,7 @@ var GridBasic = React.createClass({displayName: 'GridBasic',
     },
 
     render: function () {
-        var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
+        var remove = RemoveButtonMixin(this.props.editMode, this.props.moduleIdOnPage),
             roles = 'Roles: ' + this.props.roles.join(', '),
             cx = 'module grid ' + this.props.background;
 
@@ -27342,7 +27341,7 @@ var KpiBasic = React.createClass({displayName: 'KpiBasic',
     mixins: [InitStoreInComponentMixin],
 
     componentDidMount: function () {
-        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+        ModuleActionCreators.fetchData(this.props.action, this.props.moduleIdOnPage);
     },
 
     getStateFromStore: function () {
@@ -27352,16 +27351,16 @@ var KpiBasic = React.createClass({displayName: 'KpiBasic',
     },
 
     render: function () {
-        var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
+        var remove = RemoveButtonMixin(this.props.editMode, this.props.moduleIdOnPage),
             roles = 'Roles: ' + this.props.roles.join(', '),
             cx = 'kpi module ' + this.props.background,
             dynamicNodes;
 
         if (_.isEmpty(this.state.moduleData) ||
-            _.isEmpty(this.state.moduleData[this.props.pageId])) {
+            _.isEmpty(this.state.moduleData[this.props.moduleIdOnPage])) {
             dynamicNodes = React.createElement(SpinnerModule, {text: "Loading..."})
         } else {
-            dynamicNodes = React.createElement(DynamicKpiDataComponent, {data: this.state.moduleData[this.props.pageId].data})
+            dynamicNodes = React.createElement(DynamicKpiDataComponent, {data: this.state.moduleData[this.props.moduleIdOnPage].data})
         }
 
         return (
@@ -27432,14 +27431,14 @@ var Page = React.createClass({displayName: 'Page',
 
                 return (
                     React.createElement("div", {className: module.className + dragging, 
-                        key: module.pageId, 
+                        key: module.moduleIdOnPage, 
                         'data-id': i}, 
                         React.createElement(ModuleComponent, {
                             key: i, 
                             moduleId: module.id, 
                             action: module.action, 
                             background: module.background, 
-                            pageId: module.pageId, 
+                            moduleIdOnPage: module.moduleIdOnPage, 
                             editMode: editMode, 
                             roles: module.roles}
                         )
@@ -27534,9 +27533,9 @@ ModuleStore.dispatchToken = AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case ModuleConstants.MODULE_RECEIVE_DATA:
-            _moduleData[action.pageId] = {
+            _moduleData[action.moduleIdOnPage] = {
                 data: JSON.parse(action.moduleData),
-                moduleId: PageStore.getModuleByPageId(action.pageId).id
+                moduleId: PageStore.getModuleByIdOnPage(action.moduleIdOnPage).id
             }
             ModuleStore.emitChange();
             break;
@@ -27686,7 +27685,7 @@ function buildPageArrays (moduleCollection, pageConfig) {
                 obj[val] = module[val]
 ;           }
 
-            obj.pageId = _.uniqueId();
+            obj.moduleIdOnPage = _.uniqueId();
             arr.push(obj);
         }
     }
@@ -27709,13 +27708,13 @@ function setCurrentRole (role) {
     _currentRole = role[0].toLowerCase();
 }
 
-function removeModuleFromPage (moduleId) {
-    _currentlyOnPage = _.reject(_currentlyOnPage, {pageId: moduleId});
+function removeModuleFromPage (moduleIdOnPage) {
+    _currentlyOnPage = _.reject(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
 }
 
 function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
     var module = _.find(moduleCollection, {id: moduleId});
-    module.pageId = _.uniqueId();
+    module.moduleIdOnPage = _.uniqueId();
     module.className = module.className;
     currentlyOnPage.unshift(module);
     _mode.add = false;
@@ -27742,8 +27741,8 @@ var PageStore = assign({}, EventEmitter.prototype, {
         return filterByRole(_moduleCollection);
     },
 
-    getModuleByPageId: function (pageId) {
-        return _.find(_currentlyOnPage, {pageId: pageId});
+    getModuleByIdOnPage: function (moduleIdOnPage) {
+        return _.find(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
     },
 
     getEditMode: function () {

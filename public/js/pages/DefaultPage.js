@@ -44,14 +44,14 @@ var Page = React.createClass({
 
                 return (
                     <div className={module.className + dragging}
-                        key={module.pageId}
+                        key={module.moduleIdOnPage}
                         data-id={i}>
                         <ModuleComponent
                             key={i}
                             moduleId={module.id}
                             action={module.action}
                             background={module.background}
-                            pageId={module.pageId}
+                            moduleIdOnPage={module.moduleIdOnPage}
                             editMode={editMode}
                             roles={module.roles}
                         />

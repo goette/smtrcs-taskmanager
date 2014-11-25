@@ -1,8 +1,8 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var PageConstants = require('../constants/PageConstants.js');
-var PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    PageConstants = require('../constants/PageConstants.js'),
+    PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
 
-var PageActions = {
+var PageActionCreators = {
     toggleEditMode: function () {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.PAGE_TOGGLE_EDIT
@@ -41,4 +41,4 @@ var PageActions = {
     }
 };
 
-module.exports = PageActions;
+module.exports = PageActionCreators;

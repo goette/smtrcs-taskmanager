@@ -1,7 +1,7 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var PageFilterConstants = require('../constants/PageFilterConstants.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    PageFilterConstants = require('../constants/PageFilterConstants.js');
 
-var PageFilterActions = {
+var PageFilterActionCreators = {
     update: function () {
         AppDispatcher.handleViewAction({
             actionType: PageFilterConstants.RECEIVE_PAGE_MODULES
@@ -9,4 +9,4 @@ var PageFilterActions = {
     }
 };
 
-module.exports = PageFilterActions;
+module.exports = PageFilterActionCreators;

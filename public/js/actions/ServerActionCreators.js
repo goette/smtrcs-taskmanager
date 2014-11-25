@@ -1,8 +1,8 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var PageConstants = require('../constants/PageConstants.js');
-var ModuleConstants = require('../constants/ModuleConstants.js');
-var FilterConstants = require('../constants/FilterConstants.js');
-var PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    PageConstants = require('../constants/PageConstants.js'),
+    ModuleConstants = require('../constants/ModuleConstants.js'),
+    FilterConstants = require('../constants/FilterConstants.js'),
+    PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
 
 var ServerActionCreators = {
     receivePageConfig: function (moduleCollection, pageConfig) {
@@ -18,7 +18,7 @@ var ServerActionCreators = {
         AppDispatcher.handleServerAction({
             actionType: ModuleConstants.MODULE_RECEIVE_DATA,
             moduleData: data,
-            pageId: id
+            moduleIdOnPage: id
         });
     },
 

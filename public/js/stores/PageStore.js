@@ -33,7 +33,7 @@ function buildPageArrays (moduleCollection, pageConfig) {
                 obj[val] = module[val]
 ;           }
 
-            obj.pageId = _.uniqueId();
+            obj.moduleIdOnPage = _.uniqueId();
             arr.push(obj);
         }
     }
@@ -56,13 +56,13 @@ function setCurrentRole (role) {
     _currentRole = role[0].toLowerCase();
 }
 
-function removeModuleFromPage (moduleId) {
-    _currentlyOnPage = _.reject(_currentlyOnPage, {pageId: moduleId});
+function removeModuleFromPage (moduleIdOnPage) {
+    _currentlyOnPage = _.reject(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
 }
 
 function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
     var module = _.find(moduleCollection, {id: moduleId});
-    module.pageId = _.uniqueId();
+    module.moduleIdOnPage = _.uniqueId();
     module.className = module.className;
     currentlyOnPage.unshift(module);
     _mode.add = false;
@@ -89,8 +89,8 @@ var PageStore = assign({}, EventEmitter.prototype, {
         return filterByRole(_moduleCollection);
     },
 
-    getModuleByPageId: function (pageId) {
-        return _.find(_currentlyOnPage, {pageId: pageId});
+    getModuleByIdOnPage: function (moduleIdOnPage) {
+        return _.find(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
     },
 
     getEditMode: function () {

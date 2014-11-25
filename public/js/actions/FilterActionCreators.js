@@ -1,6 +1,6 @@
-var ApiUtils = require('../utils/ApiUtils.js');
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var FilterConstants = require('../constants/FilterConstants.js');
+var ApiUtils = require('../utils/ApiUtils.js'),
+    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    FilterConstants = require('../constants/FilterConstants.js');
 
 var FilterActionCreators = {
     fetchData: function (url, filterParam) {

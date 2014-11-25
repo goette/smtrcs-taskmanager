@@ -8,8 +8,7 @@ module.exports = {
                 roles: ['c','s','e'],
                 action: 'http://frontend.local/app/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
-                background: 'green',
-                filterParams: ['tags','engine']
+                background: 'green'
             },
             {
                 id: 'KpiSocial',
@@ -58,7 +57,7 @@ module.exports = {
             url: '/some-page', // = id
             pageFilter: {
                 roles: ['c','s','e'],
-                blacklist: ['']
+                blacklist: ['engine']
             },
             modulesOnPage: [ // Array of ordered modules
                 {

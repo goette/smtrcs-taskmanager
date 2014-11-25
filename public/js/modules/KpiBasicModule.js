@@ -14,7 +14,7 @@ var KpiBasic = React.createClass({
     mixins: [InitStoreInComponentMixin],
 
     componentDidMount: function () {
-        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+        ModuleActionCreators.fetchData(this.props.action, this.props.moduleIdOnPage);
     },
 
     getStateFromStore: function () {
@@ -24,16 +24,16 @@ var KpiBasic = React.createClass({
     },
 
     render: function () {
-        var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
+        var remove = RemoveButtonMixin(this.props.editMode, this.props.moduleIdOnPage),
             roles = 'Roles: ' + this.props.roles.join(', '),
             cx = 'kpi module ' + this.props.background,
             dynamicNodes;
 
         if (_.isEmpty(this.state.moduleData) ||
-            _.isEmpty(this.state.moduleData[this.props.pageId])) {
+            _.isEmpty(this.state.moduleData[this.props.moduleIdOnPage])) {
             dynamicNodes = <SpinnerModule text="Loading..." />
         } else {
-            dynamicNodes = <DynamicKpiDataComponent data={this.state.moduleData[this.props.pageId].data} />
+            dynamicNodes = <DynamicKpiDataComponent data={this.state.moduleData[this.props.moduleIdOnPage].data} />
         }
 
         return (

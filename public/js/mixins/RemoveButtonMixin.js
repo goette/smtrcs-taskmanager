@@ -1,8 +1,8 @@
 var RemoveModule = require('../components/RemoveModuleComponent.js');
 
-var remove = function (editMode, pageId) {
+var remove = function (editMode, moduleIdOnPage) {
     if (editMode) {
-        return <RemoveModule pageId={pageId} />;
+        return <RemoveModule moduleIdOnPage={moduleIdOnPage} />;
     } else {
         return '';
     }

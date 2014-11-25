@@ -47,9 +47,9 @@ ModuleStore.dispatchToken = AppDispatcher.register(function (payload) {
 
     switch (action.actionType) {
         case ModuleConstants.MODULE_RECEIVE_DATA:
-            _moduleData[action.pageId] = {
+            _moduleData[action.moduleIdOnPage] = {
                 data: JSON.parse(action.moduleData),
-                moduleId: PageStore.getModuleByPageId(action.pageId).id
+                moduleId: PageStore.getModuleByIdOnPage(action.moduleIdOnPage).id
             }
             ModuleStore.emitChange();
             break;

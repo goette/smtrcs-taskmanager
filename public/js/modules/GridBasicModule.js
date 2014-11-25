@@ -12,7 +12,7 @@ var GridBasic = React.createClass({
     mixins: [InitStoreInComponentMixin],
 
     componentDidMount: function () {
-        ModuleActionCreators.fetchData(this.props.action, this.props.pageId);
+        ModuleActionCreators.fetchData(this.props.action, this.props.moduleIdOnPage);
     },
 
     getStateFromStore: function () {
@@ -22,7 +22,7 @@ var GridBasic = React.createClass({
     },
 
     render: function () {
-        var remove = RemoveButtonMixin(this.props.editMode, this.props.pageId),
+        var remove = RemoveButtonMixin(this.props.editMode, this.props.moduleIdOnPage),
             roles = 'Roles: ' + this.props.roles.join(', '),
             cx = 'module grid ' + this.props.background;
 
