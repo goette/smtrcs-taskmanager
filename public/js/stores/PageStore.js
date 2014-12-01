@@ -10,8 +10,8 @@ var _ = require('lodash'),
     _pageConfig = {},
     _currentRole = 'c',
     _mode = {
-        edit: false,
-        add: false
+        edit: '',
+        add: ''
     };
 
 function buildPageArrays (moduleCollection, pageConfig) {
@@ -44,10 +44,6 @@ function buildPageArrays (moduleCollection, pageConfig) {
     _pageConfig = pageConfig;
 }
 
-function checkForPageFilter () {
-    //console.log(_.find(_currentlyOnPage, {id: 'Pag'});
-}
-
 function toggleMode (val) {
     _mode[val] = !_mode[val];
 }
@@ -58,6 +54,7 @@ function setCurrentRole (role) {
 
 function removeModuleFromPage (moduleIdOnPage) {
     _currentlyOnPage = _.reject(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
+    _updatePageConfig();
 }
 
 function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
@@ -65,7 +62,15 @@ function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
     module.moduleIdOnPage = _.uniqueId();
     module.className = module.className;
     currentlyOnPage.unshift(module);
+    _updatePageConfig();
     _mode.add = false;
+}
+
+
+function _updatePageConfig () {
+    _pageConfig.modulesOnPage = _.map(_currentlyOnPage, function (el) {
+        return el.id;
+    });
 }
 
 function filterByRole (arr) {
@@ -77,10 +82,6 @@ function updateCurrentlyOnPage (modules) {
 }
 
 var PageStore = assign({}, EventEmitter.prototype, {
-    /**
-     * Get the entire collection of views.
-     * @return {object}
-     */
     getModulesOnPage: function () {
         return filterByRole(_currentlyOnPage);
     },

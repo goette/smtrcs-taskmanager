@@ -19,9 +19,9 @@ describe('PageStoreTest', function() {
     var initialize = {
         source: 'VIEW_ACTION',
         action: {
-            actionType: PageConstants.PAGE_INITIALIZE,
+            actionType: PageConstants.PAGE_RECEICVE_CONFIG,
             moduleCollection: ModuleCollection,
-            initiallyOnPage: []
+            pageConfig: {modulesOnPage: []}
         }
     };
 
@@ -83,7 +83,7 @@ describe('PageStoreTest', function() {
 
     it('merges the initial modules correctly', function () {
         // Pretend there is a module in the page config
-        initialize.action.initiallyOnPage = [{id: 'TestModule2'}];
+        initialize.action.pageConfig.modulesOnPage = [{id: 'TestModule2'}];
         // And Initialize store again
         callback(initialize);
         // There should be 1 module on page
@@ -91,7 +91,7 @@ describe('PageStoreTest', function() {
         // The module should have a property 'roles'
         expect(PageStore.getModulesOnPage()[0]['roles']).not.toBeUndefined();
         // Reset initial page config for next tests
-        initialize.action.initiallyOnPage.length = 0;
+        initialize.action.pageConfig.modulesOnPage.length = 0;
     });
 
     it('adds a module to the page', function () {

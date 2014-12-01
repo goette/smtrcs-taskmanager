@@ -32,6 +32,10 @@ function get(url) {
 }
 
 module.exports = {
+    setPageConfig: function () {
+        console.log();
+    },
+
     getPageConfig: function() {
         // simulate retrieving data from server
         var pageConfig = JSON.parse(localStorage.getItem('pageConfig')),

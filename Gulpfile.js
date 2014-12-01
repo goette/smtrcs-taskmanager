@@ -75,5 +75,4 @@ gulp.task('watch', ['browser-sync','browserify'], function () {
 });
 
 gulp.task('test', shell.task('npm test'));
-
 gulp.task('default', ['sass','watch']);
