@@ -2,7 +2,7 @@
 
 ### Install VM
 
-* Install [https://www.vagrantup.com/downloads.html](Vagrant) & [https://www.virtualbox.org/wiki/Downloads](Virtualbox)
+* Install [Vagrant](https://www.vagrantup.com/downloads.html) & [VirtualBox](https://www.virtualbox.org/wiki/Downloads) if needed
 * Run `vagrant up` in the project root directory
 * Wait .....
 * Open `http://localhost:8888`, which is the `www/public` directory
