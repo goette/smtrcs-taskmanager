@@ -10,14 +10,14 @@ var source =  require('vinyl-source-stream');
 var jest = require('jest-cli');
 
 var paths = {
-    appJs: './public/js/app.js',
-    jsFolder: 'public/js',
-    jsFiles: ['public/js/**/*.js', '!public/js/bundle.js','!public/js/_backup/**/*.js'],
-    jsTests: ['public/js/stores/__tests__/*.js','public/js/bundle.js'],
-    scssFiles: 'public/scss/**/*.scss',
-    scssMain: 'public/scss/main.scss',
-    cssFolder: 'public/css',
-    cssMain: 'public/css/main.css'
+    appJs: './www/public/js/app.js',
+    jsFolder: 'www/public/js',
+    jsFiles: ['www/public/js/**/*.js', '!www/public/js/bundle.js','!www/public/js/_backup/**/*.js'],
+    jsTests: ['www/public/js/stores/__tests__/*.js','www/public/js/bundle.js'],
+    scssFiles: 'www/public/scss/**/*.scss',
+    scssMain: 'www/public/scss/main.scss',
+    cssFolder: 'www/public/css',
+    cssMain: 'www/public/css/main.css'
 };
 
 function logAndIgnoreError(err) {
@@ -29,7 +29,7 @@ gulp.task('browser-sync', function() {
     browserSync({
         open: false,
         server: {
-            baseDir: "./public"
+            baseDir: "./www/public"
         }
     });
 });
