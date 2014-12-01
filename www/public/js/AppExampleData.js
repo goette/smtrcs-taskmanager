@@ -6,7 +6,7 @@ module.exports = {
                 id: 'KpiConversionInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
-                action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/app/services/rankings/cs_visibility.php',
+                action: '/app/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
                 background: 'green'
             },
