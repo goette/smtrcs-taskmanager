@@ -1,5 +1,12 @@
 ## Dashboard Suite aka. Suite 7
 
+### Install VM
+
+* Install [Vagrant](https://www.vagrantup.com/downloads.html) & [VirtualBox](https://www.virtualbox.org/wiki/Downloads) if needed
+* Run `vagrant up` in the project root directory
+* Wait .....
+* Open `http://localhost:8888`, which is the `www/public` directory
+
 ### Ubuntu
 
 * Install latest node & npm
