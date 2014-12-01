@@ -4,6 +4,6 @@ class IndexController extends \BaseViews
 {
     public function indexAction()
     {
-
+		
     }
 }

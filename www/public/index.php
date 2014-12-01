@@ -13,8 +13,7 @@ try
 	$loader->registerDirs(
 		array(
 			__DIR__.$config->phalcon->controllersDir,
-			__DIR__.$config->phalcon->libraryDir,
-			__DIR__.$config->phalcon->viewsDir
+			__DIR__.$config->phalcon->libraryDir
 		)
 	)->register();
 
