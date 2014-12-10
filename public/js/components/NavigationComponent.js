@@ -16,7 +16,8 @@ var Navigation = React.createClass({
 
     getStateFromStore: function () {
         return {
-            isOpen: this.store.getMenuIsOpen()
+            isOpen: this.store.getMenuIsOpen(),
+            navigation: this.store.getNavigation()
         };
     },
 
@@ -59,7 +60,8 @@ var Navigation = React.createClass({
     },
 
     render: function () {
-        var cxNav = "cd-primary-nav is-fixed";
+        var cxNav = "cd-primary-nav is-fixed",
+            nodes;
 
         if (this.state.isOpen) {
             cxNav +=  " nav-is-visible";

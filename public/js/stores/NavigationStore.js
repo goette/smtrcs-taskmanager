@@ -9,9 +9,48 @@ var _ = require('lodash'),
     assign = require('object-assign'),
     CHANGE_EVENT = 'change',
     _menuIsOpen = false,
-    _menuConfig = [
+    _navigation = [
         {
-
+            children: [],
+            id: 1,
+            name: 'Home',
+            parentId: 0,
+            path: '/page/home'
+        },
+        {
+            children: [],
+            id: 2,
+            name: 'Rankings',
+            parentId: 0,
+            path: '/page/rankings'
+        },
+        {
+            children: [],
+            id: 3,
+            name: 'Links',
+            parentId: 0,
+            path: '/page/links'
+        },
+        {
+            children: [],
+            id: 6,
+            name: 'Traffic',
+            parentId: 1,
+            path: '/page/traffic'
+        },
+        {
+            children: [],
+            id: 4,
+            name: 'Optimization',
+            parentId: 0,
+            path: '/page/optimization'
+        },
+        {
+            children: [],
+            id: 5,
+            name: 'Traffic',
+            parentId: 1,
+            path: '/page/traffic'
         }
     ];
 
@@ -21,12 +60,28 @@ function _toggleMenuIsOpen (force) {
     } else {
         _menuIsOpen = !_menuIsOpen;
     }
-
 }
 
 var NavigationStore = assign({}, EventEmitter.prototype, {
     getMenuIsOpen: function () {
         return _menuIsOpen;
+    },
+
+    getNavigation: function () {
+        var root = {id:0, parentId: null, children: []},
+            node_list = { 0 : root};
+
+        // Sort _navigation by parentId
+        _.sortBy(_navigation, function(item) {
+            return [item.parentId.a, item.parentId.b];
+        });
+
+        for (var i = 0; i < _navigation.length; i++) {
+            node_list[_navigation[i].id] = _navigation[i];
+            node_list[_navigation[i].parentId].children.push(node_list[_navigation[i].id]);
+        }
+
+        return root.children;
     },
 
     emitChange: function () {

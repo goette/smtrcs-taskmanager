@@ -1,5 +1,4 @@
 var React = require('react'),
-    ReactCSSTransitionGroup = require('react/lib/ReactCSSTransitionGroup'),
     InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
     _ = require('lodash'),
     AllModules = require('../modules/_AllModules'),
@@ -99,9 +98,7 @@ var Page = React.createClass({
             <div className="row">
                 {loader}
                 {pageFilter}
-                <ReactCSSTransitionGroup transitionName="module">
-                    {modules}
-                </ReactCSSTransitionGroup>
+                {modules}
                 {addMenu}
                 {pageEditButtons}
             </div>

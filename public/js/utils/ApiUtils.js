@@ -1,8 +1,9 @@
 var $ = require('jquery'),
+    config = require('../config'),
     ServerActionCreators = require('../actions/ServerActionCreators.js'),
     PageStore = require('../stores/PageStore'),
-    savePageConfigAction = 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/page/save.php',
-    retrievePageConfigAction = 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/page/retrieve.php';
+    savePageConfigAction = config.PATH_ROOT + 'branches/suite7/controller_php/services/page/save.php',
+    retrievePageConfigAction = config.PATH_ROOT + 'branches/suite7/controller_php/services/page/retrieve.php';
 
 function get(url, data) {
     return $.ajax({
@@ -29,7 +30,7 @@ module.exports = {
         }).then(function (response) {
             // Action to hide loader
         }, function (error) {
-            console.error("Saving failed!", error);
+            console.error('Saving failed!', error);
         });
     },
 
