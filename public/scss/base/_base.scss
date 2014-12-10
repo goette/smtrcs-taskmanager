@@ -13,6 +13,12 @@ h1 {
     font-size: 2em;
 }
 
+a,
+a:hover {
+    color: $body-font-color;
+    text-decoration: none;
+}
+
 .module-item {
     margin-bottom: 2em;
     button {

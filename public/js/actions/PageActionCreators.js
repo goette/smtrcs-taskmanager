@@ -41,6 +41,11 @@ var PageActionCreators = {
             actionType: PageConstants.PAGE_REORDER,
             modules: modules
         });
+    },
+    clearPage: function () {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.PAGE_CLEAR
+        });
     }
 };
 

@@ -1,19 +1,21 @@
-var React = require('react');
-var ReactCSSTransitionGroup = require('react/lib/ReactCSSTransitionGroup');
-var InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin');
-var _ = require('lodash');
-var AllModules = require('../modules/_AllModules');
-var PageActions = require('../actions/PageActionCreators');
-var PageStore = require('../stores/PageStore');
-var AddMenu = require('./../components/AddMenuComponent');
-var PageEditButtons = require('./../components/PageEditButtonsComponent');
-var Loader = require('./../components/SpinnerComponent');
-var PageFilter = require('../filter/PageFilter');
+var React = require('react'),
+    ReactCSSTransitionGroup = require('react/lib/ReactCSSTransitionGroup'),
+    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
+    _ = require('lodash'),
+    AllModules = require('../modules/_AllModules'),
+    PageActionCreators = require('../actions/PageActionCreators'),
+    PageStore = require('../stores/PageStore'),
+    AddMenu = require('./../components/AddMenuComponent'),
+    PageEditButtons = require('./../components/PageEditButtonsComponent'),
+    Loader = require('./../components/SpinnerComponent'),
+    PageFilter = require('../filter/PageFilter'),
+    ApiUtils = require('../utils/ApiUtils'),
+    Router = require('react-router');
 
 var Page = React.createClass({
     store: PageStore,
 
-    mixins: [InitStoreInComponentMixin],
+    mixins: [Router.State, InitStoreInComponentMixin],
 
     getStateFromStore: function () {
         return {
@@ -23,6 +25,24 @@ var Page = React.createClass({
             editMode: this.store.getEditMode(),
             addMode: this.store.getAddMode()
         };
+    },
+
+    componentWillMount: function () {
+        console.log('init');
+        ApiUtils.retrievePageConfig(this.props.params.pageId);
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+        if (this.props.params.pageId !== nextProps.params.pageId) {
+            console.log('update');
+            PageActionCreators.clearPage();
+            ApiUtils.retrievePageConfig(nextProps.params.pageId);
+        };
+    },
+
+    componentWillUnmount: function () {
+        console.log('unmount');
+        PageActionCreators.clearPage();
     },
 
     render: function () {
@@ -39,11 +59,10 @@ var Page = React.createClass({
         if (this.state.modules.length) {
             loader = null;
             modules = _.map(this.state.modules, function (module, i) {
-                var dragging = (i == this.state.dragging) ? ' dragging' : '',
-                    ModuleComponent = AllModules[module.type];
+                var ModuleComponent = AllModules[module.type];
 
                 return (
-                    <div className={module.className + dragging}
+                    <div className={module.className}
                         key={module.moduleIdOnPage}
                         data-id={i}>
                         <ModuleComponent
@@ -79,15 +98,10 @@ var Page = React.createClass({
         return (
             <div className="row">
                 {loader}
-
-                <ReactCSSTransitionGroup transitionName="module">
-                    {pageFilter}
-                </ReactCSSTransitionGroup>
-
+                {pageFilter}
                 <ReactCSSTransitionGroup transitionName="module">
                     {modules}
                 </ReactCSSTransitionGroup>
-
                 {addMenu}
                 {pageEditButtons}
             </div>
