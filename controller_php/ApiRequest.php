@@ -6,7 +6,7 @@
  * @version 2, 2014-11-20, Martin Götte, allow cross domain requests from localhost:3000
  */
 
-header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Origin: *');
 
 class ApiRequest
 {

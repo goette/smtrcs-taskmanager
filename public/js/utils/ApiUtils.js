@@ -1,8 +1,8 @@
 var $ = require('jquery'),
     ServerActionCreators = require('../actions/ServerActionCreators.js'),
     PageStore = require('../stores/PageStore'),
-    savePageConfigAction = 'http://frontend.local/app/branches/suite7/controller_php/services/page/save.php',
-    retrievePageConfigAction = 'http://frontend.local/app/branches/suite7/controller_php/services/page/retrieve.php';
+    savePageConfigAction = 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/page/save.php',
+    retrievePageConfigAction = 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/page/retrieve.php';
 
 function get(url, data) {
     return $.ajax({

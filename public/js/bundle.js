@@ -40669,7 +40669,7 @@ module.exports = {
                 id: 'KpiConversionInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
-                action: 'http://frontend.local/app/branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
                 background: 'green'
             },
@@ -40677,7 +40677,7 @@ module.exports = {
                 id: 'KpiSocial',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
-                action: 'http://frontend.local/app/branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
                 background: 'steelblue',
                 filterParams: ['tags','interval']
@@ -40686,7 +40686,7 @@ module.exports = {
                 id: 'KpiTrafficInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s'],
-                action: 'http://frontend.local/app/branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-12',
                 background: 'orange'
             },
@@ -40694,7 +40694,7 @@ module.exports = {
                 id: 'KpiUrlRankings',
                 type: 'KpiBasicModule',
                 roles: ['c'],
-                action: 'http://frontend.local/app/branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6',
                 background: 'red'
             },
@@ -40702,7 +40702,7 @@ module.exports = {
                 id: 'ChartChannelInsight',
                 type: 'ChartBasicModule',
                 roles: ['c'],
-                action: 'http://frontend.local/app/branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-12',
                 background: 'lightgrey',
                 filterParams: ['tags','engine']
@@ -40711,7 +40711,7 @@ module.exports = {
                 id: 'GridUrlRankings',
                 type: 'GridBasicModule',
                 roles: ['c','s','e'],
-                action: 'http://frontend.local/app/branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-12',
                 background: 'blue'
             }
@@ -41436,17 +41436,17 @@ module.exports = FilterComponents;
 module.exports = {
     tags: {
         type: 'autosuggest',
-        action: 'http://frontend.local/app/branches/suite7/controller_php/services/filter/tags.php',
+        action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/filter/tags.php',
         default: false // true: first option; false: empty
     },
     engine: {
         type: 'dropdown',
-        action: 'http://frontend.local/app/branches/suite7/controller_php/services/filter/engines.php',
+        action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/filter/engines.php',
         default: true // true: first option; false: empty
     },
     interval: {
         type: 'dropdown',
-        action: 'http://frontend.local/app/branches/suite7/controller_php/services/filter/tags.php',
+        action: 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/filter/tags.php',
         default: true // true: first option; false: empty
     }
 };
@@ -42192,8 +42192,8 @@ module.exports = PageStore;
 var $ = require('jquery'),
     ServerActionCreators = require('../actions/ServerActionCreators.js'),
     PageStore = require('../stores/PageStore'),
-    savePageConfigAction = 'http://frontend.local/app/branches/suite7/controller_php/services/page/save.php',
-    retrievePageConfigAction = 'http://frontend.local/app/branches/suite7/controller_php/services/page/retrieve.php';
+    savePageConfigAction = 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/page/save.php',
+    retrievePageConfigAction = 'http://frontend.seometrie.dev/app/suite_frontend/branches/suite7/controller_php/services/page/retrieve.php';
 
 function get(url, data) {
     return $.ajax({

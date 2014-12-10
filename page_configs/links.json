@@ -1,1 +1,1 @@
-{"url":"\/links","pageFilter":{"roles":["c","s","e"],"blacklist":[""]},"modulesOnPage":[{"id":"KpiSocial"},{"id":"ChartChannelInsight"},{"id":"KpiTrafficInsight"},{"id":"KpiConversionInsight"},{"id":"KpiTrafficInsight"}]}
+{"url":"\/links","pageFilter":{"roles":["c","s","e"],"blacklist":[""]},"modulesOnPage":[{"id":"KpiUrlRankings"},{"id":"KpiUrlRankings"},{"id":"KpiConversionInsight"},{"id":"KpiTrafficInsight"}]}

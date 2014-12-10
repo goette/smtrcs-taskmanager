@@ -1,1 +1,1 @@
-{"url":"\/rankings-overview","pageFilter":{"roles":["c","s","e"],"blacklist":[""]},"modulesOnPage":[{"id":"KpiSocial"},{"id":"KpiTrafficInsight"},{"id":"KpiConversionInsight"},{"id":"KpiTrafficInsight"}]}
+{"url":"\/rankings-overview","pageFilter":{"roles":["c","s","e"],"blacklist":[""]},"modulesOnPage":[{"id":"KpiUrlRankings"},{"id":"ChartChannelInsight"},{"id":"KpiSocial"},{"id":"KpiConversionInsight"},{"id":"KpiTrafficInsight"}]}
