@@ -51,7 +51,7 @@ ModuleStore.dispatchToken = AppDispatcher.register(function (payload) {
                 moduleId =  module && module.id;
             _moduleData[action.moduleIdOnPage] = {
                 data: JSON.parse(action.moduleData),
-                moduleId: moduleId || ''
+                moduleId: moduleId||''
             }
             ModuleStore.emitChange();
             break;

@@ -1,3 +1,5 @@
+"use strict";
+
 var $ = require('jquery'),
     config = require('../config'),
     ServerActionCreators = require('../actions/ServerActionCreators.js'),

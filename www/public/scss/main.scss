@@ -5,7 +5,7 @@
 @import url(http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
 
 /* Example how to import scss from npm module */
-@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+@import '../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 
 @import 'base/base';
 @import 'button/page_edit';

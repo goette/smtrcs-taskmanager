@@ -8,7 +8,7 @@ var React = require('react'),
     PageEditButtons = require('./../components/PageEditButtonsComponent'),
     Loader = require('./../components/SpinnerComponent'),
     PageFilter = require('../filter/PageFilter'),
-    ApiUtils = require('../utils/ApiUtils'),
+    //ApiUtils = require('../utils/ApiUtils'),
     Router = require('react-router');
 
 var Page = React.createClass({
@@ -27,20 +27,17 @@ var Page = React.createClass({
     },
 
     componentWillMount: function () {
-        console.log('init');
-        ApiUtils.retrievePageConfig(this.props.params.pageId);
+        //ApiUtils.retrievePageConfig(this.props.params.pageId);
     },
 
     componentWillReceiveProps: function (nextProps) {
         if (this.props.params.pageId !== nextProps.params.pageId) {
-            console.log('update');
             PageActionCreators.clearPage();
-            ApiUtils.retrievePageConfig(nextProps.params.pageId);
+            //ApiUtils.retrievePageConfig(nextProps.params.pageId);
         };
     },
 
     componentWillUnmount: function () {
-        console.log('unmount');
         PageActionCreators.clearPage();
     },
 

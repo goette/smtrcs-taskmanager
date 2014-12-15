@@ -1,11 +1,12 @@
 server {
-
     listen   80;
     server_name localhost.dev;
 
     index index.php index.html index.htm;
     set $root_path '/var/www/public';
     root $root_path;
+
+    sendfile off;
 
     location / {
         try_files $uri $uri/ /index.php;

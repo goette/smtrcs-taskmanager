@@ -28,9 +28,7 @@ function logAndIgnoreError(err) {
 gulp.task('browser-sync', function() {
     browserSync({
         open: false,
-        server: {
-            baseDir: "./www/public"
-        }
+        proxy: "localhost:8888"
     });
 });
 
