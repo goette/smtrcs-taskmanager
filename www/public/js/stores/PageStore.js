@@ -1,5 +1,6 @@
 var _ = require('lodash'),
     AppDispatcher = require('../dispatcher/AppDispatcher'),
+    NavigationStore = require('../stores/NavigationStore'),
     EventEmitter = require('events').EventEmitter,
     PageConstants = require('../constants/PageConstants'),
     PageFilterActions = require('../actions/PageFilterActionCreators'),
@@ -48,6 +49,12 @@ function toggleMode (val) {
     _mode[val] = !_mode[val];
 }
 
+function clearPageStore () {
+    _pageConfig = {};
+    _currentlyOnPage = [];
+    console.log(_currentlyOnPage, _pageConfig);
+}
+
 function setCurrentRole (role) {
     _currentRole = role[0].toLowerCase();
 }
@@ -63,14 +70,11 @@ function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
     module.className = module.className;
     currentlyOnPage.unshift(module);
     _updatePageConfig();
-    _mode.add = false;
+    _mode['add'] = '';
 }
 
-
 function _updatePageConfig () {
-    _pageConfig.modulesOnPage = _.map(_currentlyOnPage, function (el) {
-        return el.id;
-    });
+    _pageConfig.modulesOnPage = _.map(_currentlyOnPage , function (el) {return _.pick(el, 'id')});
 }
 
 function filterByRole (arr) {
@@ -92,6 +96,10 @@ var PageStore = assign({}, EventEmitter.prototype, {
 
     getModuleByIdOnPage: function (moduleIdOnPage) {
         return _.find(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
+    },
+
+    getCurrentPageConfig: function () {
+        return _pageConfig;
     },
 
     getEditMode: function () {
@@ -131,6 +139,10 @@ var PageStore = assign({}, EventEmitter.prototype, {
 
 // Register to handle all updates
 PageStore.dispatchToken = AppDispatcher.register(function (payload) {
+    AppDispatcher.waitFor([
+        NavigationStore.dispatchToken
+    ]);
+
     var action = payload.action;
     switch (action.actionType) {
         case PageConstants.PAGE_RECEICVE_CONFIG:
@@ -165,6 +177,11 @@ PageStore.dispatchToken = AppDispatcher.register(function (payload) {
 
         case PageConstants.PAGE_REORDER:
             updateCurrentlyOnPage(action.modules);
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.PAGE_CLEAR:
+            clearPageStore();
             PageStore.emitChange();
             break;
 

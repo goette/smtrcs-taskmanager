@@ -3,7 +3,7 @@ var PageActions = require('../actions/PageActionCreators.js');
 
 var PageEditButtons = React.createClass({
     _toggleEditMode: function () {
-        PageActions.toggleEditMode();
+        PageActions.toggleEditMode(this.props.editMode);
     },
 
     _toggleAddMode: function () {

@@ -1,6 +1,15 @@
 .header {
     line-height: 50px;
     font-size: 1.5em;
+    box-shadow: 0 0 1px rgba(0,0,0,.1),0 1px 4px rgba(0,0,0,.2);
+    border: 0;
+    z-index: 100;
+
+    .main-logo {
+        float: left;
+        height: 40px;
+        margin-top: 7px;
+    }
 
     select {
         vertical-align: middle;

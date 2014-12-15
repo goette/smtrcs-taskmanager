@@ -1,12 +1,14 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
     PageConstants = require('../constants/PageConstants.js'),
-    PageFilterActionCreators = require('../actions/PageFilterActionCreators.js');
+    PageFilterActionCreators = require('../actions/PageFilterActionCreators.js'),
+    ApiUtils = require('../utils/ApiUtils');
 
 var PageActionCreators = {
-    toggleEditMode: function () {
+    toggleEditMode: function (editMode) {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.PAGE_TOGGLE_EDIT
         });
+        if (editMode) ApiUtils.savePageConfig();
     },
     toggleAddMode: function () {
         AppDispatcher.handleViewAction({
@@ -25,6 +27,7 @@ var PageActionCreators = {
             moduleId: moduleId
         });
         PageFilterActionCreators.update();
+        ApiUtils.savePageConfig();
     },
     removeModule: function (moduleId) {
         AppDispatcher.handleViewAction({
@@ -37,6 +40,11 @@ var PageActionCreators = {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.PAGE_REORDER,
             modules: modules
+        });
+    },
+    clearPage: function () {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.PAGE_CLEAR
         });
     }
 };

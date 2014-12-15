@@ -7,7 +7,8 @@ var constants = keyMirror({
     PAGE_RECEICVE_CONFIG: null,
     PAGE_TOGGLE_EDIT: null,
     PAGE_TOGGLE_ADD: null,
-    PAGE_REORDER: null
+    PAGE_REORDER: null,
+    PAGE_CLEAR: null
 });
 
 module.exports = constants;

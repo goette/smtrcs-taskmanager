@@ -4863,6 +4863,10 @@ button {
 h1 {
   font-size: 2em; }
 
+a, a:hover {
+  color: #404040;
+  text-decoration: none; }
+
 .module-item {
   margin-bottom: 2em; }
   .module-item button {
@@ -5000,7 +5004,14 @@ h1 {
 
 .header {
   line-height: 50px;
-  font-size: 1.5em; }
+  font-size: 1.5em;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.2);
+  border: 0;
+  z-index: 100; }
+  .header .main-logo {
+    float: left;
+    height: 40px;
+    margin-top: 7px; }
   .header select {
     vertical-align: middle;
     margin-top: -4px;
@@ -5017,6 +5028,381 @@ h1 {
     text-align: right; }
   .header .bars {
     font-size: 1em; }
+
+.home {
+  margin-left: 300px; }
+
+/* --------------------------------
+
+Primary style
+
+-------------------------------- */
+*, *::after, *::before {
+  box-sizing: border-box; }
+
+body.overflow-hidden {
+  /*overflow: hidden;*/ }
+
+img {
+  /* make images responsive */
+  max-width: 100%; }
+
+/* --------------------------------
+
+Main components
+
+-------------------------------- */
+.cd-main-content, .cd-main-header {
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform; }
+
+.cd-main-content, .cd-main-header {
+  position: relative;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: transform 0.3s; }
+
+.cd-main-content.nav-is-visible, .cd-main-header.nav-is-visible {
+  -webkit-transform: translateX(260px);
+  -ms-transform: translateX(260px);
+  transform: translateX(260px); }
+
+.nav-on-left .cd-main-content.nav-is-visible, .nav-on-left .cd-main-header.nav-is-visible {
+  -webkit-transform: translateX(-260px);
+  -ms-transform: translateX(-260px);
+  transform: translateX(-260px); }
+
+.cd-main-content {
+  background: #e2e3df;
+  min-height: 100vh;
+  z-index: 2; }
+
+.cd-main-header {
+  height: 50px;
+  background: #ffffff;
+  z-index: 3; }
+
+.cd-header-buttons {
+  position: absolute;
+  display: inline-block;
+  top: 3px;
+  right: 5%; }
+
+.cd-header-buttons li {
+  display: inline-block; }
+
+.nav-on-left .cd-header-buttons {
+  right: auto;
+  left: 5%; }
+
+.nav-on-left .cd-header-buttons li {
+  float: right; }
+
+.cd-header-buttons {
+  top: 18px;
+  right: 4em; }
+
+.cd-nav-trigger {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  white-space: nowrap;
+  /* hide text */
+  color: transparent;
+  z-index: 3; }
+
+.cd-nav-trigger span, .cd-nav-trigger span::before, .cd-nav-trigger span::after {
+  /* hamburger icon in CSS */
+  position: absolute;
+  display: inline-block;
+  height: 3px;
+  width: 24px;
+  background: #2e3233; }
+
+.cd-nav-trigger span {
+  /* line in the center */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -2px;
+  -webkit-transition: background 0.3s 0.3s;
+  transition: background 0.3s 0.3s; }
+
+.cd-nav-trigger span::before, .cd-nav-trigger span::after {
+  /* other 2 lines */
+  content: '';
+  right: 0;
+  /* Force Hardware Acceleration in WebKit */
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-origin: 0% 50%;
+  -ms-transform-origin: 0% 50%;
+  transform-origin: 0% 50%;
+  -webkit-transition: -webkit-transform 0.3s 0.3s;
+  transition: transform 0.3s 0.3s; }
+
+.cd-nav-trigger span::before {
+  /* menu icon top line */
+  top: -6px; }
+
+.cd-nav-trigger span::after {
+  /* menu icon bottom line */
+  top: 6px; }
+
+.cd-nav-trigger.nav-is-visible span::before, .cd-nav-trigger.nav-is-visible span::after {
+  /* keep visible other 2 lines */
+  background: #2e3233; }
+
+.cd-primary-nav, .cd-primary-nav ul {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  height: 100%;
+  width: 260px;
+  margin: 0;
+  padding: 0;
+  background: #f8f8f8;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1), 1px 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  z-index: 1;
+  /* Force Hardware Acceleration in WebKit */
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: transform 0.3s; }
+
+.cd-primary-nav ul {
+  top: 0; }
+
+.cd-primary-nav + .dim-the-light {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  visibility: hidden;
+  -webkit-transition: opacity 0.15s ease-in, visibility 0s 0.15s;
+  transition: opacity 0.15s ease-in, visibility 0s 0.15s; }
+
+.cd-primary-nav.nav-is-visible + .dim-the-light {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: opacity 0.15s ease-in, visibility 0s 0s;
+  transition: opacity 0.15s ease-in, visibility 0s 0s; }
+
+.cd-primary-nav a, .cd-primary-nav ul a {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+  border-bottom: 1px solid #e7e7e7;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s, opacity 0.3s; }
+  .cd-primary-nav a[href], .cd-primary-nav ul a[href] {
+    cursor: pointer; }
+
+.cd-primary-nav a:hover, .cd-primary-nav ul a:hover {
+  background: #ebebeb; }
+
+.cd-primary-nav a.active {
+  background: rgba(122, 186, 0, 0.2); }
+
+.cd-primary-nav.is-hidden, .cd-primary-nav ul.is-hidden {
+  /* secondary navigations hidden by default */
+  -webkit-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%); }
+
+.cd-primary-nav.moves-out > li > a, .cd-primary-nav ul.moves-out > li > a {
+  /* push the navigation items to the left - and lower down opacity - when secondary nav slides in */
+  -webkit-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  transform: translateX(-100%);
+  opacity: 0; }
+
+.nav-on-left .cd-primary-nav, .nav-on-left .cd-primary-nav ul {
+  right: auto;
+  left: 0; }
+
+.cd-primary-nav .see-all a {
+  /* different style for the See all button on mobile and tablet */
+  color: #69aa6f; }
+
+.cd-primary-nav .cd-nav-gallery .cd-nav-item, .cd-primary-nav .cd-nav-icons .cd-nav-item {
+  /* items with picture (or icon) and title */
+  height: 80px;
+  line-height: 80px; }
+
+.cd-primary-nav .cd-nav-gallery .cd-nav-item h3, .cd-primary-nav .cd-nav-icons .cd-nav-item h3 {
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.cd-primary-nav .cd-nav-gallery .cd-nav-item {
+  padding-left: 90px; }
+
+.cd-primary-nav .cd-nav-gallery .cd-nav-item img {
+  position: absolute;
+  display: block;
+  height: 40px;
+  width: auto;
+  left: 20px;
+  top: 50%;
+  margin-top: -20px; }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item {
+  padding-left: 75px; }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item p {
+  color: #2e3233;
+  font-size: 1.3rem;
+  /* hide description on small devices */
+  display: none; }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item::before {
+  /* item icon */
+  content: '';
+  display: block;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  margin-top: -20px;
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 40px 40px; }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item.item-1::before {
+  background-image: url("../images/line-icon-1.svg"); }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item.item-2::before {
+  background-image: url("../images/line-icon-2.svg"); }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item.item-3::before {
+  background-image: url("../images/line-icon-3.svg"); }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item.item-4::before {
+  background-image: url("../images/line-icon-4.svg"); }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item.item-5::before {
+  background-image: url("../images/line-icon-5.svg"); }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item.item-6::before {
+  background-image: url("../images/line-icon-6.svg"); }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item.item-7::before {
+  background-image: url("../images/line-icon-7.svg"); }
+
+.cd-primary-nav .cd-nav-icons .cd-nav-item.item-8::before {
+  background-image: url("../images/line-icon-8.svg"); }
+
+.cd-primary-nav {
+  /* by default .cd-primary-nav is hidden - trick for iOS devices where you can see the navigation if you pull down */
+  -webkit-transition: -webkit-transform 0.15s ease-in;
+  transition: transform 0.15s ease-in, visibility 0s 0.15s;
+  -webkit-transform: translateX(-260px);
+  -ms-transform: translateX(-260px);
+  transform: translateX(-260px);
+  visibility: hidden; }
+
+.cd-primary-nav.nav-is-visible {
+  -webkit-transition: -webkit-transform 0.15s ease-in;
+  transition: transform 0.15s ease-in, visibility 0s 0s;
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+  visibility: visible; }
+
+.has-children > a, .go-back a {
+  position: relative; }
+
+.has-children > a::before, .has-children > a::after, .go-back a::before, .go-back a::after {
+  /* arrow icon in CSS - for element with nested unordered lists */
+  content: '';
+  position: absolute;
+  top: 50%;
+  margin-top: -1px;
+  display: inline-block;
+  height: 2px;
+  width: 10px;
+  background: #464c4e;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden; }
+
+.has-children > a::before, .go-back a::before {
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg); }
+
+.has-children > a::after, .go-back a::after {
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg); }
+
+.has-children > a {
+  padding-right: 40px; }
+
+.has-children > a::before, .has-children > a::after {
+  /* arrow goes on the right side - children navigation */
+  right: 20px;
+  -webkit-transform-origin: 9px 50%;
+  -ms-transform-origin: 9px 50%;
+  transform-origin: 9px 50%; }
+
+.cd-primary-nav .go-back a {
+  padding-left: 40px; }
+
+.cd-primary-nav .go-back a::before, .cd-primary-nav .go-back a::after {
+  /* arrow goes on the left side - go back button */
+  left: 20px;
+  -webkit-transform-origin: 1px 50%;
+  -ms-transform-origin: 1px 50%;
+  transform-origin: 1px 50%; }
+
+.cd-overlay {
+  /* shadow layer visible when navigation is active */
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  background-color: rgba(105, 170, 111, 0.8);
+  visibility: hidden;
+  opacity: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  transition: opacity 0.3s 0s, visibility 0s 0.3s; }
+
+.cd-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
+  transition: opacity 0.3s 0s, visibility 0s 0s; }
 
 /*********************************************************
  *  CSS3 Animation spinner
