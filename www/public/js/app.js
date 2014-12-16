@@ -41,7 +41,7 @@ var routes = (
     </Route>
 );
 
-Router.run(routes, Router.HistoryLocation, function (Handler, state) {
+Router.run(routes, /*Router.HistoryLocation,*/ function (Handler, state) {
     var params = state.params;
     React.render(<Handler params={params} />, document.getElementById('app'));
 });

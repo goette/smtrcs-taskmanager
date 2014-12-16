@@ -4,8 +4,8 @@ var $ = require('jquery'),
     config = require('../config'),
     ServerActionCreators = require('../actions/ServerActionCreators.js'),
     PageStore = require('../stores/PageStore'),
-    savePageConfigAction = config.PATH_ROOT + 'branches/suite7/controller_php/services/page/save.php',
-    retrievePageConfigAction = config.PATH_ROOT + 'branches/suite7/controller_php/services/page/retrieve.php';
+    savePageConfigAction = config.PATH_ROOT + 'services/page/save-config',
+    retrievePageConfigAction = config.PATH_ROOT + 'services/page/get-config';
 
 function get(url, data) {
     return $.ajax({
@@ -53,6 +53,7 @@ module.exports = {
 
     getModuleData: function (url, id) {
         get(url).then(function (response) {
+			console.log(response);
             ServerActionCreators.receiveModuleData(response, id);
         }, function (error) {
             console.error("Failed!", error);
