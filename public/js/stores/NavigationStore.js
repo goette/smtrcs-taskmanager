@@ -34,9 +34,16 @@ var _ = require('lodash'),
         {
             children: [],
             id: 6,
-            name: 'Traffic',
-            parentId: 1,
-            path: '/page/traffic'
+            name: 'Test',
+            parentId: 2,
+            path: '/page/test'
+        },
+        {
+            children: [],
+            id: 7,
+            name: 'Test2',
+            parentId: 4,
+            path: '/page/test2'
         },
         {
             children: [],
@@ -68,20 +75,8 @@ var NavigationStore = assign({}, EventEmitter.prototype, {
     },
 
     getNavigation: function () {
-        var root = {id:0, parentId: null, children: []},
-            node_list = { 0 : root};
-
-        // Sort _navigation by parentId
-        _.sortBy(_navigation, function(item) {
-            return [item.parentId.a, item.parentId.b];
-        });
-
-        for (var i = 0; i < _navigation.length; i++) {
-            node_list[_navigation[i].id] = _navigation[i];
-            node_list[_navigation[i].parentId].children.push(node_list[_navigation[i].id]);
-        }
-
-        return root.children;
+        console.log(_navigation.sort(function (a, b) {return a.parentId - b.parentId}));
+        return _navigation.sort(function (a, b) {return a.parentId - b.parentId});
     },
 
     emitChange: function () {

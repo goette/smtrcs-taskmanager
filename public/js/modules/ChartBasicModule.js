@@ -29,7 +29,7 @@ var ConversionInside = React.createClass({
             <div key={this.props.key} className={cx}>
                 {remove}
                 <Headline title={this.props.moduleId} />
-                <img src="images/chart.png" />
+                <img src="/images/chart.png" />
             </div>
         );
     }
