@@ -2,9 +2,28 @@
 
 class PageController extends \BaseServices
 {
+	// get page config
     public function getConfigAction()
     {
-		echo 'bla';
-		
+		return array
+		(
+			'url'			=> '/rankings-overview',
+			'pageFilter'	=> array
+			(
+				'roles'		=> array('c','s','e'),
+				'blacklist'	=> array()
+			),
+			'modulesOnPage'	=> array
+			(
+				array
+				(
+					'id'	=> 'ChartChannelInsight'
+				),
+				array
+				(
+					'id'	=> 'KpiTrafficInsight'
+				)
+			)
+		);
     }
 }

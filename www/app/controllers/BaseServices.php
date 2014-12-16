@@ -1,32 +1,34 @@
 <?php
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Response;
 
 class BaseServices extends Phalcon\Mvc\Controller
 {
-    //public $dispatcher  = \Phalcon\Mvc\Dispatcher;
-    //public $response    = \Phalcon\Http\Response;
-    
+	
     public function initialize()
     {    
-      //  $this->view->setRenderLevel(View::LEVEL_NO_RENDER);
+        //Don't render Views for Service Calls
+		$this->view->setRenderLevel(View::LEVEL_NO_RENDER);
     }
     
     //Set JSON-Response when route was executed
-    /*public function afterExecuteRoute()
+    public function afterExecuteRoute()
     {
-		//get data from action
-        $data = $dispatcher->getReturnedValue();
+		//get returned data
+        $data = $this->dispatcher->getReturnedValue();
         
-		//json encode if necessary
+		//json_encode data if necessary
 		if (is_array($data)) {
             $data = json_encode($data);
         }
 		
-		//set headers and data to json response
-        $response->setContentType('application/json', 'UTF-8');
-        $response->setContent($data);
-		
+		//set headers and content of json-response
+        $this->response->setContentType('application/json', 'UTF-8');
+        $this->response->setContent($data);
+        
 		//return response
-		return $response->send();
-    }*/
+        return $this->response->send();
+    }
     
 }
