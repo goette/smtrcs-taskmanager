@@ -41,9 +41,14 @@ module.exports = {
         post(retrievePageConfigAction, {
             name: pageName
         }).then(function (response) {
-            pageConfig = JSON.parse(response);
-            moduleCollection = JSON.parse(localStorage.getItem('moduleCollection'));
-            ServerActionCreators.receivePageConfig(moduleCollection, pageConfig);
+            if (response) {
+                pageConfig = JSON.parse(response);
+                moduleCollection = JSON.parse(localStorage.getItem('moduleCollection'));
+                ServerActionCreators.receivePageConfig(moduleCollection, pageConfig);
+            } else {
+                window.location.href = '/404';
+                //ServerActionCreators.receivePageConfig();
+            }
         }, function (error) {
             console.error('Retrieveing failed!', error);
         });

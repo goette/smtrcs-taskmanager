@@ -23,12 +23,12 @@ var ConversionInside = React.createClass({
     render: function () {
         var remove = RemoveButtonMixin(this.props.editMode, this.props.moduleIdOnPage),
             roles = 'Roles: ' + this.props.roles.join(', '),
-            cx = 'module chart ' + this.props.background;;
+            cx = 'module chart ' + this.props.background;
 
         return (
             <div key={this.props.key} className={cx}>
                 {remove}
-                <Headline title={this.props.moduleId} />
+                <Headline title={this.props.id} />
                 <img src="/images/chart.png" />
             </div>
         );

@@ -60,95 +60,95 @@ module.exports = {
                 id: 1,
                 name: 'Home',
                 parentId: 0,
-                path: '/home'
+                path: 'home'
             },
             {
                 id: 2,
                 name: 'Rankings',
                 parentId: 0,
-                path: '/page/rankings'
+                path: 'page/rankings'
             },
             {
                 id: 15,
                 name: 'Overview',
                 parentId: 2,
-                path: '/page/rankings-overview'
+                path: 'page/rankings-overview'
             },
             {
                 id: 5,
                 name: 'Organics Rankings',
                 parentId: 2,
-                path: '/page/organic-rankings'
+                path: 'page/organic-rankings'
             },
             {
                 id: 7,
                 name: 'Keyword Rankings',
                 parentId: 5,
-                path: '/page/keyword-rankings'
+                path: 'page/keyword-rankings'
             },
             {
                 id: 8,
                 name: 'Ranking Analysis',
                 parentId: 5,
-                path: '/page/ranking-analysis'
+                path: 'page/ranking-analysis'
             },
             {
                 id: 9,
                 name: 'Position Spread',
                 parentId: 5,
-                path: '/page/position-spread'
+                path: 'page/position-spread'
             },
             {
                 id: 10,
                 name: 'Keyword Potential',
                 parentId: 5,
-                path: '/page/keyword-potential'
+                path: 'page/keyword-potential'
             },
             {
                 id: 11,
                 name: 'Tag Potential',
                 parentId: 5,
-                path: '/page/tag-potential'
+                path: 'page/tag-potential'
             },
             {
                 id: 12,
                 name: 'Market Insights',
                 parentId: 5,
-                path: '/page/market-insights'
+                path: 'page/market-insights'
             },
             {
                 id: 13,
                 name: 'Paid Rankings',
                 parentId: 5,
-                path: '/page/paid-rankings'
+                path: 'page/paid-rankings'
             },
             {
                 id: 3,
                 name: 'Links',
                 parentId: 0,
-                path: '/page/links'
+                path: 'page/links'
             },
             {
                 id: 4,
                 name: 'Optimization',
                 parentId: 0,
-                path: '/page/optimization'
+                path: 'page/optimization'
             },
             {
                 id: 14,
                 name: 'Traffic',
                 parentId: 0,
-                path: '/page/traffic'
+                path: 'page/traffic'
             },
             {
                 id: 6,
                 name: 'URL Rankings',
                 parentId: 5,
-                path: '/page/url-rankings'
+                path: 'page/url-rankings'
             },
         ]));
         /*localStorage.setItem('pageConfig', JSON.stringify({
-            url: '/page1', // = id
+            url: 'page1', // = id
             pageFilter: {
                 roles: ['c','s','e'],
                 blacklist: ['']

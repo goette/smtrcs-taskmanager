@@ -18,19 +18,21 @@ var _ = require('lodash'),
 function _buildFilterArray (modules) {
     var arr = [];
     // Generate array of filterParams from modules on page,
-    _.filter(PageStore.getModulesOnPage(), function (el) {
-        if(el.filterParams) {
-            arr.push(el.filterParams);
-        }
-    });
 
-    // Flatten array and remove duplicates
-    arr = _.uniq(_.flatten(arr));
+    if (PageStore.getModulesOnPage().length) {
+        _.filter(PageStore.getModulesOnPage(), function (el) {
+           if(el.filterParams) {
+               arr.push(el.filterParams);
+           }
+        });
+
+        // Flatten array and remove duplicates
+        arr = _.uniq(_.flatten(arr));
 
 
-    // Remove all blacklisted items
-    _filterParamsOnPage = _.difference(arr, PageStore.getPageFilter().blacklist);
-
+        // Remove all blacklisted items
+        _filterParamsOnPage = _.difference(arr, PageStore.getPageFilter().blacklist);
+    }
 }
 
 function _triggerFetchFilterData () {

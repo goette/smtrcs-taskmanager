@@ -28,7 +28,6 @@ var AppDispatcher = assign(new Dispatcher(), {
     },
 
     handleServerAction: function(action) {
-        console.log(action);
         this.dispatch({
             source: 'SERVER_ACTION',
             action: action

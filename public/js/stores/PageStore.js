@@ -146,7 +146,11 @@ PageStore.dispatchToken = AppDispatcher.register(function (payload) {
     var action = payload.action;
     switch (action.actionType) {
         case PageConstants.PAGE_RECEICVE_CONFIG:
-            buildPageArrays(action.moduleCollection, action.pageConfig);
+            if (action.moduleCollection) {
+                buildPageArrays(action.moduleCollection, action.pageConfig);
+            } else {
+                buildPageArrays(false);
+            }
             PageStore.emitChange();
             break;
 

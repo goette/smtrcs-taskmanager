@@ -39,7 +39,7 @@ var KpiBasic = React.createClass({
         return (
             <div key={this.props.key} className={cx}>
                 {remove}
-                <Headline title={this.props.moduleId} />
+                <Headline title={this.props.id} />
                 <p>{roles}</p>
                 {dynamicNodes}
             </div>

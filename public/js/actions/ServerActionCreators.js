@@ -1,4 +1,6 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+var React = require('react'),
+    Router = require('react-router'),
+    AppDispatcher = require('../dispatcher/AppDispatcher.js'),
     PageConstants = require('../constants/PageConstants.js'),
     ModuleConstants = require('../constants/ModuleConstants.js'),
     NavigationConstants = require('../constants/NavigationConstants.js'),

@@ -1,6 +1,6 @@
 var React = require('react'),
-    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
     _ = require('lodash'),
+    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
     AllModules = require('../modules/_AllModules'),
     PageActionCreators = require('../actions/PageActionCreators'),
     PageStore = require('../stores/PageStore'),
@@ -27,20 +27,17 @@ var Page = React.createClass({
     },
 
     componentWillMount: function () {
-        console.log('init');
         ApiUtils.retrievePageConfig(this.props.params.pageId);
     },
 
     componentWillReceiveProps: function (nextProps) {
         if (this.props.params.pageId !== nextProps.params.pageId) {
-            console.log('update');
             PageActionCreators.clearPage();
             ApiUtils.retrievePageConfig(nextProps.params.pageId);
         };
     },
 
     componentWillUnmount: function () {
-        console.log('unmount');
         PageActionCreators.clearPage();
     },
 
@@ -61,18 +58,8 @@ var Page = React.createClass({
                 var ModuleComponent = AllModules[module.type];
 
                 return (
-                    <div className={module.className}
-                        key={module.moduleIdOnPage}
-                        data-id={i}>
-                        <ModuleComponent
-                            key={i}
-                            moduleId={module.id}
-                            action={module.action}
-                            background={module.background}
-                            moduleIdOnPage={module.moduleIdOnPage}
-                            editMode={editMode}
-                            roles={module.roles}
-                        />
+                    <div className={module.className} key={module.moduleIdOnPage} data-id={i}>
+                        <ModuleComponent key={i} editMode={editMode} {...module} />
                     </div>
                 );
             }, this);

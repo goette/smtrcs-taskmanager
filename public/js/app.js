@@ -3,6 +3,7 @@ var React = require('react'),
     ApiUtils = require('./utils/ApiUtils');
     Header = require('./components/HeaderComponent'),
     Page = require('./pages/DefaultPage'),
+    NotFound = require('./pages/NotFoundPage'),
     Home = require('./pages/HomePage'),
     Navigation = require('./components/NavigationComponent'),
     NavigationActionCreators = require('./actions/NavigationActionCreators'),
@@ -25,7 +26,7 @@ var App = React.createClass({
             <div className="container-fluid">
                 <Header />
                 <RouteHandler params={this.props.params} />
-                <Navigation />
+                <Navigation currentPath={this.props.currentPath} />
             </div>
         );
     }
@@ -35,11 +36,13 @@ var routes = (
     <Route handler={App}>
         <Route name="page" path="/page/:pageId" handler={Page} />
         <Route name="home" path="/home" handler={Home}/>
+        <NotFoundRoute handler={NotFound} />
         <Redirect from="/" to="/home" />
     </Route>
 );
 
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
-    var params = state.params;
-    React.render(<Handler params={params} />, document.getElementById('app'));
+    var params = state.params,
+        currentPath = state.path;
+    React.render(<Handler currentPath={currentPath} params={params} />, document.getElementById('app'));
 });

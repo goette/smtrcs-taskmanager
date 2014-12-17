@@ -1,4 +1,5 @@
-var React = require('react'),
+var React = require('react/addons'),
+    ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
     _ = require('lodash'),
     Header = require('./HeaderComponent'),
     Page = require('../pages/DefaultPage'),
@@ -17,6 +18,10 @@ function _forceCloseNav () {
     }, 500);
 }
 
+function _toggleNav () {
+    NavigationActionCreators.toggle();
+}
+
 var Navigation = React.createClass({
     store: NavigationStore,
 
@@ -25,140 +30,105 @@ var Navigation = React.createClass({
     getStateFromStore: function () {
         return {
             isOpen: this.store.getMenuIsOpen(),
-            navigation: this.store.getNavigation()
+            navigation: this.store.getNavigation(),
+            parentId: this.store.getParentId()
         };
     },
 
     componentDidMount: function () {
         // Pretend to receive the navigation config
+        NavigationActionCreators.setInitialPath(this.props.currentPath);
         ApiUtils.retrieveNavigationConfig();
-
-        // We use jquery for now
-        //prevent default clicking on direct children of .cd-primary-nav
-
-        $('.cd-primary-nav').children('.has-children').children('a').on('click', function(event){
-            event.preventDefault();
-        });
-        //open submenu
-        $('.has-children').children('a').on('click', function(event){
-            event.preventDefault();
-            var selected = $(this);
-            if( selected.next('ul').hasClass('is-hidden') ) {
-                //desktop version only
-                selected.addClass('selected').next('ul').removeClass('is-hidden').end().parent('.has-children').parent('ul').addClass('moves-out');
-                selected.parent('.has-children').siblings('.has-children').children('ul').addClass('is-hidden').end().children('a').removeClass('selected');
-                $('.cd-overlay').addClass('is-visible');
-            } else {
-                selected.removeClass('selected').next('ul').addClass('is-hidden').end().parent('.has-children').parent('ul').removeClass('moves-out');
-                $('.cd-overlay').removeClass('is-visible');
-            }
-        });
-        //submenu items - go back link
-        $('.go-back').on('click', function(event) {
-            event.preventDefault();
-            $(this).parent('ul').addClass('is-hidden').parent('.has-children').parent('ul').removeClass('moves-out');
-        });
     },
 
     render: function () {
         var cxNav = "cd-primary-nav is-fixed",
+            currentName = _.where(this.state.navigation, {id: this.state.parentId.current}),
+            goBackEl = null,
+            transitionName = 'menu-slide-left',
+            enableTransition = true,
             nodes;
 
         if (this.state.isOpen) {
             cxNav +=  " nav-is-visible";
         }
 
-        nodes = this.state.navigation.map(function (node) {
-            return <TreeNode key={node.path} node={node} parentName='Main Menu' />
+        if (this.state.parentId.current && currentName.length) {
+            goBackEl = <GoBackEl key={currentName[0]['path']} name={currentName[0]['name']} parentId={currentName[0]['parentId']} />;
+        }
+
+        if (this.state.parentId.current <= this.state.parentId.old) {
+            transitionName = 'menu-slide-right';
+        }
+
+        console.log(this.state.parentId.old);
+
+        if (this.state.parentId.old === null) {
+            enableTransition = false;
+        }
+
+        nodes = _.where(this.state.navigation, {parentId: this.state.parentId.current}).map(function (node, index) {
+            if (goBackEl) index += 1;
+            return <TreeNode index={index} key={node.path} node={node} parentName='Main Menu' id={node.id} parentId={node.parentId} />
         });
+
 
         return (
             <nav className="nav">
-                <ul id="cd-primary-nav" className={cxNav}>
-                    {nodes}
+                <ul className={cxNav} id={'nav' + this.state.parentId.current}>
+                    <ReactCSSTransitionGroup transitionName={transitionName} transitionEnter={enableTransition}>
+                        {goBackEl}
+                        {nodes}
+                    </ReactCSSTransitionGroup>
                 </ul>
-                <div className="dim-the-light" onClick={_forceCloseNav}></div>
+                <div className="dim-the-light" onClick={_toggleNav}></div>
             </nav>
         );
-
-        /*return (
-            <nav className="nav">
-                <ul id="cd-primary-nav" className={cxNav}>
-                    <li><Link onClick={this._handleRouting} to="home">Home</Link></li>
-                    <li className="has-children">
-                        <a>Rankings</a>
-                        <ul className="cd-secondary-nav is-hidden">
-                            <li className="go-back"><a>Main Menu</a></li>
-                            <li><Link onClick={this._handleRouting} to="page" params={{pageId: "rankings-overview"}}>Overview</Link></li>
-                            <li className="has-children">
-                                <a>Organic Rankings</a>
-
-                                <ul className="is-hidden">
-                                    <li className="go-back">
-                                        <a>Rankings</a>
-                                    </li>
-                                    <li>
-                                        <a>URL Rankings</a>
-                                    </li>
-                                    <li>
-                                        <a>Keyword Rankings</a>
-                                    </li>
-                                    <li>
-                                        <a>Ranking Analysis</a>
-                                    </li>
-                                    <li>
-                                        <a>Position Spread</a>
-                                    </li>
-                                    <li>
-                                        <a>Keyword Potential</a>
-                                    </li>
-                                    <li>
-                                        <a>Tag Potential</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a>Market Insights</a></li>
-                            <li><a>Paid Rankings</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <Link onClick={this._handleRouting} to="page" params={{pageId: "links"}}>Links</Link>
-                    </li>
-                    <li>
-                        <a>Optimization</a>
-                    </li>
-                    <li>
-                        <a>Traffic</a>
-                    </li>
-                </ul>
-                <div className="dim-the-light" onClick={this._toggleNav}></div>
-            </nav>
-        );*/
     }
 });
 
 var TreeNode = React.createClass({
+    _setParentId: function () {
+        NavigationActionCreators.setParentId(this.props.id);
+    },
+
     render: function () {
-        var childNodes,
-            className = '';
+        var className = '',
+            childNodes,
+            linkEl,
+            to,
+            pageId,
+            style;
 
         if (this.props.node.children) {
-            childNodes = this.props.node.children.map(function(node, index) {
-                return (
-                    <TreeNode key={node.path} node={node} parentName={this.props.node.name} />
-                );
-            }, this);
             className = 'has-children';
+            linkEl = <a onClick={this._setParentId}>{this.props.node.name}</a>;
+        } else {
+            to = this.props.node.path.split('/')[0];
+            pageId = this.props.node.path.split('/')[1];
+            linkEl = <Link onClick={_forceCloseNav} to={to} params={{pageId: pageId}}>{this.props.node.name}</Link>;
         }
 
+        style = {
+            top: this.props.index * 50
+        };
+
         return (
-            <li className={className}>
-                <a>{this.props.node.name}</a>
-                <ul className="cd-secondary-nav is-hidden">
-                    <li className="go-back"><a>{this.props.parentName}</a></li>
-                    {childNodes}
-                </ul>
+            <li style={style} className={className}>
+                {linkEl}
             </li>
+        );
+    }
+});
+
+var GoBackEl = React.createClass({
+    _setParentId: function () {
+        NavigationActionCreators.setParentId(this.props.parentId);
+    },
+
+    render: function () {
+        return (
+            <li className="go-back" onClick={this._setParentId}><a>{this.props.name}</a></li>
         );
     }
 });

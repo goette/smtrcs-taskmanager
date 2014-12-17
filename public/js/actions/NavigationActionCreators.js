@@ -14,6 +14,18 @@ var NavigationActionCreators = {
             force: force
         });
     },
+    setParentId: function (parentId) {
+        AppDispatcher.handleViewAction({
+            actionType: NavigationConstants.NAVIGATION_SET_PARENTID,
+            parentId: parentId
+        });
+    },
+    setInitialPath: function (path) {
+        AppDispatcher.handleViewAction({
+            actionType: NavigationConstants.NAVIGATION_SET_INITIAL_PATH,
+            path: path
+        });
+    },
     routeChange: function (l) {
         console.log(l);
     }
