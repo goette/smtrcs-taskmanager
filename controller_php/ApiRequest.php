@@ -2,8 +2,12 @@
 /**
  * Controller to handle API Requests
  *
- * @version 1, 2014-10-22, Franziska Hempel
+ * @version 1, 2014-10-22, Franziska Hempel,
+ * @version 2, 2014-11-20, Martin Götte, allow cross domain requests from localhost:3000
  */
+
+header('Access-Control-Allow-Origin: *');
+
 class ApiRequest
 {
 	//URL of Live Proxy

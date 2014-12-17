@@ -1,28 +1,45 @@
-/**
- * @jsx React.DOM
- */
-
-var React = require('react');
-var Header = require('./layout_modules/header.layout_module');
-var Page = require('./layout_modules/page.layout_module');
-var EditMenu = require('./layout_modules/add_menu.layout_module.js');
+var React = require('react'),
+    AppExampleData = require('./AppExampleData'),
+    ApiUtils = require('./utils/ApiUtils');
+    Header = require('./components/HeaderComponent'),
+    Page = require('./pages/DefaultPage'),
+    Home = require('./pages/HomePage'),
+    Navigation = require('./components/NavigationComponent'),
+    NavigationActionCreators = require('./actions/NavigationActionCreators'),
+    Router = require('react-router'),
+    Route = Router.Route,
+    Redirect = Router.Redirect,
+    NotFoundRoute = Router.NotFoundRoute,
+    DefaultRoute = Router.DefaultRoute,
+    Link = Router.Link,
+    RouteHandler = Router.RouteHandler;
 
 // For React DevTools
 window.React = React;
 
-var Main = React.createClass({
+AppExampleData.init(); // Write static data to localStorage
+
+var App = React.createClass({
     render: function () {
         return (
             <div className="container-fluid">
                 <Header />
-                <Page />
+                <RouteHandler params={this.props.params} />
+                <Navigation />
             </div>
         );
     }
 });
 
-
-React.renderComponent(
-    <Main />,
-    document.getElementById('main')
+var routes = (
+    <Route handler={App}>
+        <Route name="page" path="/page/:pageId" handler={Page} />
+        <Route name="home" path="/home" handler={Home}/>
+        <Redirect from="/" to="/home" />
+    </Route>
 );
+
+Router.run(routes, Router.HistoryLocation, function (Handler, state) {
+    var params = state.params;
+    React.render(<Handler params={params} />, document.getElementById('app'));
+});

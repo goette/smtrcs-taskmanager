@@ -1,0 +1,17 @@
+.module-enter {
+    transform: scale(0, 0);
+    transition: transform .25s ease-out;
+}
+
+.module-enter.module-enter-active {
+    transform: scale(1, 1);
+}
+
+.module-leave {
+    transform: scale(1, 1);
+    transition: transform .25s ease-out;
+}
+
+.module-leave.module-leave-active {
+    transform: scale(0, 0);
+}
