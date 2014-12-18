@@ -23,7 +23,7 @@ var Header = React.createClass({
             <nav className="header navbar navbar-default navbar-fixed-top" role="navigation">
                 <div className="container-fluid">
                     <a className="navbar-brand bars" onClick={this._toggleNav} href="/v1.html"><i className="fa fa-bars"></i></a>
-                    <img className="main-logo" src="/images/logo_suite.png" />
+                    <img className="main-logo" src="images/logo_suite.png" />
                     <a className="navbar-brand pull-right" href="/v1.html">S7 v0.1.0</a>
                     <select onChange={this._onChange}>
                         {renderedOptions}

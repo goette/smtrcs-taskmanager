@@ -61,8 +61,6 @@ var Navigation = React.createClass({
             transitionName = 'menu-slide-right';
         }
 
-        console.log(this.state.parentId.old);
-
         if (this.state.parentId.old === null) {
             enableTransition = false;
         }
@@ -71,7 +69,6 @@ var Navigation = React.createClass({
             if (goBackEl) index += 1;
             return <TreeNode index={index} key={node.path} node={node} parentName='Main Menu' id={node.id} parentId={node.parentId} />
         });
-
 
         return (
             <nav className="nav">

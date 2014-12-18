@@ -8,7 +8,7 @@ module.exports = {
                 id: 'KpiConversionInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
-                action: config.PATH_ROOT + 'branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
                 background: 'green'
             },
@@ -16,7 +16,7 @@ module.exports = {
                 id: 'KpiSocial',
                 type: 'KpiBasicModule',
                 roles: ['c','s','e'],
-                action: config.PATH_ROOT + 'branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6 col-md-3',
                 background: 'steelblue',
                 filterParams: ['tags','interval']
@@ -25,7 +25,7 @@ module.exports = {
                 id: 'KpiTrafficInsight',
                 type: 'KpiBasicModule',
                 roles: ['c','s'],
-                action: config.PATH_ROOT + 'branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-12',
                 background: 'orange'
             },
@@ -33,7 +33,7 @@ module.exports = {
                 id: 'KpiUrlRankings',
                 type: 'KpiBasicModule',
                 roles: ['c'],
-                action: config.PATH_ROOT + 'branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-6',
                 background: 'red'
             },
@@ -41,7 +41,7 @@ module.exports = {
                 id: 'ChartChannelInsight',
                 type: 'ChartBasicModule',
                 roles: ['c'],
-                action: config.PATH_ROOT + 'branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: config.PATH_ROOT + 'controller_php/services/traffic/ds_domainchannelhistory.php',
                 className: 'col-sm-12',
                 background: 'lightgrey',
                 filterParams: ['tags','engine']
@@ -50,7 +50,7 @@ module.exports = {
                 id: 'GridUrlRankings',
                 type: 'GridBasicModule',
                 roles: ['c','s','e'],
-                action: config.PATH_ROOT + 'branches/suite7/controller_php/services/rankings/cs_visibility.php',
+                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
                 className: 'col-sm-12',
                 background: 'blue'
             }

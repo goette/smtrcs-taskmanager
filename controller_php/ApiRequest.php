@@ -11,7 +11,7 @@ header('Access-Control-Allow-Origin: *');
 class ApiRequest
 {
 	//URL of Live Proxy
-	private static $proxy = 'http://proxy-seo-search.unbelievable-machine.net:6081/stable/ProxyService/public/Proxy/';
+	private static $proxy = 'http://proxy-seo-search.unbelievable-machine.net/test/ProxyService/public/Proxy/';
 	
 	
 	/**

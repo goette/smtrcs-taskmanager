@@ -13,7 +13,8 @@ var React = require('react'),
     NotFoundRoute = Router.NotFoundRoute,
     DefaultRoute = Router.DefaultRoute,
     Link = Router.Link,
-    RouteHandler = Router.RouteHandler;
+    RouteHandler = Router.RouteHandler,
+    pathName = window.location.pathname;
 
 // For React DevTools
 window.React = React;
@@ -34,14 +35,14 @@ var App = React.createClass({
 
 var routes = (
     <Route handler={App}>
-        <Route name="page" path="/page/:pageId" handler={Page} />
-        <Route name="home" path="/home" handler={Home}/>
+        <Route name="page" path="/page/:pageId/" handler={Page} />
+        <Route name="home" path="/home" handler={Home} />
         <NotFoundRoute handler={NotFound} />
         <Redirect from="/" to="/home" />
     </Route>
 );
 
-Router.run(routes, Router.HistoryLocation, function (Handler, state) {
+Router.run(routes, function (Handler, state) {
     var params = state.params,
         currentPath = state.path;
     React.render(<Handler currentPath={currentPath} params={params} />, document.getElementById('app'));

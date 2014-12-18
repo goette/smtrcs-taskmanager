@@ -2,8 +2,8 @@ var $ = require('jquery'),
     config = require('../config'),
     ServerActionCreators = require('../actions/ServerActionCreators.js'),
     PageStore = require('../stores/PageStore'),
-    savePageConfigAction = config.PATH_ROOT + 'branches/suite7/controller_php/services/page/save.php',
-    retrievePageConfigAction = config.PATH_ROOT + 'branches/suite7/controller_php/services/page/retrieve.php';
+    savePageConfigAction = config.PATH_ROOT + 'controller_php/services/page/save.php',
+    retrievePageConfigAction = config.PATH_ROOT + 'controller_php/services/page/retrieve.php';
 
 function get(url, data) {
     return $.ajax({
@@ -46,7 +46,7 @@ module.exports = {
                 moduleCollection = JSON.parse(localStorage.getItem('moduleCollection'));
                 ServerActionCreators.receivePageConfig(moduleCollection, pageConfig);
             } else {
-                window.location.href = '/404';
+                window.location.hash = '/404';
                 //ServerActionCreators.receivePageConfig();
             }
         }, function (error) {
