@@ -29,7 +29,10 @@ function logAndIgnoreError(err) {
 gulp.task('browser-sync', function() {
     browserSync({
         open: false,
-        proxy: 'frontend.local/app/public/'
+        server: {
+            baseDir: './public'
+        }
+        //proxy: 'frontend.local/app/public/'
     });
 });
 

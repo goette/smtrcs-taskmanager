@@ -56,7 +56,13 @@ function _setParentId (parentId) {
 }
 
 function _setInitialPath (path) {
-    _initialPath = path.substr(1);
+    var initialPathArr = path.substr(1).split('/');
+
+    if (initialPathArr.length === 1) {
+        _initialPath = initialPathArr[0];
+    } else {
+        _initialPath = initialPathArr[0] + '/' + initialPathArr[1];
+    }
 }
 
 var NavigationStore = assign({}, EventEmitter.prototype, {

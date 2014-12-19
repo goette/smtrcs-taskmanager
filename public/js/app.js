@@ -35,15 +35,19 @@ var App = React.createClass({
 
 var routes = (
     <Route handler={App}>
-        <Route name="page" path="/page/:pageId/" handler={Page} />
+        <DefaultRoute handler={Home} />
         <Route name="home" path="/home" handler={Home} />
+        <Route name="page" path="/page/:pageId" handler={Page}>
+            <DefaultRoute handler={Home}/>
+            <NotFoundRoute handler={NotFound}/>
+        </Route>
         <NotFoundRoute handler={NotFound} />
-        <Redirect from="/" to="/home" />
     </Route>
 );
 
 Router.run(routes, function (Handler, state) {
     var params = state.params,
         currentPath = state.path;
+    console.log(params);
     React.render(<Handler currentPath={currentPath} params={params} />, document.getElementById('app'));
 });
