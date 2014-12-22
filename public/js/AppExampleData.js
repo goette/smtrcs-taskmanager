@@ -40,11 +40,12 @@ module.exports = {
             {
                 id: 'ChartChannelInsight',
                 type: 'ChartBasicModule',
+                visualization: 'area',
+                visualizationTypes: ['line','area'],
                 roles: ['c'],
                 action: config.PATH_ROOT + 'controller_php/services/traffic/ds_domainchannelhistory.php',
                 className: 'col-sm-12',
-                background: 'lightgrey',
-                filterParams: ['tags','engine']
+                background: 'lightgrey'
             },
             {
                 id: 'GridUrlRankings',

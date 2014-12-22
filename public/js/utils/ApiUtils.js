@@ -24,6 +24,7 @@ module.exports = {
     savePageConfig: function () {
         var configToWrite = PageStore.getCurrentPageConfig();
         // Action to show loader
+        console.log(configToWrite);
         post(savePageConfigAction, {
             name: configToWrite['url'].replace('/',''),
             config: configToWrite

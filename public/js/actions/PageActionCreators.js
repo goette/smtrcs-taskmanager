@@ -36,6 +36,14 @@ var PageActionCreators = {
         });
         PageFilterActionCreators.update();
     },
+    switchModuleVisualization: function (moduleId, visualization) {
+        AppDispatcher.handleViewAction({
+            actionType: PageConstants.MODULE_SWITCH_VISUALIZATION,
+            moduleId: moduleId,
+            visualization: visualization
+        });
+        ApiUtils.savePageConfig();
+    },
     updateModulesOrder: function (modules) {
         AppDispatcher.handleViewAction({
             actionType: PageConstants.PAGE_REORDER,

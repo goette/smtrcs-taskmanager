@@ -5,6 +5,7 @@
     min-height: 200px;
     margin: 1em 0;
     padding: .25em 1em 1em;
+    height: 500px;
     [draggable="true"] &,
     [draggable="true"] &:active {
         cursor: move;
@@ -57,4 +58,14 @@
 .dragging {
     background-color: rgba(#f0f0f0, 1);
     border-radius: 4px;
+}
+
+.switch-visualization {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.chart-container {
+    height: 100%;
 }

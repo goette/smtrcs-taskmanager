@@ -15,7 +15,7 @@ var _ = require('lodash'),
         add: ''
     };
 
-function buildPageArrays (moduleCollection, pageConfig) {
+function _buildPageArrays (moduleCollection, pageConfig) {
     var arr = [],
         obj,
         key,
@@ -34,7 +34,14 @@ function buildPageArrays (moduleCollection, pageConfig) {
                 obj[val] = module[val]
 ;           }
 
-            obj.moduleIdOnPage = _.uniqueId();
+            if (pageConfig.modulesOnPage[i].visualization) {
+                obj.visualization = pageConfig.modulesOnPage[i].visualization;
+            }
+
+            if (!obj.moduleIdOnPage) {
+                obj.moduleIdOnPage = 'module-' + _.uniqueId();
+            }
+
             arr.push(obj);
         }
     }
@@ -45,28 +52,31 @@ function buildPageArrays (moduleCollection, pageConfig) {
     _pageConfig = pageConfig;
 }
 
-function toggleMode (val) {
+function _toggleMode (val) {
     _mode[val] = !_mode[val];
 }
 
-function clearPageStore () {
+function _clearPageStore () {
     _pageConfig = {};
     _currentlyOnPage = [];
-    console.log(_currentlyOnPage, _pageConfig);
 }
 
-function setCurrentRole (role) {
+function _setCurrentRole (role) {
     _currentRole = role[0].toLowerCase();
 }
 
-function removeModuleFromPage (moduleIdOnPage) {
+function _removeModuleFromPage (moduleIdOnPage) {
     _currentlyOnPage = _.reject(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
     _updatePageConfig();
 }
 
-function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
+function _addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
     var module = _.find(moduleCollection, {id: moduleId});
-    module.moduleIdOnPage = _.uniqueId();
+
+    if (!module.moduleIdOnPage) {
+        module.moduleIdOnPage = 'module-' + _.uniqueId();
+    }
+
     module.className = module.className;
     currentlyOnPage.unshift(module);
     _updatePageConfig();
@@ -74,24 +84,29 @@ function addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
 }
 
 function _updatePageConfig () {
-    _pageConfig.modulesOnPage = _.map(_currentlyOnPage , function (el) {return _.pick(el, 'id')});
+    _pageConfig.modulesOnPage = _.map(_currentlyOnPage , function (el) {return _.pick(el, 'id', 'visualization', 'moduleIdOnPage')});
 }
 
-function filterByRole (arr) {
+function _filterByRole (arr) {
     return _.filter(arr, function (el) { return el.roles.indexOf(_currentRole) > -1; });
 }
 
-function updateCurrentlyOnPage (modules) {
+function _updateCurrentlyOnPage (modules) {
     _currentlyOnPage = modules;
+}
+
+function _updateVisualization (moduleId, visualization) {
+    _.find(_currentlyOnPage, {moduleIdOnPage: moduleId})['visualization'] = visualization;
+    _updatePageConfig();
 }
 
 var PageStore = assign({}, EventEmitter.prototype, {
     getModulesOnPage: function () {
-        return filterByRole(_currentlyOnPage);
+        return _filterByRole(_currentlyOnPage);
     },
 
     getModuleCollection: function () {
-        return filterByRole(_moduleCollection);
+        return _filterByRole(_moduleCollection);
     },
 
     getModuleByIdOnPage: function (moduleIdOnPage) {
@@ -147,45 +162,50 @@ PageStore.dispatchToken = AppDispatcher.register(function (payload) {
     switch (action.actionType) {
         case PageConstants.PAGE_RECEICVE_CONFIG:
             if (action.moduleCollection) {
-                buildPageArrays(action.moduleCollection, action.pageConfig);
+                _buildPageArrays(action.moduleCollection, action.pageConfig);
             } else {
-                buildPageArrays(false);
+                _buildPageArrays(false);
             }
             PageStore.emitChange();
             break;
 
         case PageConstants.PAGE_TOGGLE_EDIT:
-            toggleMode('edit');
+            _toggleMode('edit');
             PageStore.emitChange();
             break;
 
         case PageConstants.PAGE_TOGGLE_ADD:
-            toggleMode('add');
+            _toggleMode('add');
             PageStore.emitChange();
             break;
 
         case PageConstants.MODULE_FILTER_BY_ROLE:
-            setCurrentRole(action.role);
+            _setCurrentRole(action.role);
             PageStore.emitChange();
             break;
 
         case PageConstants.MODULE_ADD:
-            addModuleToPage(_moduleCollection, _currentlyOnPage, action.moduleId);
+            _addModuleToPage(_moduleCollection, _currentlyOnPage, action.moduleId);
             PageStore.emitChange();
             break;
 
         case PageConstants.MODULE_REMOVE:
-            removeModuleFromPage(action.moduleId);
+            _removeModuleFromPage(action.moduleId);
+            PageStore.emitChange();
+            break;
+
+        case PageConstants.MODULE_SWITCH_VISUALIZATION:
+            _updateVisualization(action.moduleId, action.visualization);
             PageStore.emitChange();
             break;
 
         case PageConstants.PAGE_REORDER:
-            updateCurrentlyOnPage(action.modules);
+            _updateCurrentlyOnPage(action.modules);
             PageStore.emitChange();
             break;
 
         case PageConstants.PAGE_CLEAR:
-            clearPageStore();
+            _clearPageStore();
             PageStore.emitChange();
             break;
 
