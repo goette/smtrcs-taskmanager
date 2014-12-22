@@ -1,5 +1,4 @@
-var $ = require('jquery'),
-    config = require('../config'),
+var config = require('../config'),
     ServerActionCreators = require('../actions/ServerActionCreators.js'),
     PageStore = require('../stores/PageStore'),
     savePageConfigAction = config.PATH_ROOT + 'controller_php/services/page/save.php',

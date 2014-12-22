@@ -8,7 +8,6 @@ var React = require('react/addons'),
     NavigationActionCreators = require('../actions/NavigationActionCreators'),
     ApiUtils = require('../utils/ApiUtils'),
     PageActionCreators = require('../actions/PageActionCreators'),
-    $ = require('jquery'),
     Router = require('react-router'),
     Link = Router.Link;
 

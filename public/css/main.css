@@ -5172,7 +5172,8 @@ a, a:hover {
 
 .cd-primary-nav li {
   position: absolute;
-  width: 100%; }
+  width: 100%;
+  list-style-type: none; }
 
 .menu-slide-left-enter, .menu-slide-right-enter {
   -webkit-transform: translateX(260px);
@@ -5355,3 +5356,14 @@ a, a:hover {
 
 .chart-container {
   height: 100%; }
+
+path {
+  stroke: #aaa;
+  stroke-width: 1;
+  fill: no; }
+
+.axis path, .axis line {
+  fill: yes;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges; }
