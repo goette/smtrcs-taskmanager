@@ -7,7 +7,7 @@
     "url": "git@git.seometrie.dev:git-project-suite-frontend/suite7.git"
   },
   "devDependencies": {
-    "browser-sync": "~1.5.8",
+    "browserify": "^7.0.3",
     "connect-history-api-fallback": "0.0.5",
     "gulp": "~3.8.8",
     "gulp-autoprefixer": "~1.0.1",
