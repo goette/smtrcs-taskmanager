@@ -38,7 +38,7 @@ var ConversionInside = React.createClass({
         } else {
             moduleData = this.state.moduleData[this.props.moduleIdOnPage];
             switch (this.props.visualization) {
-                case 'line':
+                case 'line-chart':
                     chartComponent = <ChartLineComponent id={this.props.moduleIdOnPage} moduleData={moduleData} />
                     break;
 
@@ -51,7 +51,11 @@ var ConversionInside = React.createClass({
             <div key={this.props.key} className={cx}>
                 {remove}
                 <Headline title={this.props.id} />
-                <SwitchVisualizationButton visualizationTypes={this.props.visualizationTypes} currentVisualization={this.props.visualization} moduleId={this.props.moduleIdOnPage} />
+                <SwitchVisualizationButton
+                    visualizationTypes={this.props.visualizationTypes}
+                    currentVisualization={this.props.visualization}
+                    moduleId={this.props.moduleIdOnPage}
+                    editMode={this.props.editMode} />
                 {chartComponent}
             </div>
         );

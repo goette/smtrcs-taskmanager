@@ -4,10 +4,10 @@ var React = require('react'),
 
 var SwitchVisualizationButtons = React.createClass({
     render: function () {
-        if (this.props.visualizationTypes.length > 1) {
+        if (!this.props.editMode && this.props.visualizationTypes.length > 1) {
             var buttons = _.map(this.props.visualizationTypes, function (el, i) {
                 var key = 'visualization-' + i,
-                    cx = 'fa fa-' + el + '-chart';
+                    cx = 'fa fa-' + el;
                 return <SwitchVisualizationButton {...this.props} visualization={el} cx={cx} key={key} />;
             }, this);
 

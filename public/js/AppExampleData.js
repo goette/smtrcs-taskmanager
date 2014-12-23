@@ -40,8 +40,8 @@ module.exports = {
             {
                 id: 'ChartChannelInsight',
                 type: 'ChartBasicModule',
-                visualization: 'area',
-                visualizationTypes: ['line','area'],
+                visualization: 'area-chart',
+                visualizationTypes: ['line-chart','area-chart','table'],
                 roles: ['c'],
                 action: config.PATH_ROOT + 'controller_php/services/traffic/ds_domainchannelhistory.php',
                 className: 'col-sm-12',

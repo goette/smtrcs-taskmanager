@@ -8,8 +8,10 @@
 </head>
 <body>
     <div id="app"></div>
+
     <script src="js/_vendor/jquery.js"></script>
     <script src="js/_vendor/highcharts.js"></script>
     <script src="js/bundle.js"></script>
+    <?php /*<script src="dist/app.min.js"></script> */ ?>
 </body>
 </html>

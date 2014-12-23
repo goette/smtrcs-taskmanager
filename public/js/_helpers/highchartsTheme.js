@@ -16,8 +16,20 @@ Highcharts.theme = {
         "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
     chart: {
         backgroundColor: null,
-        style: {
-            fontFamily: "Signika, serif"
+        resetZoomButton: {
+            theme: {
+                fill: 'white',
+                stroke: 'silver',
+                r: 0,
+                states: {
+                    hover: {
+                        fill: '#41739D',
+                        style: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
         }
     },
     title: {
@@ -25,11 +37,6 @@ Highcharts.theme = {
             color: 'black',
             fontSize: '16px',
             fontWeight: 'bold'
-        }
-    },
-    subtitle: {
-        style: {
-            color: 'black'
         }
     },
     tooltip: {
@@ -73,20 +80,17 @@ Highcharts.theme = {
             gridLineColor: '#D0D0D8'
         }
     },
-    rangeSelector: {
-        buttonTheme: {
-            fill: 'white',
-            stroke: '#C0C0C8',
-            'stroke-width': 1,
-            states: {
-                select: {
-                    fill: '#D0D0D8'
-                }
-            }
-        }
-    },
+
     scrollbar: {
         trackBorderColor: '#C0C0C8'
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    lang: {
+        resetZoom: 'Reset zoom'
     },
 
     // General

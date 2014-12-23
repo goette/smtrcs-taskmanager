@@ -63,22 +63,9 @@
 .switch-visualization {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 22px;
 }
 
 .chart-container {
     height: 100%;
-}
-
-path {
-    stroke: #aaa;
-    stroke-width: 1;
-    fill: no;
-}
-.axis path,
-.axis line {
-    fill: yes;
-    stroke: grey;
-    stroke-width: 1;
-    shape-rendering: crispEdges;
 }

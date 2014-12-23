@@ -2,19 +2,22 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     shell = require('gulp-shell'),
     autoprefixer = require('gulp-autoprefixer'),
+    assign = require('object-assign'),
     browserify = require('browserify'),
     browserSync = require('browser-sync'),
     watchify = require('watchify'),
     reactify = require('reactify'),
     source =  require('vinyl-source-stream'),
     jest = require('jest-cli'),
-    historyApiFallback = require('connect-history-api-fallback');
+    uglify = require('gulp-uglify'),
+    concat = require('gulp-concat');
 
 var paths = {
     appJs: './public/js/app.js',
     jsFolder: 'public/js',
     jsFiles: ['public/js/**/*.js', '!public/js/bundle.js','!public/js/_backup/**/*.js'],
     jsTests: ['public/js/stores/__tests__/*.js','public/js/bundle.js'],
+    dist: 'public/dist',
     scssFiles: 'public/scss/**/*.scss',
     scssMain: 'public/scss/main.scss',
     cssFolder: 'public/css',
@@ -41,7 +44,9 @@ gulp.task('browser-sync-reload', function () {
 // Our JS task. It will Browserify our code and compile React JSX files.
 gulp.task('browserify', function() {
     // Browserify/bundle the JS.
-    var bundler = watchify(browserify(paths.appJs, watchify.args));
+    var bundler = watchify(browserify(paths.appJs, assign(watchify.args, {
+        fullPaths: false
+    })));
     bundler.on('update', rebundle);
 
     function rebundle () {
@@ -70,6 +75,17 @@ gulp.task('sass', function () {
 gulp.task('watch', ['browser-sync','browserify'], function () {
     gulp.watch(paths.scssFiles, ['sass']);
     //gulp.watch(paths.jsTests, ['test']);
+});
+
+gulp.task('compress', function() {
+    gulp.src([
+            'public/js/_vendor/jquery.js',
+            'public/js/_vendor/highcharts.js',
+            'public/js/bundle.js'
+        ])
+        .pipe(concat('app.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.dist))
 });
 
 gulp.task('test', shell.task('npm test'));
