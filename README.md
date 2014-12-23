@@ -32,7 +32,7 @@
 
 ### Livereload
 
-You need the browser extension for livereload which can be downloaded here: 
+* You need the browser extension for livereload which can be downloaded here:
     * [Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)
     * [Firefox](http://download.livereload.com/2.0.8/LiveReload-2.0.8.xpi)
     * [Safari](http://download.livereload.com/2.0.9/LiveReload-2.0.9.safariextz)
