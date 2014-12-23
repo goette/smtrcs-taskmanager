@@ -1,4 +1,4 @@
-## Dashboard Suite aka. Suite 7
+## Suite 7
 
 ### Ubuntu
 
@@ -14,9 +14,6 @@
 * Switch to this directory (suite7)
 * `sudo npm install`
 * `gulp`
-* Open [http://localhost:3000/v1.html](http://localhost:3000/v1.html)
-* Change something in /scss or /js/components
-* Don't reload the page - you shouldn't need to
 
 ---
 
@@ -30,10 +27,13 @@
 * Switch to this directory (suite7)
 * `npm install --msvs_version=2012`
 * `gulp`
-* Open [http://localhost:3000/v1.html](http://localhost:3000/v1.html)
-* Change something in /scss or /js/components
-* Don't reload the page - you shouldn't need to
 
 ---
 
-There will be more soon
+### Livereload
+
+You need the browser extension for livereload which can be downloaded here
+    * [Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)
+    * [Firefox](http://download.livereload.com/2.0.8/LiveReload-2.0.8.xpi)
+    * [Safari](http://download.livereload.com/2.0.9/LiveReload-2.0.9.safariextz)
+
