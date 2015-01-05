@@ -88,7 +88,7 @@ gulp.task('sass', function () {
  * This only affects since the js watching is handled by the browserify task already
  * One could also run the tests on every change, but we don't want that
  */
-gulp.task('watch', ['libs','browserify'], function () {
+gulp.task('watch', ['browserify'], function () {
     livereload.listen();
     gulp.watch(paths.scssFiles, ['sass']);
     //gulp.watch(paths.jsTests, ['test']);

@@ -1,20 +1,13 @@
 var React = require('react'),
     AppExampleData = require('./AppExampleData'),
-    ApiUtils = require('./utils/ApiUtils');
-    Header = require('./components/HeaderComponent'),
-    Page = require('./pages/DefaultPage'),
-    NotFound = require('./pages/NotFoundPage'),
-    Home = require('./pages/HomePage'),
-    Navigation = require('./components/NavigationComponent'),
-    NavigationActionCreators = require('./actions/NavigationActionCreators'),
+    TaskManager = require('./components/TaskManagerComponent'),
     Router = require('react-router'),
     Route = Router.Route,
     Redirect = Router.Redirect,
     NotFoundRoute = Router.NotFoundRoute,
     DefaultRoute = Router.DefaultRoute,
     Link = Router.Link,
-    RouteHandler = Router.RouteHandler,
-    pathName = window.location.pathname;
+    RouteHandler = Router.RouteHandler;
 
 // For React DevTools
 window.React = React;
@@ -24,10 +17,8 @@ AppExampleData.init(); // Write static data to localStorage
 var App = React.createClass({
     render: function () {
         return (
-            <div className="container-fluid">
-                <Header />
+            <div className="container">
                 <RouteHandler params={this.props.params} />
-                <Navigation currentPath={this.props.currentPath} />
             </div>
         );
     }
@@ -48,6 +39,5 @@ var routes = (
 Router.run(routes, function (Handler, state) {
     var params = state.params,
         currentPath = state.path;
-    console.log(params);
     React.render(<Handler currentPath={currentPath} params={params} />, document.getElementById('app'));
 });

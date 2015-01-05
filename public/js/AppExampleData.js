@@ -1,5 +1,3 @@
-var config = require('./config');
-
 module.exports = {
     init: function() {
         localStorage.clear();

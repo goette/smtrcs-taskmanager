@@ -1,7 +1,7 @@
-var React = require('react');
-var _ = require('lodash');
-var PageStore = require('../stores/PageStore.js');
-var PageActions = require('../actions/PageActionCreators.js');
+var React = require('react'),
+    _ = require('lodash'),
+    TaskManagerStore = require('../stores/TaskManagerStore.js'),
+    TaskManagerActionCreators = require('../actions/TaskManagerActionCreators.js');
 
 var AddMenu = React.createClass({
     render: function () {
