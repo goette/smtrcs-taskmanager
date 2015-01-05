@@ -11,7 +11,7 @@
     box-shadow: 0 0 1px rgba(0,0,0,.1),1px 2px 4px rgba(0,0,0,.2);
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
-    z-index: 1;
+    z-index: 4;
     /* Force Hardware Acceleration in WebKit */
     -webkit-transform: translateZ(0);
     -moz-transform: translateZ(0);
@@ -37,6 +37,7 @@
     bottom: 0;
     left: 0;
     opacity: 0;
+    z-index: 3;
     background-color: rgba(#000, .2);
     visibility: hidden;
     transition: opacity .15s ease-in, visibility 0s .15s
