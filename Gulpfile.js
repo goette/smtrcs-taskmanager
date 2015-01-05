@@ -2,29 +2,35 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     shell = require('gulp-shell'),
     autoprefixer = require('gulp-autoprefixer'),
-    assign = require('object-assign'),
     livereload = require('gulp-livereload'),
+    source = require('vinyl-source-stream'),
     browserify = require('browserify'),
+    browserifyShim = require('browserify-shim'),
     watchify = require('watchify'),
     reactify = require('reactify'),
     source =  require('vinyl-source-stream'),
     jest = require('jest-cli'),
     uglify = require('gulp-uglify'),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+    concatSourcemap = require('gulp-concat-sourcemap'),
+    package = require('./package.json'),
+    bundler,
+    paths;
 
 /**
  * All relevant file paths used in this Gulpfile
  */
-var paths = {
+paths = {
     appJs: './public/js/app.js',
     jsFolder: 'public/js',
     jsTests: ['public/js/stores/__tests__/*.js','public/js/bundle.js'],
-    jsToCompress: ['public/js/_vendor/jquery.js','public/js/_vendor/highcharts.js','public/js/bundle.js'],
-    dist: 'public/dist',
+    jsVendor: ['public/js/_vendor/jquery.js','public/js/_vendor/highcharts.js'],
+    jsToCompress: ['public/js/libs.js','public/js/bundle.js'],
     scssFiles: 'public/scss/**/*.scss',
     scssMain: 'public/scss/main.scss',
     cssFolder: 'public/css',
-    cssMain: 'public/css/main.css'
+    cssMain: 'public/css/main.css',
+    dist: 'public/dist',
 };
 
 /**
@@ -41,19 +47,25 @@ function logAndIgnoreError(err) {
  * Watchify makes sure only the parts that changed get re-compiled, which makes everything
  * much faster
  */
-gulp.task('browserify', function() {
-    var bundler = watchify(browserify(paths.appJs, assign(watchify.args, {
-        fullPaths: false
-    })));
-    bundler.on('update', rebundle);
-    function rebundle () {
-        return bundler.transform(reactify).bundle()
-            .on('error', logAndIgnoreError)
-            .pipe(source('bundle.js'))
-            .pipe(gulp.dest(paths.jsFolder))
-            .pipe(livereload());
-    }
-    return rebundle();
+bundler = watchify(browserify(paths.appJs, watchify.args));
+bundler.transform(reactify);
+bundler.transform(browserifyShim);
+gulp.task('browserify', bundle);
+bundler.on('update', bundle);
+function bundle () {
+    console.log('Browserify refresh')
+    return bundler.bundle()
+        .on('error', logAndIgnoreError)
+        .pipe(source('bundle.js'))
+        .pipe(gulp.dest(paths.jsFolder))
+        .pipe(livereload());
+}
+
+//the third-party libs like Three.js, TweenLite, etc.
+gulp.task('libs', function() {
+    gulp.src(paths.jsVendor)
+        .pipe(concat('libs.js'))
+        .pipe(gulp.dest(paths.jsFolder));
 });
 
 /*
@@ -76,7 +88,7 @@ gulp.task('sass', function () {
  * This only affects since the js watching is handled by the browserify task already
  * One could also run the tests on every change, but we don't want that
  */
-gulp.task('watch', ['browserify'], function () {
+gulp.task('watch', ['libs','browserify'], function () {
     livereload.listen();
     gulp.watch(paths.scssFiles, ['sass']);
     //gulp.watch(paths.jsTests, ['test']);

@@ -9,9 +9,12 @@
 <body>
     <div id="app"></div>
 
-    <script src="js/_vendor/jquery.js"></script>
-    <script src="js/_vendor/highcharts.js"></script>
+    <script src="js/libs.js"></script>
     <script src="js/bundle.js"></script>
-    <?php /*<script src="dist/app.min.js"></script> */ ?>
+
+    <?php /*
+        Path for minified scripts
+        <script src="dist/app.min.js"></script>
+    */ ?>
 </body>
 </html>
