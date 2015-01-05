@@ -1,5 +1,23 @@
 .taskmanager {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 40px auto;
+    padding: .5em;
+    border-radius: 4px;
     background-color: #f6f6f6;
+    h3 {
+        padding-bottom: .25em;
+    }
+}
+
+.overview {
+    margin-bottom: 1em;
+    button {
+        margin-top: 4px;
+    }
+}
+
+.input {
+    input {
+        margin-bottom: .5em;
+    }
 }

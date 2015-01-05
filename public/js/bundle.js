@@ -2045,6 +2045,61 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
+},{}],"/Users/mgoette/Development/Sources/suite7/node_modules/keymirror/index.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014 Facebook, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+"use strict";
+
+/**
+ * Constructs an enumeration with keys equal to their value.
+ *
+ * For example:
+ *
+ *   var COLORS = keyMirror({blue: null, red: null});
+ *   var myColor = COLORS.blue;
+ *   var isColorValid = !!COLORS[myColor];
+ *
+ * The last line could not be performed if the values of the generated enum were
+ * not equal to their keys.
+ *
+ *   Input:  {key1: val1, key2: val2}
+ *   Output: {key1: key1, key2: key2}
+ *
+ * @param {object} obj
+ * @return {object}
+ */
+var keyMirror = function(obj) {
+  var ret = {};
+  var key;
+  if (!(obj instanceof Object && !Array.isArray(obj))) {
+    throw new Error('keyMirror(...): Argument must be an object.');
+  }
+  for (key in obj) {
+    if (!obj.hasOwnProperty(key)) {
+      continue;
+    }
+    ret[key] = key;
+  }
+  return ret;
+};
+
+module.exports = keyMirror;
+
 },{}],"/Users/mgoette/Development/Sources/suite7/node_modules/lodash/dist/lodash.js":[function(require,module,exports){
 (function (global){
 /**
@@ -30647,36 +30702,116 @@ module.exports = {
 };
 
 },{}],"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js":[function(require,module,exports){
-var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
+    TaskManagerConstants = require('../constants/TaskManagerConstants');
 
 var TaskManagerActionCreators = {
-
+    toggleInputForm: function (navigationConfig) {
+        AppDispatcher.handleViewAction({
+            actionType: TaskManagerConstants.TASK_INPUT_TOGGLE
+        });
+    },
 };
 
 module.exports = TaskManagerActionCreators;
-},{"../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/components/TaskManagerComponent.js":[function(require,module,exports){
+},{"../constants/TaskManagerConstants":"/Users/mgoette/Development/Sources/suite7/public/js/constants/TaskManagerConstants.js","../dispatcher/AppDispatcher.js":"/Users/mgoette/Development/Sources/suite7/public/js/dispatcher/AppDispatcher.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/components/HeaderComponent.js":[function(require,module,exports){
+var React = require('react'),
+    TaskManagerActionCreators = require('../actions/TaskManagerActionCreators');
+
+var CreateButton = React.createClass({displayName: 'CreateButton',
+    _toggleInputForm: function () {
+        TaskManagerActionCreators.toggleInputForm();
+    },
+    render: function () {
+        var button = React.createElement("button", {className: "btn btn-default pull-right", onClick: this._toggleInputForm}, "Create new task");
+
+        if (this.props.showInput) {
+            button = React.createElement("button", {className: "btn btn-danger pull-right", onClick: this._toggleInputForm}, "Cancel ", React.createElement("i", {className: "fa fa-times"}));
+        }
+
+        return button;
+    }
+});
+
+var Header = React.createClass({displayName: 'Header',
+    render: function () {
+        return (
+            React.createElement("div", {className: "col-xs-12 overview"}, 
+                React.createElement(CreateButton, {showInput: this.props.showInput}), 
+                React.createElement("h4", null, React.createElement("i", {className: "fa fa-th-list"}), " 5 Tasks sind Ihnen zugewiesen")
+            )
+        )
+    }
+});
+
+module.exports = Header;
+
+
+
+},{"../actions/TaskManagerActionCreators":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/components/InputComponent.js":[function(require,module,exports){
+var React = require('react');
+
+var Input = React.createClass({displayName: 'Input',
+    render: function () {
+        return (
+            React.createElement("div", {className: "col-xs-12 input"}, 
+                React.createElement("input", {type: "text", className: "form-control", placeholder: "Enter title"}), 
+                React.createElement("textarea", {className: "form-control", rows: "3", placeholder: "Enter description"})
+            )
+        );
+    }
+});
+
+module.exports = Input;
+},{"react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/components/TaskManagerComponent.js":[function(require,module,exports){
 var React = require('react'),
     _ = require('lodash'),
+    InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
+    Header = require('./HeaderComponent'),
+    Input = require('./InputComponent'),
     TaskManagerStore = require('../stores/TaskManagerStore.js'),
     TaskManagerActionCreators = require('../actions/TaskManagerActionCreators.js');
 
 var TaskManager = React.createClass({displayName: 'TaskManager',
+    store: TaskManagerStore,
+
+    mixins: [InitStoreInComponentMixin],
+
+    getStateFromStore: function () {
+        return {
+            showInput: this.store.getShowInput()
+        };
+    },
+
     render: function () {
+        var inputField = null;
+
+        if (this.state.showInput) {
+            inputField = React.createElement(Input, null)
+        }
+
         return (
             React.createElement("div", {className: "taskmanager row"}, 
-                React.createElement("div", {className: "col-xs-4"}, 
-                    React.createElement("h3", null, "Sidebar")
-                ), 
-                React.createElement("div", {className: "col-xs-8"}, 
-                    React.createElement("h3", null, "TaskList")
-                )
+                React.createElement(Header, {showInput: this.state.showInput}), 
+                inputField
             )
         );
     }
 });
 
 module.exports = TaskManager;
-},{"../actions/TaskManagerActionCreators.js":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","../stores/TaskManagerStore.js":"/Users/mgoette/Development/Sources/suite7/public/js/stores/TaskManagerStore.js","lodash":"/Users/mgoette/Development/Sources/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/dispatcher/AppDispatcher.js":[function(require,module,exports){
+},{"../actions/TaskManagerActionCreators.js":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","../mixins/InitStoreInComponentMixin":"/Users/mgoette/Development/Sources/suite7/public/js/mixins/InitStoreInComponentMixin.js","../stores/TaskManagerStore.js":"/Users/mgoette/Development/Sources/suite7/public/js/stores/TaskManagerStore.js","./HeaderComponent":"/Users/mgoette/Development/Sources/suite7/public/js/components/HeaderComponent.js","./InputComponent":"/Users/mgoette/Development/Sources/suite7/public/js/components/InputComponent.js","lodash":"/Users/mgoette/Development/Sources/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/constants/TaskManagerConstants.js":[function(require,module,exports){
+var keyMirror = require('keymirror');
+
+var constants = keyMirror({
+    TASK_ADD: null,
+    TASK_COMPLETE: null,
+    TASK_DELETE: null,
+    TASK_INPUT_TOGGLE: null
+});
+
+module.exports = constants;
+},{"keymirror":"/Users/mgoette/Development/Sources/suite7/node_modules/keymirror/index.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/dispatcher/AppDispatcher.js":[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -30716,137 +30851,43 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":"/Users/mgoette/Development/Sources/suite7/node_modules/flux/index.js","object-assign":"/Users/mgoette/Development/Sources/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/stores/TaskManagerStore.js":[function(require,module,exports){
+},{"flux":"/Users/mgoette/Development/Sources/suite7/node_modules/flux/index.js","object-assign":"/Users/mgoette/Development/Sources/suite7/node_modules/object-assign/index.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/mixins/InitStoreInComponentMixin.js":[function(require,module,exports){
+var InitStoreInComponent = {
+    getInitialState: function () {
+        return this.getStateFromStore();
+    },
+
+    _onChange: function () {
+        this.setState(this.getStateFromStore());
+    },
+
+    componentDidMount: function () {
+        this.store.addChangeListener(this._onChange);
+    },
+
+    componentWillUnmount: function () {
+        this.store.removeChangeListener(this._onChange);
+    }
+};
+
+module.exports = InitStoreInComponent;
+},{}],"/Users/mgoette/Development/Sources/suite7/public/js/stores/TaskManagerStore.js":[function(require,module,exports){
 var _ = require('lodash'),
     AppDispatcher = require('../dispatcher/AppDispatcher'),
+    TaskManagerConstants = require('../constants/TaskManagerConstants'),
     EventEmitter = require('events').EventEmitter,
     assign = require('object-assign'),
     CHANGE_EVENT = 'change',
-    _currentlyOnPage = [],
-    _moduleCollection = [],
-    _pageConfig = {},
-    _currentRole = 'c',
-    _mode = {
-        edit: '',
-        add: ''
-    };
+    _showInput = false,
+    _taskList = [];
 
-function _buildPageArrays (moduleCollection, pageConfig) {
-    var arr = [],
-        obj,
-        key,
-        module,
-        val,
-        i;
-
-    // Merge arrays to generate currentlyOnPage array
-    for (i = 0; i < pageConfig.modulesOnPage.length; i++) {
-        obj = {};
-        key = pageConfig.modulesOnPage[i].id;
-        module = _.find(moduleCollection, {id: key});
-
-        if (module) {
-            for (val in module) {
-                obj[val] = module[val]
-;           }
-
-            if (pageConfig.modulesOnPage[i].visualization) {
-                obj.visualization = pageConfig.modulesOnPage[i].visualization;
-            }
-
-            if (!obj.moduleIdOnPage) {
-                obj.moduleIdOnPage = 'module-' + _.uniqueId();
-            }
-
-            arr.push(obj);
-        }
-    }
-    _currentlyOnPage = arr;
-
-    // Store moduleCollection and pageCollection, so it is available for later
-    _moduleCollection = moduleCollection;
-    _pageConfig = pageConfig;
+function _toggleShowInput () {
+    _showInput = !_showInput;
 }
 
-function _toggleMode (val) {
-    _mode[val] = !_mode[val];
-}
-
-function _clearPageStore () {
-    _pageConfig = {};
-    _currentlyOnPage = [];
-}
-
-function _setCurrentRole (role) {
-    _currentRole = role[0].toLowerCase();
-}
-
-function _removeModuleFromPage (moduleIdOnPage) {
-    _currentlyOnPage = _.reject(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
-    _updatePageConfig();
-}
-
-function _addModuleToPage (moduleCollection, currentlyOnPage, moduleId) {
-    var module = _.find(moduleCollection, {id: moduleId});
-
-    if (!module.moduleIdOnPage) {
-        module.moduleIdOnPage = 'module-' + _.uniqueId();
-    }
-
-    module.className = module.className;
-    currentlyOnPage.unshift(module);
-    _updatePageConfig();
-    _mode['add'] = '';
-}
-
-function _updatePageConfig () {
-    _pageConfig.modulesOnPage = _.map(_currentlyOnPage , function (el) {return _.pick(el, 'id', 'visualization', 'moduleIdOnPage')});
-}
-
-function _filterByRole (arr) {
-    return _.filter(arr, function (el) { return el.roles.indexOf(_currentRole) > -1; });
-}
-
-function _updateCurrentlyOnPage (modules) {
-    _currentlyOnPage = modules;
-}
-
-function _updateVisualization (moduleId, visualization) {
-    _.find(_currentlyOnPage, {moduleIdOnPage: moduleId})['visualization'] = visualization;
-    _updatePageConfig();
-}
-
-var PageStore = assign({}, EventEmitter.prototype, {
-    getModulesOnPage: function () {
-        return _filterByRole(_currentlyOnPage);
-    },
-
-    getModuleCollection: function () {
-        return _filterByRole(_moduleCollection);
-    },
-
-    getModuleByIdOnPage: function (moduleIdOnPage) {
-        return _.find(_currentlyOnPage, {moduleIdOnPage: moduleIdOnPage});
-    },
-
-    getCurrentPageConfig: function () {
-        return _pageConfig;
-    },
-
-    getEditMode: function () {
-        return _mode.edit;
-    },
-
-    getAddMode: function () {
-        return _mode.add;
-    },
-
-    getCurrentRole: function () {
-        return _currentRole;
-    },
-
-    getPageFilter: function () {
-        return _pageConfig.pageFilter;
+var TaskManagerStore = assign({}, EventEmitter.prototype, {
+    getShowInput: function () {
+        return _showInput;
     },
 
     emitChange: function () {
@@ -30869,60 +30910,12 @@ var PageStore = assign({}, EventEmitter.prototype, {
 });
 
 // Register to handle all updates
-PageStore.dispatchToken = AppDispatcher.register(function (payload) {
-    AppDispatcher.waitFor([
-        NavigationStore.dispatchToken
-    ]);
-
+TaskManagerStore.dispatchToken = AppDispatcher.register(function (payload) {
     var action = payload.action;
     switch (action.actionType) {
-        case PageConstants.PAGE_RECEICVE_CONFIG:
-            if (action.moduleCollection) {
-                _buildPageArrays(action.moduleCollection, action.pageConfig);
-            } else {
-                _buildPageArrays(false);
-            }
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.PAGE_TOGGLE_EDIT:
-            _toggleMode('edit');
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.PAGE_TOGGLE_ADD:
-            _toggleMode('add');
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.MODULE_FILTER_BY_ROLE:
-            _setCurrentRole(action.role);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.MODULE_ADD:
-            _addModuleToPage(_moduleCollection, _currentlyOnPage, action.moduleId);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.MODULE_REMOVE:
-            _removeModuleFromPage(action.moduleId);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.MODULE_SWITCH_VISUALIZATION:
-            _updateVisualization(action.moduleId, action.visualization);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.PAGE_REORDER:
-            _updateCurrentlyOnPage(action.modules);
-            PageStore.emitChange();
-            break;
-
-        case PageConstants.PAGE_CLEAR:
-            _clearPageStore();
-            PageStore.emitChange();
+        case TaskManagerConstants.TASK_INPUT_TOGGLE:
+            _toggleShowInput();
+            TaskManagerStore.emitChange();
             break;
 
         default:
@@ -30932,5 +30925,5 @@ PageStore.dispatchToken = AppDispatcher.register(function (payload) {
     return true; // No errors.  Needed by promise in Dispatcher.
 });
 
-module.exports = PageStore;
-},{"../dispatcher/AppDispatcher":"/Users/mgoette/Development/Sources/suite7/public/js/dispatcher/AppDispatcher.js","events":"/Users/mgoette/Development/Sources/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite7/node_modules/object-assign/index.js"}]},{},["./public/js/app.js"]);
+module.exports = TaskManagerStore;
+},{"../constants/TaskManagerConstants":"/Users/mgoette/Development/Sources/suite7/public/js/constants/TaskManagerConstants.js","../dispatcher/AppDispatcher":"/Users/mgoette/Development/Sources/suite7/public/js/dispatcher/AppDispatcher.js","events":"/Users/mgoette/Development/Sources/suite7/node_modules/browserify/node_modules/events/events.js","lodash":"/Users/mgoette/Development/Sources/suite7/node_modules/lodash/dist/lodash.js","object-assign":"/Users/mgoette/Development/Sources/suite7/node_modules/object-assign/index.js"}]},{},["./public/js/app.js"]);

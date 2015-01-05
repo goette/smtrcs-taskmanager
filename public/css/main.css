@@ -4853,5 +4853,17 @@ button.close {
 
 .taskmanager {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 40px auto;
+  padding: 0.5em;
+  border-radius: 4px;
   background-color: #f6f6f6; }
+  .taskmanager h3 {
+    padding-bottom: 0.25em; }
+
+.overview {
+  margin-bottom: 1em; }
+  .overview button {
+    margin-top: 4px; }
+
+.input input {
+  margin-bottom: 0.5em; }

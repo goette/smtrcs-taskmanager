@@ -37,3 +37,22 @@
     * [Firefox](http://download.livereload.com/2.0.8/LiveReload-2.0.8.xpi)
     * [Safari](http://download.livereload.com/2.0.9/LiveReload-2.0.9.safariextz)
 
+---
+
+### Workshop Roadmap
+
+1. Basic project setup
+2. What do we need?
+    * Task box
+    * "Create task" button
+    * Task overview
+    * Task list
+    * Task single view
+    * Task input mask
+    * Sort list by name
+    * Complete task checkbox
+    * Delete task button
+    * Edit task button (optional)
+    * Add / filter by assignees (optional)
+    
+    
