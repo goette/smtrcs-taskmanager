@@ -4850,3 +4850,8 @@ button.close {
   .hidden-print {
     display: none !important; }
  }
+
+.taskmanager {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #f6f6f6; }

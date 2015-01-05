@@ -26,18 +26,14 @@ var App = React.createClass({
 
 var routes = (
     <Route handler={App}>
-        <DefaultRoute handler={Home} />
-        <Route name="home" path="/home" handler={Home} />
-        <Route name="page" path="/page/:pageId" handler={Page}>
-            <DefaultRoute handler={Home}/>
-            <NotFoundRoute handler={NotFound}/>
-        </Route>
-        <NotFoundRoute handler={NotFound} />
+        <DefaultRoute handler={TaskManager} />
+        <Route name="taskmanager" path="/taskmanager" handler={TaskManager} />
     </Route>
 );
 
 Router.run(routes, function (Handler, state) {
     var params = state.params,
         currentPath = state.path;
+
     React.render(<Handler currentPath={currentPath} params={params} />, document.getElementById('app'));
 });

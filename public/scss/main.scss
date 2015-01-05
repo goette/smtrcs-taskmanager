@@ -6,3 +6,5 @@
 
 /* Example how to import scss from npm module */
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+
+@import 'taskmanager/taskmanager';

@@ -27,19 +27,15 @@ var App = React.createClass({displayName: 'App',
 
 var routes = (
     React.createElement(Route, {handler: App}, 
-        React.createElement(DefaultRoute, {handler: Home}), 
-        React.createElement(Route, {name: "home", path: "/home", handler: Home}), 
-        React.createElement(Route, {name: "page", path: "/page/:pageId", handler: Page}, 
-            React.createElement(DefaultRoute, {handler: Home}), 
-            React.createElement(NotFoundRoute, {handler: NotFound})
-        ), 
-        React.createElement(NotFoundRoute, {handler: NotFound})
+        React.createElement(DefaultRoute, {handler: TaskManager}), 
+        React.createElement(Route, {name: "taskmanager", path: "/taskmanager", handler: TaskManager})
     )
 );
 
 Router.run(routes, function (Handler, state) {
     var params = state.params,
         currentPath = state.path;
+
     React.render(React.createElement(Handler, {currentPath: currentPath, params: params}), document.getElementById('app'));
 });
 },{"./AppExampleData":"/Users/mgoette/Development/Sources/suite7/public/js/AppExampleData.js","./components/TaskManagerComponent":"/Users/mgoette/Development/Sources/suite7/public/js/components/TaskManagerComponent.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js","react-router":"/Users/mgoette/Development/Sources/suite7/node_modules/react-router/modules/index.js"}],"/Users/mgoette/Development/Sources/suite7/node_modules/browserify/node_modules/buffer/index.js":[function(require,module,exports){
@@ -30639,181 +30635,14 @@ module.exports = require('./lib/React');
 module.exports = {
     init: function() {
         localStorage.clear();
-        localStorage.setItem('moduleCollection', JSON.stringify([
+        localStorage.setItem('taskCollection', JSON.stringify([
             {
-                id: 'KpiConversionInsight',
-                type: 'KpiBasicModule',
-                roles: ['c','s','e'],
-                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
-                className: 'col-sm-6 col-md-3',
-                background: 'green'
-            },
-            {
-                id: 'KpiSocial',
-                type: 'KpiBasicModule',
-                roles: ['c','s','e'],
-                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
-                className: 'col-sm-6 col-md-3',
-                background: 'steelblue',
-                filterParams: ['tags','interval']
-            },
-            {
-                id: 'KpiTrafficInsight',
-                type: 'KpiBasicModule',
-                roles: ['c','s'],
-                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
-                className: 'col-sm-12',
-                background: 'orange'
-            },
-            {
-                id: 'KpiUrlRankings',
-                type: 'KpiBasicModule',
-                roles: ['c'],
-                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
-                className: 'col-sm-6',
-                background: 'red'
-            },
-            {
-                id: 'ChartChannelInsight',
-                type: 'ChartBasicModule',
-                visualization: 'area-chart',
-                visualizationTypes: ['line-chart','area-chart','table'],
-                roles: ['c'],
-                action: config.PATH_ROOT + 'controller_php/services/traffic/ds_domainchannelhistory.php',
-                className: 'col-sm-12',
-                background: 'lightgrey'
-            },
-            {
-                id: 'GridUrlRankings',
-                type: 'GridBasicModule',
-                roles: ['c','s','e'],
-                action: config.PATH_ROOT + 'controller_php/services/rankings/cs_visibility.php',
-                className: 'col-sm-12',
-                background: 'blue'
+                id: 'task1',
+                name: 'First Task',
+                text: 'Create this new visibility report for customer XYZ',
+                assignee: 'Martin'
             }
         ]));
-        localStorage.setItem('navigationConfig', JSON.stringify([
-            {
-                id: 1,
-                name: 'Home',
-                parentId: 0,
-                path: 'home'
-            },
-            {
-                id: 2,
-                name: 'Rankings',
-                parentId: 0,
-                path: 'page/rankings'
-            },
-            {
-                id: 15,
-                name: 'Overview',
-                parentId: 2,
-                path: 'page/rankings-overview'
-            },
-            {
-                id: 5,
-                name: 'Organics Rankings',
-                parentId: 2,
-                path: 'page/organic-rankings'
-            },
-            {
-                id: 7,
-                name: 'Keyword Rankings',
-                parentId: 5,
-                path: 'page/keyword-rankings'
-            },
-            {
-                id: 8,
-                name: 'Ranking Analysis',
-                parentId: 5,
-                path: 'page/ranking-analysis'
-            },
-            {
-                id: 9,
-                name: 'Position Spread',
-                parentId: 5,
-                path: 'page/position-spread'
-            },
-            {
-                id: 10,
-                name: 'Keyword Potential',
-                parentId: 5,
-                path: 'page/keyword-potential'
-            },
-            {
-                id: 11,
-                name: 'Tag Potential',
-                parentId: 5,
-                path: 'page/tag-potential'
-            },
-            {
-                id: 12,
-                name: 'Market Insights',
-                parentId: 5,
-                path: 'page/market-insights'
-            },
-            {
-                id: 13,
-                name: 'Paid Rankings',
-                parentId: 5,
-                path: 'page/paid-rankings'
-            },
-            {
-                id: 3,
-                name: 'Links',
-                parentId: 0,
-                path: 'page/links'
-            },
-            {
-                id: 4,
-                name: 'Optimization',
-                parentId: 0,
-                path: 'page/optimization'
-            },
-            {
-                id: 14,
-                name: 'Traffic',
-                parentId: 0,
-                path: 'page/traffic'
-            },
-            {
-                id: 6,
-                name: 'URL Rankings',
-                parentId: 5,
-                path: 'page/url-rankings'
-            },
-        ]));
-        /*localStorage.setItem('pageConfig', JSON.stringify({
-            url: 'page1', // = id
-            pageFilter: {
-                roles: ['c','s','e'],
-                blacklist: ['']
-            },
-            modulesOnPage: [ // Array of ordered modules
-                {
-                    id: 'KpiConversionInsight'
-                },
-                {
-                    id: 'KpiSocial'
-                },
-                {
-                    id: 'ChartChannelInsight'
-                },
-                {
-                    id: 'GridUrlRankings'
-                },
-                {
-                    id: 'KpiUrlRankings'
-                },
-                {
-                    id: 'KpiUrlRankings'
-                },
-                {
-                    id: 'KpiTrafficInsight'
-                }
-            ]
-        }));*/
     }
 };
 
@@ -30831,47 +30660,22 @@ var React = require('react'),
     TaskManagerStore = require('../stores/TaskManagerStore.js'),
     TaskManagerActionCreators = require('../actions/TaskManagerActionCreators.js');
 
-var AddMenu = React.createClass({displayName: 'AddMenu',
+var TaskManager = React.createClass({displayName: 'TaskManager',
     render: function () {
-        var moduleList = _.map(this.props.moduleCollection, function (module, i) {
-            return(
-                React.createElement(ModuleItem, {
-                    key: i, 
-                    moduleId: module.id, 
-                    roles: module.roles, 
-                    cx: module.className, 
-                    background: module.background}
+        return (
+            React.createElement("div", {className: "taskmanager row"}, 
+                React.createElement("div", {className: "col-xs-4"}, 
+                    React.createElement("h3", null, "Sidebar")
+                ), 
+                React.createElement("div", {className: "col-xs-8"}, 
+                    React.createElement("h3", null, "TaskList")
                 )
-            );
-        });
-
-        return (
-            React.createElement("div", {className: "add-menu"}, 
-                moduleList
             )
         );
     }
 });
 
-var ModuleItem = React.createClass({displayName: 'ModuleItem',
-    _addToPage: function (e) {
-        PageActions.addModule(this.props.moduleId);
-    },
-    render: function () {
-        var roles = this.props.roles.join(', '),
-            cx = "add-menu-preview " + this.props.cx.split(' ').pop() + ' ' + this.props.background;
-        return (
-            React.createElement("div", {className: "add-menu-item"}, 
-                React.createElement("div", {className: cx}, "Preview"), 
-                React.createElement("button", {onClick: this._addToPage, className: "btn btn-success"}, "+ Add to page"), 
-                React.createElement("strong", null, this.props.moduleId), React.createElement("br", null), 
-                React.createElement("span", null, "Roles: ", roles)
-            )
-        );
-    }
-});
-
-module.exports = AddMenu;
+module.exports = TaskManager;
 },{"../actions/TaskManagerActionCreators.js":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","../stores/TaskManagerStore.js":"/Users/mgoette/Development/Sources/suite7/public/js/stores/TaskManagerStore.js","lodash":"/Users/mgoette/Development/Sources/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/dispatcher/AppDispatcher.js":[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
