@@ -42,7 +42,7 @@
 ### Workshop Roadmap
 
 1. Basic project setup
-2. What do we need?
+2. General todos
     * Task box
     * "Create task" button
     * Task overview
@@ -52,7 +52,6 @@
     * Sort list by name
     * Complete task checkbox
     * Delete task button
-    * Edit task button (optional)
-    * Add / filter by assignees (optional)
+3. Let's do it
     
     

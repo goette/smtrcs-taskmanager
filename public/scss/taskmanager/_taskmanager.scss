@@ -17,7 +17,77 @@
 }
 
 .input {
-    input {
+    margin-bottom: 2em;
+    input,
+    textarea {
+        font-weight: bold;
         margin-bottom: .5em;
+    }
+    textarea {
+        font-weight: normal;
+    }
+    .btn-cancel {
+        margin-right: 8px;
+    }
+}
+
+.task-list {
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        position: relative;
+        padding: .25em .5em;
+        margin: 0 0 .25em;
+        background-color: #fff;
+        border-radius: 4px;
+        list-style-type: none;
+        &:hover {
+            .delete {
+                display: block;
+            }
+        }
+    }
+    span {
+        color: #aaa;
+        &:before {
+            content: ' - ';
+        }
+    }
+    .checked {
+        text-decoration: line-through;
+        opacity: .4;
+    }
+    .delete {
+        display: none;
+        position: absolute;
+        top: 5px;
+        right: 8px;
+        cursor: pointer;
+        color: #aaa;
+        &:hover {
+            color: #444;
+        }
+    }
+}
+
+input[type="checkbox"] {
+    display: inline-block;
+    vertical-align: top;
+    margin: 4px 6px 0 0;
+}
+
+.footer {
+    margin: 1em 0 .5em;
+    text-align: right;
+    font-size: .875em;
+    > span {
+        margin-left: 1em;
+        cursor: pointer;
+        opacity: .8;
+        &:hover {
+            opacity: 1;
+        }
     }
 }

@@ -30689,15 +30689,29 @@ module.exports = require('./lib/React');
 },{"./lib/React":"/Users/mgoette/Development/Sources/suite7/node_modules/react/lib/React.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/AppExampleData.js":[function(require,module,exports){
 module.exports = {
     init: function() {
-        localStorage.clear();
-        localStorage.setItem('taskCollection', JSON.stringify([
-            {
-                id: 'task1',
-                name: 'First Task',
-                text: 'Create this new visibility report for customer XYZ',
-                assignee: 'Martin'
-            }
-        ]));
+        if (!localStorage.getItem('taskCollection')) {
+            localStorage.clear();
+            localStorage.setItem('taskCollection', JSON.stringify([
+                {
+                    id: 'dummytask1',
+                    title: 'First Task',
+                    description: 'Create this new visibility report for customer XYZ',
+                    completed: false
+                },
+                {
+                    id: 'dummytask2',
+                    title: 'Second Task',
+                    description: 'Check out the second default task',
+                    completed: false
+                },
+                {
+                    id: 'dummytask3',
+                    title: 'Another Task',
+                    description: '',
+                    completed: false
+                }
+            ]));
+        }
     }
 };
 
@@ -30706,11 +30720,42 @@ var AppDispatcher = require('../dispatcher/AppDispatcher.js'),
     TaskManagerConstants = require('../constants/TaskManagerConstants');
 
 var TaskManagerActionCreators = {
-    toggleInputForm: function (navigationConfig) {
+    toggleInputForm: function () {
         AppDispatcher.handleViewAction({
-            actionType: TaskManagerConstants.TASK_INPUT_TOGGLE
+            actionType: TaskManagerConstants.TASK_TOGGLE_INPUT
         });
     },
+    toggleCompleted: function (taskId) {
+        AppDispatcher.handleViewAction({
+            actionType: TaskManagerConstants.TASK_TOGGLE_COMPLETE,
+            taskId: taskId
+        });
+    },
+    add: function (title, description) {
+        AppDispatcher.handleViewAction({
+            actionType: TaskManagerConstants.TASK_ADD,
+            title: title,
+            description: description
+        });
+    },
+    delete: function (taskId) {
+        AppDispatcher.handleViewAction({
+            actionType: TaskManagerConstants.TASK_DELETE,
+            taskId: taskId
+        });
+    },
+    sort: function (dir) {
+        AppDispatcher.handleViewAction({
+            actionType: TaskManagerConstants.TASK_SORT,
+            dir: dir
+        });
+    },
+    setInitialTasks: function (initialTasks) {
+        AppDispatcher.handleViewAction({
+            actionType: TaskManagerConstants.TASK_INITIALIZE,
+            initialTasks: initialTasks
+        });
+    }
 };
 
 module.exports = TaskManagerActionCreators;
@@ -30723,10 +30768,13 @@ var CreateButton = React.createClass({displayName: 'CreateButton',
         TaskManagerActionCreators.toggleInputForm();
     },
     render: function () {
-        var button = React.createElement("button", {className: "btn btn-default pull-right", onClick: this._toggleInputForm}, "Create new task");
+        var createText = 'Create new task',
+            cancelText = 'Cancel',
+            cx = 'btn btn-primary pull-right',
+            button = React.createElement("button", {className: cx, onClick: this._toggleInputForm}, createText);
 
         if (this.props.showInput) {
-            button = React.createElement("button", {className: "btn btn-danger pull-right", onClick: this._toggleInputForm}, "Cancel ", React.createElement("i", {className: "fa fa-times"}));
+            button = null;
         }
 
         return button;
@@ -30735,12 +30783,18 @@ var CreateButton = React.createClass({displayName: 'CreateButton',
 
 var Header = React.createClass({displayName: 'Header',
     render: function () {
+        var text = 'There are ' + this.props.amount + ' open tasks';
+
+        if (this.props.amount === 1) {
+            text = 'There is 1 open tasks';
+        }
+
         return (
             React.createElement("div", {className: "col-xs-12 overview"}, 
                 React.createElement(CreateButton, {showInput: this.props.showInput}), 
-                React.createElement("h4", null, React.createElement("i", {className: "fa fa-th-list"}), " There are 5 open tasks")
+                React.createElement("h4", null, React.createElement("i", {className: "fa fa-th-list"}), " ", text)
             )
-        )
+        );
     }
 });
 
@@ -30749,26 +30803,45 @@ module.exports = Header;
 
 
 },{"../actions/TaskManagerActionCreators":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/components/InputComponent.js":[function(require,module,exports){
-var React = require('react');
+var React = require('react'),
+    TaskManagerActionCreators = require('../actions/TaskManagerActionCreators.js');
 
 var Input = React.createClass({displayName: 'Input',
+    _addTask: function (e) {
+        var title,
+            description;
+
+        if (e.keyCode === 13 || e.type === 'click') {
+            title = this.refs.title.getDOMNode().value.trim();
+            description = this.refs.description.getDOMNode().value.trim();
+            if (title) TaskManagerActionCreators.add(title, description);
+        }
+    },
+    _toggleInputForm: function () {
+        this.refs.title.getDOMNode().value = '';
+        this.refs.description.getDOMNode().value = '';
+        TaskManagerActionCreators.toggleInputForm();
+    },
     render: function () {
         return (
             React.createElement("div", {className: "col-xs-12 input"}, 
-                React.createElement("input", {type: "text", className: "form-control", placeholder: "Enter title for new task"}), 
-                React.createElement("textarea", {className: "form-control", rows: "3", placeholder: "Enter description for new task"})
+                React.createElement("input", {ref: "title", type: "text", className: "form-control", placeholder: "Enter title for new task", onKeyDown: this._addTask}), 
+                React.createElement("textarea", {ref: "description", className: "form-control", rows: "3", placeholder: "Enter description for new task", onKeyDown: this._addTask}), 
+                React.createElement("button", {className: "btn btn-primary pull-right", onClick: this._addTask}, "Add new task"), 
+                React.createElement("button", {className: "btn btn-danger btn-cancel pull-right", onClick: this._toggleInputForm}, "Cancel ", React.createElement("i", {className: "fa fa-times"}))
             )
         );
     }
 });
 
 module.exports = Input;
-},{"react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/components/TaskManagerComponent.js":[function(require,module,exports){
+},{"../actions/TaskManagerActionCreators.js":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/components/TaskManagerComponent.js":[function(require,module,exports){
 var React = require('react'),
     _ = require('lodash'),
     InitStoreInComponentMixin = require('../mixins/InitStoreInComponentMixin'),
     Header = require('./HeaderComponent'),
     Input = require('./InputComponent'),
+    Tasks = require('./TasksComponent'),
     TaskManagerStore = require('../stores/TaskManagerStore.js'),
     TaskManagerActionCreators = require('../actions/TaskManagerActionCreators.js');
 
@@ -30777,37 +30850,122 @@ var TaskManager = React.createClass({displayName: 'TaskManager',
 
     mixins: [InitStoreInComponentMixin],
 
+    componentDidMount: function () {
+        TaskManagerActionCreators.setInitialTasks(JSON.parse(localStorage.getItem('taskCollection')));
+    },
+
     getStateFromStore: function () {
         return {
+            tasks: this.store.getTasks(),
             showInput: this.store.getShowInput()
         };
     },
 
+    _sortAsc: function () {
+        TaskManagerActionCreators.sort('asc');
+    },
+
+    _sortDesc: function () {
+        TaskManagerActionCreators.sort('desc');
+    },
+
     render: function () {
-        var inputField = null;
+        var inputField = null,
+            tasks = null,
+            amount = 0;
 
         if (this.state.showInput) {
             inputField = React.createElement(Input, null)
         }
 
+        if (this.state.tasks) {
+            this.state.tasks.forEach(function (task) {
+                if (!task.completed) amount++;
+            }, this);
+        }
+
         return (
             React.createElement("div", {className: "taskmanager row"}, 
-                React.createElement(Header, {showInput: this.state.showInput}), 
-                inputField
+                React.createElement(Header, {showInput: this.state.showInput, amount: amount}), 
+                inputField, 
+                React.createElement(Tasks, {tasks: this.state.tasks}), 
+                React.createElement("div", {className: "col-xs-12 footer"}, 
+                    React.createElement("span", {onClick: this._sortAsc}, React.createElement("i", {className: "fa fa-sort-alpha-asc"}), " Sort asc"), 
+                    React.createElement("span", {onClick: this._sortDesc}, React.createElement("i", {className: "fa fa-sort-alpha-desc"}), " Sort desc")
+                )
             )
         );
     }
 });
 
 module.exports = TaskManager;
-},{"../actions/TaskManagerActionCreators.js":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","../mixins/InitStoreInComponentMixin":"/Users/mgoette/Development/Sources/suite7/public/js/mixins/InitStoreInComponentMixin.js","../stores/TaskManagerStore.js":"/Users/mgoette/Development/Sources/suite7/public/js/stores/TaskManagerStore.js","./HeaderComponent":"/Users/mgoette/Development/Sources/suite7/public/js/components/HeaderComponent.js","./InputComponent":"/Users/mgoette/Development/Sources/suite7/public/js/components/InputComponent.js","lodash":"/Users/mgoette/Development/Sources/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/constants/TaskManagerConstants.js":[function(require,module,exports){
+},{"../actions/TaskManagerActionCreators.js":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","../mixins/InitStoreInComponentMixin":"/Users/mgoette/Development/Sources/suite7/public/js/mixins/InitStoreInComponentMixin.js","../stores/TaskManagerStore.js":"/Users/mgoette/Development/Sources/suite7/public/js/stores/TaskManagerStore.js","./HeaderComponent":"/Users/mgoette/Development/Sources/suite7/public/js/components/HeaderComponent.js","./InputComponent":"/Users/mgoette/Development/Sources/suite7/public/js/components/InputComponent.js","./TasksComponent":"/Users/mgoette/Development/Sources/suite7/public/js/components/TasksComponent.js","lodash":"/Users/mgoette/Development/Sources/suite7/node_modules/lodash/dist/lodash.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/components/TasksComponent.js":[function(require,module,exports){
+var React = require('react'),
+    TaskManagerActionCreators = require('../actions/TaskManagerActionCreators');
+
+var Task = React.createClass({displayName: 'Task',
+    _toggleCompleted: function () {
+        TaskManagerActionCreators.toggleCompleted(this.props.task.id);
+    },
+
+    _delete: function () {
+        TaskManagerActionCreators.delete(this.props.task.id);
+    },
+
+    render: function () {
+        var checked = '',
+            description = null;
+
+        if (this.props.task.completed) {
+            checked = 'checked';
+        }
+
+        if (this.props.task.description) {
+            description = React.createElement("span", null, this.props.task.description);
+        }
+
+        return (
+            React.createElement("li", {className: checked}, 
+                React.createElement("input", {onChange: this._toggleCompleted, type: "checkbox"}), 
+                React.createElement("strong", null, this.props.task.title), 
+                description, 
+                React.createElement("p", {className: "delete", onClick: this._delete}, React.createElement("i", {className: "fa fa-times"}))
+            )
+        );
+    }
+});
+
+var Tasks = React.createClass({displayName: 'Tasks',
+    render: function () {
+        var tasks;
+
+        if (this.props.tasks) {
+            tasks = this.props.tasks.map(function (task, i) {
+                return React.createElement(Task, {key: i, task: task})
+            }, this);
+        }
+
+        return (
+            React.createElement("div", {className: "col-xs-12 task-list"}, 
+                React.createElement("ul", null, 
+                    tasks
+                )
+            )
+        );
+    }
+});
+
+module.exports = Tasks;
+},{"../actions/TaskManagerActionCreators":"/Users/mgoette/Development/Sources/suite7/public/js/actions/TaskManagerActionCreators.js","react":"/Users/mgoette/Development/Sources/suite7/node_modules/react/react.js"}],"/Users/mgoette/Development/Sources/suite7/public/js/constants/TaskManagerConstants.js":[function(require,module,exports){
 var keyMirror = require('keymirror');
 
 var constants = keyMirror({
     TASK_ADD: null,
-    TASK_COMPLETE: null,
     TASK_DELETE: null,
-    TASK_INPUT_TOGGLE: null
+    TASK_INITIALIZE: null,
+    TASK_TOGGLE_INPUT: null,
+    TASK_TOGGLE_COMPLETE: null,
+    TASK_SORT: null
 });
 
 module.exports = constants;
@@ -30885,9 +31043,48 @@ function _toggleShowInput () {
     _showInput = !_showInput;
 }
 
+function _setInitialTasks (initialTasks) {
+    _taskList = initialTasks;
+}
+
+function _setCompleted (taskId) {
+    var task = _.find(_taskList, {id: taskId});
+    task.completed = !task.completed;
+}
+
+function _add (title, description) {
+    _taskList.unshift({
+        id: 'task' + _.uniqueId(),
+        title: title,
+        description: description,
+        completed: false
+    });
+    _showInput = false;
+    localStorage.clear();
+    localStorage.setItem('taskCollection', JSON.stringify(_taskList));
+}
+
+function _delete (taskId) {
+    _taskList = _.reject(_taskList, {id: taskId});
+    localStorage.clear();
+    localStorage.setItem('taskCollection', JSON.stringify(_taskList));
+}
+
+function _sort (dir) {
+    _taskList = _.sortBy(_taskList, 'title');
+
+    if (dir === 'desc') {
+        _taskList.reverse();
+    }
+}
+
 var TaskManagerStore = assign({}, EventEmitter.prototype, {
     getShowInput: function () {
         return _showInput;
+    },
+
+    getTasks: function () {
+        return _taskList;
     },
 
     emitChange: function () {
@@ -30913,8 +31110,33 @@ var TaskManagerStore = assign({}, EventEmitter.prototype, {
 TaskManagerStore.dispatchToken = AppDispatcher.register(function (payload) {
     var action = payload.action;
     switch (action.actionType) {
-        case TaskManagerConstants.TASK_INPUT_TOGGLE:
+        case TaskManagerConstants.TASK_INITIALIZE:
+            _setInitialTasks(action.initialTasks);
+            TaskManagerStore.emitChange();
+            break;
+
+        case TaskManagerConstants.TASK_DELETE:
+            _delete(action.taskId);
+            TaskManagerStore.emitChange();
+            break;
+
+        case TaskManagerConstants.TASK_ADD:
+            _add(action.title, action.description);
+            TaskManagerStore.emitChange();
+            break;
+
+        case TaskManagerConstants.TASK_TOGGLE_INPUT:
             _toggleShowInput();
+            TaskManagerStore.emitChange();
+            break;
+
+        case TaskManagerConstants.TASK_TOGGLE_COMPLETE:
+            _setCompleted(action.taskId);
+            TaskManagerStore.emitChange();
+            break;
+
+        case TaskManagerConstants.TASK_SORT:
+            _sort(action.dir);
             TaskManagerStore.emitChange();
             break;
 

@@ -6,10 +6,13 @@ var CreateButton = React.createClass({
         TaskManagerActionCreators.toggleInputForm();
     },
     render: function () {
-        var button = <button className='btn btn-default pull-right' onClick={this._toggleInputForm}>Create new task</button>;
+        var createText = 'Create new task',
+            cancelText = 'Cancel',
+            cx = 'btn btn-primary pull-right',
+            button = <button className={cx} onClick={this._toggleInputForm}>{createText}</button>;
 
         if (this.props.showInput) {
-            button = <button className='btn btn-danger pull-right' onClick={this._toggleInputForm}>Cancel <i className="fa fa-times"></i></button>;
+            button = null;
         }
 
         return button;
@@ -18,12 +21,18 @@ var CreateButton = React.createClass({
 
 var Header = React.createClass({
     render: function () {
+        var text = 'There are ' + this.props.amount + ' open tasks';
+
+        if (this.props.amount === 1) {
+            text = 'There is 1 open tasks';
+        }
+
         return (
             <div className="col-xs-12 overview">
                 <CreateButton showInput={this.props.showInput} />
-                <h4><i className="fa fa-th-list"></i> There are 5 open tasks</h4>
+                <h4><i className="fa fa-th-list"></i> {text}</h4>
             </div>
-        )
+        );
     }
 });
 

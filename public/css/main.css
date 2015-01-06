@@ -4865,5 +4865,57 @@ button.close {
   .overview button {
     margin-top: 4px; }
 
-.input input {
-  margin-bottom: 0.5em; }
+.input {
+  margin-bottom: 2em; }
+  .input input, .input textarea {
+    font-weight: bold;
+    margin-bottom: 0.5em; }
+  .input textarea {
+    font-weight: normal; }
+  .input .btn-cancel {
+    margin-right: 8px; }
+
+.task-list ul {
+  margin: 0;
+  padding: 0; }
+.task-list li {
+  position: relative;
+  padding: 0.25em 0.5em;
+  margin: 0 0 0.25em;
+  background-color: #fff;
+  border-radius: 4px;
+  list-style-type: none; }
+  .task-list li:hover .delete {
+    display: block; }
+.task-list span {
+  color: #aaa; }
+  .task-list span:before {
+    content: ' - '; }
+.task-list .checked {
+  text-decoration: line-through;
+  opacity: 0.4; }
+.task-list .delete {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  cursor: pointer;
+  color: #aaa; }
+  .task-list .delete:hover {
+    color: #444; }
+
+input[type="checkbox"] {
+  display: inline-block;
+  vertical-align: top;
+  margin: 4px 6px 0 0; }
+
+.footer {
+  margin: 1em 0 0.5em;
+  text-align: right;
+  font-size: 0.875em; }
+  .footer > span {
+    margin-left: 1em;
+    cursor: pointer;
+    opacity: 0.8; }
+    .footer > span:hover {
+      opacity: 1; }
