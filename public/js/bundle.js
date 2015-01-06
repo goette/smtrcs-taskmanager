@@ -30738,7 +30738,7 @@ var Header = React.createClass({displayName: 'Header',
         return (
             React.createElement("div", {className: "col-xs-12 overview"}, 
                 React.createElement(CreateButton, {showInput: this.props.showInput}), 
-                React.createElement("h4", null, React.createElement("i", {className: "fa fa-th-list"}), " 5 Tasks sind Ihnen zugewiesen")
+                React.createElement("h4", null, React.createElement("i", {className: "fa fa-th-list"}), " There are 5 open tasks")
             )
         )
     }
@@ -30755,8 +30755,8 @@ var Input = React.createClass({displayName: 'Input',
     render: function () {
         return (
             React.createElement("div", {className: "col-xs-12 input"}, 
-                React.createElement("input", {type: "text", className: "form-control", placeholder: "Enter title"}), 
-                React.createElement("textarea", {className: "form-control", rows: "3", placeholder: "Enter description"})
+                React.createElement("input", {type: "text", className: "form-control", placeholder: "Enter title for new task"}), 
+                React.createElement("textarea", {className: "form-control", rows: "3", placeholder: "Enter description for new task"})
             )
         );
     }

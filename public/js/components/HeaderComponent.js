@@ -21,7 +21,7 @@ var Header = React.createClass({
         return (
             <div className="col-xs-12 overview">
                 <CreateButton showInput={this.props.showInput} />
-                <h4><i className="fa fa-th-list"></i> 5 Tasks sind Ihnen zugewiesen</h4>
+                <h4><i className="fa fa-th-list"></i> There are 5 open tasks</h4>
             </div>
         )
     }
